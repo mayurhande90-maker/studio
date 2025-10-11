@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Coins } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { ThemeToggle } from '../theme-toggle';
 import { useUser } from '@/firebase';
 import { UserDropdown } from '../auth/user-dropdown';
 import { Skeleton } from '../ui/skeleton';
+import { useCredits } from '@/hooks/use-credits';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -29,6 +30,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, isUserLoading } = useUser();
+  const { credits, isLoading: isCreditsLoading } = useCredits();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +40,18 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const CreditsDisplay = () => {
+    if (isCreditsLoading) {
+      return <Skeleton className="h-8 w-20 rounded-md" />;
+    }
+    return (
+      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-3 py-1.5 rounded-md">
+        <Coins className="w-5 h-5 text-primary"/>
+        <span>{credits ?? 0} Credits</span>
+      </div>
+    );
+  };
 
   const AuthNav = () => {
     if (isUserLoading) {
@@ -95,6 +110,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
+          <CreditsDisplay />
           <AuthNav />
           <ThemeToggle />
           <div className="md:hidden">

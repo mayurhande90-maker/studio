@@ -23,13 +23,24 @@
           "type": "string",
           "description": "Date and time when the user account was created.",
           "format": "date-time"
+        },
+        "credits": {
+          "type": "number",
+          "description": "The number of available credits for the user."
+        },
+        "lastCreditRenewal": {
+          "type": "string",
+          "description": "The date when the user's credits were last renewed.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "email",
         "displayName",
-        "creationDate"
+        "creationDate",
+        "credits",
+        "lastCreditRenewal"
       ]
     },
     "Session": {

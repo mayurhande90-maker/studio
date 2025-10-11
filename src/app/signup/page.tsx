@@ -23,12 +23,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/firebase';
-import { initiateEmailSignUp } from '@/firebase/non-blocking-login';
+import { useAuth, useFirestore } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { FirebaseError } from 'firebase/app';
-import { AuthErrorCodes } from 'firebase/auth';
+import { AuthErrorCodes, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Eye, EyeOff } from 'lucide-react';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const signupSchema = z
   .object({
@@ -49,6 +49,7 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signupSchema>>({
@@ -63,12 +64,28 @@ export default function SignupPage() {
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
     setIsLoading(true);
     try {
-      await initiateEmailSignUp(auth, values.email, values.password);
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      // Create user document in Firestore
+      if (user && firestore) {
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const displayName = user.email ? user.email.split('@')[0] : 'User';
+        await setDoc(userDocRef, {
+          id: user.uid,
+          email: user.email,
+          displayName: displayName,
+          creationDate: serverTimestamp(),
+          lastCreditRenewal: serverTimestamp(),
+          credits: 10,
+        });
+      }
+
       toast({
         title: 'Account Created',
         description: "You've been successfully signed up.",
       });
-      router.push('/');
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Signup Error:', error);
       let title = 'An unexpected error occurred.';

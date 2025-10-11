@@ -4,9 +4,12 @@ import { useUser } from '@/firebase';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useCredits } from '@/hooks/use-credits';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
+  const { credits, isLoading: isCreditsLoading } = useCredits();
 
   if (isUserLoading) {
     return <div>Loading...</div>;
@@ -29,6 +32,21 @@ export default function DashboardPage() {
     }
     return 'User';
   };
+  
+  const CreditsCardContent = () => {
+    if (isCreditsLoading) {
+        return <Skeleton className="h-10 w-24" />;
+    }
+    return (
+        <>
+            <div className="text-4xl font-bold">{credits ?? 0}</div>
+            <p className="text-xs text-muted-foreground">Credits remaining this month</p>
+             <Button asChild className="mt-4">
+              <Link href="/#pricing">Buy More Credits</Link>
+            </Button>
+        </>
+    )
+  }
 
   return (
     <div className="space-y-8">
@@ -46,11 +64,7 @@ export default function DashboardPage() {
             <CardDescription>Your available credits for using AI tools.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold">10</div>
-            <p className="text-xs text-muted-foreground">+5 credits for new users</p>
-            <Button asChild className="mt-4">
-              <Link href="/#pricing">Buy More Credits</Link>
-            </Button>
+            <CreditsCardContent />
           </CardContent>
         </Card>
         <Card>

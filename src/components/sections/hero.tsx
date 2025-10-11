@@ -1,10 +1,34 @@
 'use client';
 
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, Coins } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useCredits } from '@/hooks/use-credits';
+import { Skeleton } from '../ui/skeleton';
 
 export function Hero() {
+    const { credits, isLoading } = useCredits();
+
+  const CreditsDisplay = () => {
+    if (isLoading) {
+      return <Skeleton className="h-6 w-48 rounded-md" />;
+    }
+    if (credits === 1) {
+         return (
+            <p className="text-sm text-muted-foreground flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              You have 1 free credit to start — no card required.
+            </p>
+         )
+    }
+    return (
+        <p className="text-sm text-muted-foreground flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-green-500" />
+            Start with 10 free credits upon sign-up.
+        </p>
+    )
+  };
+
   return (
     <section id="home" className="relative w-full py-16 lg:py-20 overflow-hidden">
        <div className="absolute inset-0 z-0">
@@ -37,10 +61,7 @@ export function Hero() {
                 <Link href="#features">Explore Features</Link>
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              Start with 10 free credits — no card required.
-            </p>
+            <CreditsDisplay />
           </div>
         </div>
       </div>

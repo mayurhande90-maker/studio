@@ -24,10 +24,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase';
-import { initiateEmailSignIn } from '@/firebase/non-blocking-login';
 import { useToast } from '@/hooks/use-toast';
 import { FirebaseError } from 'firebase/app';
-import { AuthErrorCodes } from 'firebase/auth';
+import { AuthErrorCodes, signInWithEmailAndPassword } from 'firebase/auth';
 import { Eye, EyeOff } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -53,12 +52,12 @@ export default function LoginPage() {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
     try {
-      await initiateEmailSignIn(auth, values.email, values.password);
+      await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
         title: 'Login Successful',
         description: "You've been successfully logged in.",
       });
-      router.push('/');
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Login Error:', error);
       let title = 'An unexpected error occurred.';
@@ -67,8 +66,9 @@ export default function LoginPage() {
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case AuthErrorCodes.INVALID_EMAIL:
-            title = 'Invalid Email';
-            description = 'Please check your email address and try again.';
+          case 'auth/invalid-credential':
+            title = 'Invalid Credentials';
+            description = 'Please check your email and password and try again.';
             break;
           case AuthErrorCodes.USER_DELETED:
             title = 'User Not Found';
