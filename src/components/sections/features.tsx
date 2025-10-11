@@ -183,7 +183,7 @@ export function Features() {
                 key={category.category}
                 value={category.category}
                 className={cn(
-                  'py-2.5 text-center text-base font-semibold transition-all',
+                  'py-2.5 text-center text-lg font-bold transition-all',
                   category.category === 'premium' &&
                     'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
                 )}
@@ -199,7 +199,7 @@ export function Features() {
           {featureCategories.map((category) => (
             <TabsContent key={category.category} value={category.category}>
                 <div className="text-center mb-8">
-                    <p className="font-semibold text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
+                    <p className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {category.features.map((feature) => (
@@ -213,9 +213,9 @@ export function Features() {
                       {feature.comingSoon && (
                         <Badge variant="default" className="absolute top-4 right-4 z-10">Coming Soon</Badge>
                       )}
-                      <CardHeader className="p-6">
+                      <CardHeader className="p-6 items-center text-center">
                         <div className="p-3 bg-primary/10 rounded-lg mb-4 w-fit">
-                          <feature.icon className="h-6 w-6 text-primary" />
+                          <feature.icon className="h-8 w-8 icon-gradient" strokeWidth={2.5} />
                         </div>
                         <CardTitle className="text-lg font-semibold">
                           {feature.title}
@@ -224,7 +224,7 @@ export function Features() {
                           {feature.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardFooter className="p-6 pt-0 mt-auto">
+                      <CardFooter className="p-6 pt-0 mt-auto justify-center">
                         <Button
                           asChild
                           variant="link"
@@ -243,7 +243,7 @@ export function Features() {
             </TabsContent>
           ))}
         </Tabs>
-        <p className="text-center text-primary/80 font-bold text-lg mt-12">
+        <p className="text-center text-primary/80 font-extrabold text-xl mt-12">
             More features coming soon to Magicpixa Pro+
         </p>
       </div>

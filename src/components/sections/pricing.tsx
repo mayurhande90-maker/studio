@@ -180,7 +180,7 @@ export function Pricing() {
                 <ul className="space-y-4">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <Check className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
+                      <Check className="h-5 w-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
                       <span className="text-muted-foreground text-sm">{feature}</span>
                     </li>
                   ))}
@@ -194,7 +194,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="text-center text-muted-foreground font-semibold text-lg mt-12">
+        <p className="text-center text-muted-foreground font-extrabold text-xl mt-12">
             Upgrade or cancel anytime. Instant access after purchase.
         </p>
       </div>
