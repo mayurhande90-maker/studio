@@ -30,7 +30,7 @@ const pricingData = {
       period: '/month',
       features: [
         'Everything from Free Plan',
-        '100 credits per month',
+        '100 credits/month',
         'No watermark',
         'Premium templates',
         'Priority processing',
@@ -45,7 +45,7 @@ const pricingData = {
       period: '/month',
       features: [
         'Everything from Pro Plan',
-        '350 credits per month',
+        '350 credits/month',
         'Premium templates & priority processing',
       ],
       buttonLabel: 'Go Premium',
@@ -87,7 +87,7 @@ const pricingData = {
       period: '/month (billed yearly)',
       features: [
         'Everything from Free Plan',
-        '100 credits per month',
+        '100 credits/month',
         'No watermark',
         'Premium templates',
         'Priority processing',
@@ -102,7 +102,7 @@ const pricingData = {
       period: '/month (billed yearly)',
       features: [
         'Everything from Pro Plan',
-        '350 credits per month',
+        '350 credits/month',
         'Premium templates & priority processing',
       ],
       buttonLabel: 'Go Premium',
@@ -194,7 +194,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="text-center text-primary/80 font-semibold text-base mt-12">
+        <p className="text-center text-muted-foreground font-semibold text-lg mt-12">
             Upgrade or cancel anytime. Instant access after purchase.
         </p>
       </div>
