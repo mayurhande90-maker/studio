@@ -51,7 +51,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-semibold text-foreground/80 hover:text-primary transition-colors"
               >
                 {item.name}
               </Link>
@@ -63,7 +63,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             {authNavItems.map(item => (
-                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-md'>
+                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-md font-bold'>
                     <Link href={item.href}>{item.name}</Link>
                 </Button>
             ))}
@@ -95,7 +95,7 @@ export function Header() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="text-lg font-medium text-foreground/80 hover:text-primary transition-colors"
+                        className="text-lg font-bold text-foreground/80 hover:text-primary transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
