@@ -58,7 +58,7 @@ export function Reviews() {
   return (
     <section
       id="reviews"
-      className="w-full py-20 lg:py-32 bg-secondary/20"
+      className="w-full py-20 lg:py-32 bg-background"
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -91,7 +91,7 @@ export function Reviews() {
                 className="md:basis-1/2 lg:basis-1/3"
               >
                 <div className="p-1">
-                  <Card className="h-full flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <Card className="h-full flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300 bg-card/50 backdrop-blur-sm border border-white/10">
                     <CardContent className="p-6 flex flex-col gap-4">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (

@@ -153,10 +153,10 @@ export function Pricing() {
             <Card
               key={plan.plan}
               className={cn(
-                'flex flex-col rounded-2xl shadow-lg hover:shadow-primary/20 transition-all duration-300',
+                'flex flex-col rounded-2xl shadow-lg hover:shadow-primary/20 transition-all duration-300 bg-card/50 backdrop-blur-sm border-white/10',
                 plan.variant === 'default'
-                  ? 'border-primary border-2'
-                  : 'border-border/20'
+                  ? 'border-primary'
+                  : ''
               )}
             >
               <CardHeader className="p-6">

@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 export function Hero() {
   return (
     <section id="home" className="w-full relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/50 to-background animated-gradient -z-10" />
+      <div className="absolute inset-0 bg-background -z-10" />
+      <div className="absolute inset-0 bg-radial-gradient -z-10" style={{
+        background: 'radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108,99,255,0.15), transparent)'
+      }}/>
       <div className="container mx-auto px-4 md:px-6 pt-32 pb-16 md:pt-48 md:pb-24">
         <div className="flex flex-col items-center justify-center space-y-6 text-center">
           <div className="space-y-4 max-w-4xl mx-auto">

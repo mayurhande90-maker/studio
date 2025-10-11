@@ -178,7 +178,7 @@ export function Features() {
         </div>
 
         <Tabs defaultValue="photo" className="w-full">
-          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 max-w-2xl mx-auto h-auto">
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 max-w-2xl mx-auto h-auto bg-card/80 backdrop-blur-sm border border-white/10">
             <TabsTrigger value="photo" className="py-3 text-base">
               AI Photo Enhancements
             </TabsTrigger>
@@ -200,7 +200,7 @@ export function Features() {
                 {category.features.map((feature, index) => (
                   <Card
                     key={index}
-                    className="rounded-2xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 border-border/20 group bg-card/50 backdrop-blur-sm overflow-hidden"
+                    className="rounded-2xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 border-white/10 group bg-card/50 backdrop-blur-sm overflow-hidden"
                   >
                     <CardHeader className="p-6">
                       <div className="p-3 bg-primary/10 rounded-xl mb-4 w-fit">

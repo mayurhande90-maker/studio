@@ -42,7 +42,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-secondary/20 border-t">
+    <footer className="bg-background border-t border-white/10">
       <div className="container mx-auto py-12 px-4 md:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="flex flex-col gap-4">
@@ -83,7 +83,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t text-center text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-white/10 text-center text-muted-foreground">
           <p>© 2025 Magicpixa. All rights reserved.</p>
         </div>
       </div>
