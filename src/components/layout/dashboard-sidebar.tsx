@@ -21,10 +21,22 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { featureCategories } from '../sections/features';
 import { Logo } from '../logo';
+import { useEffect, useState } from 'react';
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const defaultOpenCategories = featureCategories.map(c => c.category);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+
+  const getVariant = (href: string) => {
+    if (!isMounted) return 'ghost';
+    return pathname === href ? 'secondary' : 'ghost';
+  };
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -34,7 +46,7 @@ export function DashboardSidebar() {
       <ScrollArea className="flex-1">
         <div className="px-6 py-4 space-y-4">
           <Button
-            variant={pathname === '/dashboard' ? 'secondary' : 'ghost'}
+            variant={getVariant('/dashboard')}
             className="w-full justify-start"
             asChild
           >
@@ -44,7 +56,7 @@ export function DashboardSidebar() {
             </Link>
           </Button>
           <Button
-            variant={pathname === '/dashboard/creations' ? 'secondary' : 'ghost'}
+            variant={getVariant('/dashboard/creations')}
             className="w-full justify-start"
             asChild
           >
@@ -76,9 +88,7 @@ export function DashboardSidebar() {
                     {category.features.map((feature) => (
                       <Button
                         key={feature.title}
-                        variant={
-                          pathname === feature.href ? 'secondary' : 'ghost'
-                        }
+                        variant={getVariant(feature.href)}
                         className="w-full justify-start h-auto py-2"
                         asChild
                       >
