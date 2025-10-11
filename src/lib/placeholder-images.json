@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image-before",
+      "description": "A blurry portrait of a woman before AI enhancement",
+      "imageUrl": "https://picsum.photos/seed/blurrywoman/800/600",
+      "imageHint": "blurry portrait"
+    },
+    {
+      "id": "hero-image-after",
+      "description": "A sharp, clear portrait of a woman after AI enhancement",
+      "imageUrl": "https://picsum.photos/seed/sharpwoman/800/600",
+      "imageHint": "sharp portrait"
+    },
+    {
+      "id": "about-image",
+      "description": "An abstract image representing the fusion of art and technology",
+      "imageUrl": "https://picsum.photos/seed/techart/600/800",
+      "imageHint": "abstract technology"
+    }
+  ]
 }
