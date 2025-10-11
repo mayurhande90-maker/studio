@@ -12,85 +12,111 @@ import { Badge } from '../ui/badge';
 const pricingData = {
   monthly: [
     {
-      plan: 'Free — Discover',
+      plan: 'Free Plan',
       price: '₹0',
-      period: '/ month',
+      period: '/month',
       features: [
-        '10 credits/month',
+        '10 credits/month upon signup',
         'Access to basic tools',
         'Watermark on exports',
         'Standard processing speed',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Start Free',
       variant: 'outline' as const,
     },
     {
-      plan: 'Pro — Create More',
+      plan: 'Pro Plan',
       price: '₹299',
-      period: '/ month',
+      period: '/month',
       features: [
-        '100 credits',
+        '100 credits/month',
         'No watermark',
         'Access to premium templates',
         'Priority processing',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Upgrade to Pro',
       variant: 'default' as const,
       recommended: true,
     },
     {
-      plan: 'Premium+ — Live Fully',
+      plan: 'Premium Plan',
       price: '₹499',
-      period: '/ month',
+      period: '/month',
       features: [
-        'Unlimited access',
+        '350 credits/month',
+        'No watermark',
+        'Access to premium templates',
+        'Priority processing',
+      ],
+      buttonLabel: 'Get Premium',
+      variant: 'outline' as const,
+    },
+     {
+      plan: 'VIP Plan',
+      price: '₹1999',
+      period: '/month',
+      features: [
+        'Unlimited credits',
         'Exclusive new AI tools',
         'Dedicated support',
-        'Top priority queue',
+        'Highest priority queue',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Go VIP',
       variant: 'outline' as const,
     },
   ],
   yearly: [
-     {
-      plan: 'Free — Discover',
+    {
+      plan: 'Free Plan',
       price: '₹0',
-      period: '/ month',
+      period: '/month',
       features: [
-        '10 credits/month',
+        '10 credits/month upon signup',
         'Access to basic tools',
         'Watermark on exports',
         'Standard processing speed',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Start Free',
       variant: 'outline' as const,
     },
     {
-      plan: 'Pro — Create More',
-      price: '₹2999',
-      period: '/ year',
+      plan: 'Pro Plan',
+      price: '₹249',
+      period: '/month (billed yearly)',
       features: [
-        '100 credits / month',
+        '100 credits/month',
         'No watermark',
         'Access to premium templates',
         'Priority processing',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Upgrade to Pro',
       variant: 'default' as const,
       recommended: true,
     },
     {
-      plan: 'Premium+ — Live Fully',
-      price: '₹4999',
-      period: '/ year',
+      plan: 'Premium Plan',
+      price: '₹399',
+      period: '/month (billed yearly)',
       features: [
-        'Unlimited access',
+        '350 credits/month',
+        'No watermark',
+        'Premium templates & priority processing',
+        'Priority processing',
+      ],
+      buttonLabel: 'Get Premium',
+      variant: 'outline' as const,
+    },
+     {
+      plan: 'VIP Plan',
+      price: '₹1499',
+      period: '/month (billed yearly)',
+      features: [
+        'Unlimited credits',
         'Exclusive new AI tools',
         'Dedicated support',
-        'Top priority queue',
+        'Highest priority queue',
       ],
-      buttonLabel: 'Start Free Trial',
+      buttonLabel: 'Go VIP',
       variant: 'outline' as const,
     },
   ],
@@ -102,18 +128,18 @@ export function Pricing() {
   const plans = isYearly ? pricingData.yearly : pricingData.monthly;
 
   return (
-    <section id="pricing" className="w-full py-20 lg:py-32 bg-gradient-to-b from-background to-card/50">
+    <section id="pricing" className="w-full py-20 lg:py-32 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Choose Your Plan — Start Free, Upgrade Anytime.
+              Simple Pricing, No Hidden Costs
             </h2>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              Save up to 2 months with a yearly plan.
+              Choose the plan that fits your needs.
             </p>
           </div>
-          <div className="flex items-center space-x-2 mt-8">
+          <div className="flex items-center space-x-2 pt-8">
             <Label htmlFor="pricing-toggle">Monthly</Label>
             <Switch
               id="pricing-toggle"
@@ -125,13 +151,13 @@ export function Pricing() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-7xl items-stretch gap-8 md:grid-cols-2 lg:grid-cols-3 mt-16">
+        <div className="mx-auto grid max-w-7xl items-start gap-8 md:grid-cols-2 lg:grid-cols-4 mt-16">
           {plans.map((plan) => (
             <Card
               key={plan.plan}
               className={cn(
-                'relative flex flex-col rounded-3xl shadow-lg hover:shadow-primary/20 transition-all duration-300 bg-card/50 backdrop-blur-sm border border-border/10 overflow-hidden',
-                plan.recommended ? 'border-primary shadow-primary/10' : ''
+                'relative flex flex-col rounded-3xl shadow-lg hover:shadow-primary/20 transition-all duration-300',
+                plan.recommended ? 'border-2 border-primary shadow-primary/10' : 'border'
               )}
             >
               {plan.recommended && (
@@ -146,11 +172,11 @@ export function Pricing() {
                   <span className="text-sm text-muted-foreground">{plan.period}</span>
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-8 flex-1">
+              <CardContent className="p-8 pt-0 flex-1">
                 <ul className="space-y-4">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
-                      <Check className="h-5 w-5 text-primary mr-3 mt-0.5 shrink-0" />
+                      <Check className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                       <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
@@ -165,7 +191,7 @@ export function Pricing() {
           ))}
         </div>
         <p className="text-center text-muted-foreground text-sm mt-12">
-            7-day free trial on Pro and Premium+ plans. Cancel anytime. No hidden fees.
+            Upgrade or cancel anytime. Instant access after purchase.
         </p>
       </div>
     </section>

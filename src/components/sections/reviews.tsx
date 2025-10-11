@@ -1,6 +1,6 @@
 'use client';
 
-import { Star, User } from 'lucide-react';
+import { Star } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -10,102 +10,103 @@ import {
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import { Card, CardContent } from '../ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 const reviews = [
   {
-    name: 'Aarav Sharma',
-    city: 'Pune',
+    name: 'Aarav Mehta',
+    location: 'Mumbai | Product Photographer',
     rating: 5,
-    review: 'Best AI app for creators!',
-    avatar: 'AS'
+    review: 'The background remover is unbelievably fast and accurate. Saves me hours every day!',
   },
   {
-    name: 'Ritika Menon',
-    city: 'Mumbai',
-    rating: 5,
-    review: 'My brand posters look like agency work.',
-    avatar: 'RM'
-  },
-  {
-    name: 'Karan Patel',
-    city: 'Ahmedabad',
+    name: 'Priya Deshmukh',
+    location: 'Pune | Digital Marketer',
     rating: 4,
-    review: 'Easy and addictive.',
-    avatar: 'KP'
+    review: 'Photo Studio makes my product photos look like they were shot professionally. Super impressed!',
   },
   {
-    name: 'Sneha Desai',
-    city: 'Nashik',
+    name: 'Rohan Nair',
+    location: 'Bengaluru | E-commerce Seller',
     rating: 5,
-    review: 'Turned my old photo into magic.',
-    avatar: 'SD'
+    review: 'Enhancement tool is a game changer! My product images look 10x better instantly.',
   },
   {
-    name: 'Aditya Khanna',
-    city: 'Delhi',
+    name: 'Sneha Patil',
+    location: 'Nashik | Wedding Photographer',
     rating: 4,
-    review: 'Perfect for my YouTube channel.',
-    avatar: 'AK'
+    review: 'Loved the colorizer feature — it brought life to my grandparents’ old photos beautifully.',
   },
   {
-    name: 'Neha Singh',
-    city: 'Bengaluru',
+    name: 'Karan Sharma',
+    location: 'Delhi | Designer',
     rating: 5,
-    review: 'The background removal is flawless. A must-have tool!',
-    avatar: 'NS'
-  }
+    review: 'Very clean interface and amazing results. Definitely worth upgrading to Pro.',
+  },
 ];
 
 export function Reviews() {
   return (
     <section
       id="reviews"
-      className="w-full py-20 lg:py-32 bg-background"
+      className="w-full py-20 lg:py-32 bg-secondary/50"
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Loved by Creators Across India 🇮🇳
+            Loved by Thousands of Users
           </h2>
           <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-            Real feedback from users who’ve transformed their creative flow.
+            See what our Indian users say about Magicpixa.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Carousel
+          opts={{
+            align: 'start',
+            loop: true,
+          }}
+          plugins={[
+            Autoplay({
+              delay: 3000,
+            }),
+          ]}
+          className="w-full"
+        >
+          <CarouselContent>
             {reviews.map((review, index) => (
-              <Card key={index} className="rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-300 bg-card/50 backdrop-blur-sm border border-border/10">
-                <CardContent className="p-6 flex flex-col gap-4">
-                  <div className="flex items-center gap-4">
-                    <Avatar>
-                      <AvatarFallback>{review.avatar}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-semibold">{review.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {review.city}
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1">
+                  <Card className="rounded-3xl shadow-lg">
+                    <CardContent className="p-8 flex flex-col gap-4">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < review.rating
+                                ? 'text-yellow-400 fill-yellow-400'
+                                : 'text-muted-foreground/50'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-foreground text-lg font-medium">
+                        “{review.review}”
                       </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-5 h-5 ${
-                          i < review.rating
-                            ? 'text-yellow-400 fill-yellow-400'
-                            : 'text-muted-foreground/50'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground italic">
-                    “{review.review}”
-                  </p>
-                </CardContent>
-              </Card>
+                      <div>
+                        <p className="font-semibold">{review.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {review.location}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
             ))}
-        </div>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
     </section>
   );

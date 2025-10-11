@@ -19,10 +19,10 @@ export function Hero() {
         <div className="flex flex-col items-center justify-center space-y-6 text-center">
           <div className="space-y-4 max-w-4xl mx-auto">
             <h1 className="text-4xl font-extrabold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-gradient animated-gradient">
-              Magicpixa
+              Transform Your Photos with the Magic of AI
             </h1>
             <p className="max-w-2xl mx-auto text-muted-foreground md:text-xl">
-              Your Everyday AI Studio — Create. Enhance. Imagine.
+              Remove backgrounds, enhance lighting, colorize memories, and create marketing-ready photos — all in seconds.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -32,7 +32,7 @@ export function Hero() {
               className="bg-primary text-primary-foreground hover:bg-primary/90 transition-transform hover:scale-105 rounded-2xl shadow-lg text-lg py-7 px-8 font-semibold"
             >
               <Link href="/enhance">
-                Start Creating Free <ArrowRight className="ml-2 h-5 w-5" />
+                Enhance Your First Photo <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button asChild variant="link" size="lg">
@@ -41,7 +41,7 @@ export function Hero() {
           </div>
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-green-500" />
-            Get 10 free credits upon signup.
+            Try your first 10 images absolutely free.
           </p>
         </div>
       </div>
