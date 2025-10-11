@@ -55,7 +55,7 @@ export function Features() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="rounded-3xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 border-border/10 group"
+              className="flex flex-col rounded-3xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 border-border/10 group"
             >
               <CardHeader className="p-8">
                 <div className="p-4 bg-primary/10 rounded-xl mb-4 w-fit">
@@ -68,7 +68,7 @@ export function Features() {
                   {feature.description}
                 </CardDescription>
               </CardHeader>
-              <CardFooter className="p-8 pt-0">
+              <CardFooter className="p-8 pt-0 mt-auto">
                 <Button
                   asChild
                   variant="link"
