@@ -34,6 +34,10 @@ export function DashboardSidebar() {
     if (!isMounted) return 'ghost';
     return pathname === href ? 'secondary' : 'ghost';
   };
+  
+  if (!isMounted) {
+    return null; // Or a loading skeleton
+  }
 
   return (
     <div className="hidden md:flex flex-col h-full w-80 border-r bg-background">
