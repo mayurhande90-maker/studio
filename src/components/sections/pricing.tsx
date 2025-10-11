@@ -187,7 +187,7 @@ export function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter className="p-6">
-                <Button className="w-full rounded-md text-base py-6" variant={plan.variant}>
+                <Button className="w-full rounded-md text-base py-6 font-bold" variant={plan.variant}>
                   {plan.buttonLabel}
                 </Button>
               </CardFooter>
