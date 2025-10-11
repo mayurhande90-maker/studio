@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'MagicPixa - Bring Your Photos to Life with AI',
@@ -51,12 +52,19 @@ export default function RootLayout({
           'min-h-screen bg-background font-body antialiased'
         )}
       >
-        <Header />
-        <div className="relative flex min-h-dvh flex-col">
-          <main className="flex-1">{children}</main>
-        </div>
-        <Footer />
-        <Toaster />
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+          <Header />
+          <div className="relative flex min-h-dvh flex-col">
+            <main className="flex-1">{children}</main>
+          </div>
+          <Footer />
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
