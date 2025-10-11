@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import {
-  Wand2,
+  Sparkles as Wand2,
   Scissors,
-  Image as ImageIcon,
-  Paintbrush,
+  Camera as ImageIcon,
+  Palette as Paintbrush,
   ArrowRight,
   ScanLine,
   FileText,
@@ -206,7 +206,7 @@ export function Features() {
                     <Card
                       key={feature.title}
                       className={cn(
-                        'relative flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group bg-card',
+                        'relative flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-secondary',
                         feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
                       )}
                     >
@@ -214,8 +214,8 @@ export function Features() {
                         <Badge variant="default" className="absolute top-4 right-4 z-10">Coming Soon</Badge>
                       )}
                       <CardHeader className="p-6 items-center text-center">
-                        <div className="p-3 bg-primary/10 rounded-lg mb-4 w-fit">
-                          <feature.icon className="h-8 w-8 icon-gradient" strokeWidth={2.5} />
+                        <div className="icon-container mb-4">
+                          <feature.icon className="h-8 w-8 text-primary-foreground" strokeWidth={2.5} />
                         </div>
                         <CardTitle className="text-lg font-semibold">
                           {feature.title}
