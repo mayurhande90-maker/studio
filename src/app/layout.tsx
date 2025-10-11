@@ -7,17 +7,17 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'MagicPixa - Bring Your Photos to Life with AI',
+  title: 'Magicpixa - Transform Your Photos with the Magic of AI',
   description:
-    'MagicPixa enhances your images in seconds — clarity, detail, and color balance powered by AI.',
+    'Remove backgrounds, enhance lighting, colorize memories, and create marketing-ready photos — all in seconds.',
   openGraph: {
-    title: 'MagicPixa - Bring Your Photos to Life with AI',
+    title: 'Magicpixa - Transform Your Photos with the Magic of AI',
     description:
       'Instantly improve your photos with our advanced AI enhancement tool.',
     type: 'website',
     locale: 'en_US',
     url: 'https://magicpixa.com',
-    siteName: 'MagicPixa',
+    siteName: 'Magicpixa',
   },
 };
 
@@ -26,7 +26,7 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
-}
+};
 
 export default function RootLayout({
   children,
@@ -48,16 +48,14 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={cn(
-          'min-h-screen bg-background font-body antialiased'
-        )}
+        className={cn('min-h-screen bg-background font-body antialiased')}
         suppressHydrationWarning
       >
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
           <Header />
           <div className="relative flex min-h-dvh flex-col">
