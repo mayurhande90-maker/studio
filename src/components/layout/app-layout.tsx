@@ -20,13 +20,21 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const isDashboard = pathname.startsWith('/dashboard');
 
+  if (isDashboard) {
+    return (
+      <div className={cn("relative flex min-h-dvh flex-col")}>
+        <main className="flex-1">{children}</main>
+      </div>
+    );
+  }
+
   return (
     <>
       <Header />
-      <div className={cn("relative flex min-h-dvh flex-col", !isDashboard && "pt-20")}>
+      <div className={cn("relative flex min-h-dvh flex-col", "pt-20")}>
         <main className="flex-1">{children}</main>
       </div>
-      {!isDashboard && <Footer />}
+      <Footer />
     </>
   );
 }
