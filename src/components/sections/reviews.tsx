@@ -8,6 +8,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { useEffect, useState } from 'react';
 
 const reviews = [
   {
@@ -43,6 +44,16 @@ const reviews = [
 ];
 
 export function Reviews() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null; // Or a loading skeleton
+  }
+
   return (
     <section
       id="reviews"
