@@ -24,13 +24,18 @@ export function UserDropdown() {
     router.push('/');
   };
 
-  const getInitials = (name: string | null | undefined) => {
-    if (!name) return '';
-    const nameParts = name.split(' ');
-    if (nameParts.length > 1) {
-      return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
+  const getInitials = () => {
+    if (user?.displayName) {
+      const nameParts = user.displayName.split(' ');
+      if (nameParts.length > 1) {
+        return `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`;
+      }
+      return user.displayName[0];
     }
-    return name[0];
+    if (user?.email) {
+      return user.email[0].toUpperCase();
+    }
+    return '';
   };
 
   if (!user) {
@@ -43,7 +48,7 @@ export function UserDropdown() {
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
-            <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
+            <AvatarFallback>{getInitials()}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
