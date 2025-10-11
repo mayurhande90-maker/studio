@@ -34,8 +34,10 @@ const footerLinkGroups = [
 
 export function Footer() {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [currentYear, setCurrentYear] = useState('');
 
   useEffect(() => {
+    setCurrentYear(new Date().getFullYear().toString());
     const handleScroll = () => {
       if (window.scrollY > window.innerHeight / 2) {
         setShowBackToTop(true);
@@ -96,7 +98,7 @@ export function Footer() {
             </div>
         </div>
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className='text-sm text-muted-foreground'>© {new Date().getFullYear()} Magicpixa. All rights reserved.</p>
+          <p className='text-sm text-muted-foreground'>© {currentYear} Magicpixa. All rights reserved.</p>
         </div>
       </div>
       <Button
