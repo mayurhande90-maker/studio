@@ -24,6 +24,7 @@ import { Logo } from '../logo';
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const defaultOpenCategories = featureCategories.map(c => c.category);
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -55,7 +56,7 @@ export function DashboardSidebar() {
 
           <Separator />
 
-          <Accordion type="multiple" className="w-full">
+          <Accordion type="multiple" className="w-full" defaultValue={defaultOpenCategories}>
             {featureCategories.map((category) => (
               <AccordionItem value={category.category} key={category.category}>
                 <AccordionTrigger
