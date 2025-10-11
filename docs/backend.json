@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the MagicPixa application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The name the user wishes to be displayed as."
+        },
+        "creationDate": {
+          "type": "string",
+          "description": "Date and time when the user account was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "displayName",
+        "creationDate"
+      ]
+    },
+    "Session": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Session",
+      "type": "object",
+      "description": "Represents a user session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Session entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Session)"
+        },
+        "sessionStart": {
+          "type": "string",
+          "description": "Date and time when the session started.",
+          "format": "date-time"
+        },
+        "sessionEnd": {
+          "type": "string",
+          "description": "Date and time when the session ended. Null if the session is still active.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "sessionStart"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile data. Only the user can read/write their own profile. No denormalization required as direct ownership is enforced via path.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/sessions/{sessionId}",
+        "definition": {
+          "entityName": "Session",
+          "schema": {
+            "$ref": "#/backend/entities/Session"
+          },
+          "description": "Stores session data for each user.  Enforces path-based ownership; only the user can access their own sessions. `userId` field must match `request.auth.uid`. No denormalization is needed, as path ownership is sufficient. Supports secure listing of sessions by user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "sessionId",
+              "description": "The unique identifier for the session."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to securely manage user data and sessions. It leverages path-based ownership for private user data, specifically for storing session information. Authorization Independence is achieved without denormalization, as the security rules will primarily rely on `request.auth.uid` matching the `userId` field within the `/users/{userId}/sessions/{sessionId}` path. Segregation is achieved by storing all session-related data under the user's specific path, ensuring consistent security postures within those collections. This structure facilitates secure list operations via path-based ownership, ensures clear ownership invariants, and offers a predictable data schema. The structure focuses on simplicity and security, optimizing for easy debugging and maintenance."
+  }
+}
