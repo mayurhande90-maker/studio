@@ -199,7 +199,7 @@ export function Features() {
           {featureCategories.map((category) => (
             <TabsContent key={category.category} value={category.category}>
                 <div className="text-center mb-8">
-                    <p className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
+                    <p className="font-semibold text-lg text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {category.features.map((feature) => (
@@ -243,7 +243,7 @@ export function Features() {
             </TabsContent>
           ))}
         </Tabs>
-        <p className="text-center text-primary/80 font-medium text-sm mt-12">
+        <p className="text-center text-primary/80 font-semibold text-lg mt-12">
             More features coming soon to Magicpixa Pro+
         </p>
       </div>
