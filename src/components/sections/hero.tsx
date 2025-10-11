@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export function Hero() {
   return (
-    <section id="home" className="relative w-full py-20 lg:py-32 overflow-hidden">
+    <section id="home" className="relative w-full py-16 lg:py-24 overflow-hidden">
        <div className="absolute inset-0 z-0">
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full filter blur-3xl opacity-40 animate-blob"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-accent/20 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
