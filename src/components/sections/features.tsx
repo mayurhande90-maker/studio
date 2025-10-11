@@ -215,7 +215,7 @@ export function Features() {
                       )}
                       <CardHeader className="p-6 items-center text-center">
                         <div className="icon-container mb-4">
-                          <feature.icon className="h-8 w-8 text-primary-foreground" strokeWidth={2.5} />
+                          <feature.icon className="h-7 w-7 text-primary-foreground" strokeWidth={2.5} />
                         </div>
                         <CardTitle className="text-lg font-semibold">
                           {feature.title}
