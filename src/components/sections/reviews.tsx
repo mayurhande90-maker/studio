@@ -2,6 +2,12 @@
 
 import { Star } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
+import Autoplay from 'embla-carousel-autoplay';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 
 const reviews = [
   {
@@ -52,35 +58,53 @@ export function Reviews() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+           plugins={[
+            Autoplay({
+              delay: 3000,
+              stopOnInteraction: false,
+            }),
+          ]}
+          className="w-full"
+        >
+          <CarouselContent>
             {reviews.map((review, index) => (
-                <Card key={index} className="rounded-lg shadow-md bg-card">
-                <CardContent className="p-6 flex flex-col gap-4">
-                    <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                        <Star
-                        key={i}
-                        className={`w-5 h-5 ${
-                            i < review.rating
-                            ? 'text-yellow-400 fill-yellow-400'
-                            : 'text-muted-foreground/50'
-                        }`}
-                        />
-                    ))}
-                    </div>
-                    <p className="text-foreground text-base">
-                    “{review.review}”
-                    </p>
-                    <div>
-                    <p className="font-semibold">{review.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                        {review.location}
-                    </p>
-                    </div>
-                </CardContent>
-                </Card>
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                 <div className="p-1">
+                    <Card key={index} className="rounded-lg shadow-md bg-card h-full">
+                    <CardContent className="p-6 flex flex-col gap-4 justify-between h-full">
+                        <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                            <Star
+                            key={i}
+                            className={`w-5 h-5 ${
+                                i < review.rating
+                                ? 'text-yellow-400 fill-yellow-400'
+                                : 'text-muted-foreground/50'
+                            }`}
+                            />
+                        ))}
+                        </div>
+                        <p className="text-foreground text-base flex-1">
+                        “{review.review}”
+                        </p>
+                        <div>
+                        <p className="font-semibold">{review.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                            {review.location}
+                        </p>
+                        </div>
+                    </CardContent>
+                    </Card>
+                 </div>
+              </CarouselItem>
             ))}
-        </div>
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   );

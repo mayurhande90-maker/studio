@@ -1,7 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { Wand2, Scissors, Image as ImageIcon, Paintbrush, ArrowRight, ScanLine, FileText, Notebook, MessageSquare } from 'lucide-react';
+import {
+  Wand2,
+  Scissors,
+  Image as ImageIcon,
+  Paintbrush,
+  ArrowRight,
+  ScanLine,
+  FileText,
+  Notebook,
+  MessageSquare,
+} from 'lucide-react';
 import {
   Card,
   CardHeader,
@@ -10,10 +20,11 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const featureCategories = [
   {
+    category: 'photo',
     title: 'AI Photo Enhancements',
     subtitle: 'Enhance and perfect your photos in seconds.',
     features: [
@@ -44,6 +55,7 @@ const featureCategories = [
     ],
   },
   {
+    category: 'productivity',
     title: 'Productivity & Content Tools',
     subtitle: 'Automate your daily workflow with smart AI tools.',
     features: [
@@ -74,10 +86,11 @@ const featureCategories = [
     ],
   },
   {
+    category: 'creative',
     title: 'Creative & Fun Studio',
     subtitle: 'Create, imagine, and design with AI magic.',
     features: [
-        {
+      {
         icon: ImageIcon,
         title: 'Thumbnail Forge',
         description: 'Create YouTube thumbnails instantly',
@@ -101,7 +114,7 @@ const featureCategories = [
         description: 'Get AI photos with your favorite celebrity',
         href: '/celebrity-photo',
       },
-       {
+      {
         icon: ImageIcon,
         title: 'FutureMe Vision',
         description: 'See your future self in cinematic or fantasy style',
@@ -110,7 +123,6 @@ const featureCategories = [
     ],
   },
 ];
-
 
 export function Features() {
   return (
@@ -125,48 +137,55 @@ export function Features() {
           </p>
         </div>
 
-        <div className="space-y-16">
+        <Tabs defaultValue="photo" className="w-full">
+          <TabsList className="grid w-full grid-cols-1 md:grid-cols-3 mb-8">
+            {featureCategories.map((category) => (
+              <TabsTrigger key={category.category} value={category.category}>
+                {category.title}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          
           {featureCategories.map((category) => (
-            <div key={category.title}>
-              <div className="mb-8 text-center md:text-left">
-                <h3 className="text-2xl font-bold tracking-tight">{category.title}</h3>
-                <p className="text-muted-foreground">{category.subtitle}</p>
-              </div>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {category.features.map((feature) => (
-                  <Card
-                    key={feature.title}
-                    className="flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group bg-card"
-                  >
-                    <CardHeader className="p-6">
-                      <div className="p-3 bg-primary/10 rounded-lg mb-4 w-fit">
-                        <feature.icon className="h-6 w-6 text-primary" />
-                      </div>
-                      <CardTitle className="text-lg font-semibold">
-                        {feature.title}
-                      </CardTitle>
-                      <CardDescription className="text-muted-foreground pt-1 text-sm">
-                        {feature.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardFooter className="p-6 pt-0 mt-auto">
-                      <Button
-                        asChild
-                        variant="link"
-                        className="p-0 h-auto font-semibold text-sm"
-                      >
-                        <Link href={feature.href}>
-                          Try Now
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            </div>
+            <TabsContent key={category.category} value={category.category}>
+                <div className="text-center mb-8">
+                    <p className="text-muted-foreground">{category.subtitle}</p>
+                </div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {category.features.map((feature) => (
+                    <Card
+                      key={feature.title}
+                      className="flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group bg-card"
+                    >
+                      <CardHeader className="p-6">
+                        <div className="p-3 bg-primary/10 rounded-lg mb-4 w-fit">
+                          <feature.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle className="text-lg font-semibold">
+                          {feature.title}
+                        </CardTitle>
+                        <CardDescription className="text-muted-foreground pt-1 text-sm">
+                          {feature.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardFooter className="p-6 pt-0 mt-auto">
+                        <Button
+                          asChild
+                          variant="link"
+                          className="p-0 h-auto font-semibold text-sm"
+                        >
+                          <Link href={feature.href}>
+                            Try Now
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+            </TabsContent>
           ))}
-        </div>
+        </Tabs>
         <p className="text-center text-muted-foreground text-sm mt-16">
             More features coming soon to Magicpixa Pro+
         </p>
