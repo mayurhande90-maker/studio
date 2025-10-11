@@ -15,8 +15,8 @@ import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
   { name: 'Home', href: '/' },
-  { name: 'Features', href: '#features' },
-  { name: 'Pricing', href: '#pricing' },
+  { name: 'Features', href: '/#features' },
+  { name: 'Pricing', href: '/#pricing' },
   { name: 'About', href: '#' },
 ];
 
@@ -43,7 +43,14 @@ export function Header() {
       return <Skeleton className="h-10 w-24 rounded-md" />;
     }
     if (user) {
-      return <UserDropdown />;
+      return (
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="rounded-md font-bold">
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+          <UserDropdown />
+        </div>
+      );
     }
     return (
       <div className="hidden md:flex items-center gap-2">
@@ -123,14 +130,23 @@ export function Header() {
                       </Link>
                     ))}
                     {user ? (
-                      <Button
-                        onClick={() => {
-                          // TODO: Implement Logout
-                          setIsMobileMenuOpen(false);
-                        }}
-                      >
-                        Logout
-                      </Button>
+                      <>
+                        <Link
+                          href="/dashboard"
+                          className="text-lg font-bold text-foreground/80 hover:text-primary transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                        <Button
+                          onClick={() => {
+                            // TODO: Implement Logout
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </>
                     ) : (
                       authNavItems.map((item) => (
                         <Link

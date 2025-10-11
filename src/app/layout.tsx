@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { FirebaseClientProvider } from '@/firebase';
+import { AppProviders } from '@/components/layout/app-providers';
+import { AppLayout } from '@/components/layout/app-layout';
 
 export const metadata: Metadata = {
   title: 'Magicpixa – AI Photo & Design Studio',
@@ -52,21 +52,9 @@ export default function RootLayout({
         className={cn('min-h-screen bg-background font-body antialiased')}
         suppressHydrationWarning={true}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
-          <FirebaseClientProvider>
-            <Header />
-            <div className="relative flex min-h-dvh flex-col">
-              <main className="flex-1">{children}</main>
-            </div>
-            <Footer />
-            <Toaster />
-          </FirebaseClientProvider>
-        </ThemeProvider>
+        <AppProviders>
+          <AppLayout>{children}</AppLayout>
+        </AppProviders>
       </body>
     </html>
   );

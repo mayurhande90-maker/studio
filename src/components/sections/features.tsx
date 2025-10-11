@@ -26,8 +26,24 @@ import { Button } from '../ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
+import { ComponentType } from 'react';
 
-const featureCategories = [
+export interface Feature {
+  icon: ComponentType<{ className?: string; strokeWidth?: number; }>;
+  title: string;
+  description: string;
+  href: string;
+  comingSoon: boolean;
+}
+
+export interface FeatureCategory {
+  category: string;
+  title: string;
+  subtitle: string;
+  features: Feature[];
+}
+
+export const featureCategories: FeatureCategory[] = [
   {
     category: 'photo',
     title: 'AI Photo Enhancements',
@@ -215,7 +231,7 @@ export function Features() {
                       )}
                       <CardHeader className="p-6 items-center text-center">
                         <div className="icon-container mb-4">
-                          <feature.icon className="h-7 w-7 text-primary-foreground" strokeWidth={2.5} />
+                          <feature.icon className="h-6 w-6 text-primary-foreground" strokeWidth={2.5} />
                         </div>
                         <CardTitle className="text-lg font-semibold">
                           {feature.title}
