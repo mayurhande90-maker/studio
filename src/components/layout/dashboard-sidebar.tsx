@@ -32,11 +32,19 @@ export function DashboardSidebar() {
 
   const getVariant = (href: string) => {
     if (!isMounted) return 'ghost';
-    return pathname === href ? 'secondary' : 'ghost';
+    // This is a simple check. For more complex routing, you might need a more robust solution.
+    // e.g., if you have /dashboard/settings and /dashboard/settings/profile
+    if (pathname === href) return 'secondary';
+    // Handle case for nested routes if needed, e.g. pathname.startsWith(href) for parent links
+    return 'ghost';
   };
   
   if (!isMounted) {
-    return null; // Or a loading skeleton
+    return (
+        <div className="hidden md:flex flex-col h-full w-80 border-r bg-background">
+          {/* You can put a skeleton loader here if you want */}
+        </div>
+    );
   }
 
   return (
