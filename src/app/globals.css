@@ -91,6 +91,6 @@
   }
 
   .icon-gradient {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary;
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary stroke-[currentColor];
   }
 }

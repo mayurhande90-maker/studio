@@ -199,14 +199,14 @@ export function Features() {
           {featureCategories.map((category) => (
             <TabsContent key={category.category} value={category.category}>
                 <div className="text-center mb-8">
-                    <p className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
+                    <p className="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {category.features.map((feature) => (
                     <Card
                       key={feature.title}
                       className={cn(
-                        'relative flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group bg-secondary',
+                        'relative flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group bg-card',
                         feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
                       )}
                     >
@@ -243,7 +243,7 @@ export function Features() {
             </TabsContent>
           ))}
         </Tabs>
-        <p className="text-center text-primary/80 font-extrabold text-xl mt-12">
+        <p className="text-center text-primary/80 font-extrabold text-2xl mt-12">
             More features coming soon to Magicpixa Pro+
         </p>
       </div>
