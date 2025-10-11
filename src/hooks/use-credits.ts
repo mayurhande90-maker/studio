@@ -21,7 +21,7 @@ export function useCredits() {
 
   const { data: userDoc, isLoading: isUserDocLoading } = useDoc<{
     credits: number;
-    lastCreditRenewal: { seconds: number };
+    lastCreditRenewal: { seconds: number } | null;
     creationDate: { seconds: number };
   }>(userDocRef);
   
@@ -80,20 +80,25 @@ export function useCredits() {
     }
     
     if (userDoc) {
-      const now = new Date();
-      const lastRenewal = new Date(userDoc.lastCreditRenewal.seconds * 1000);
-      const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-      
-      if (now.getTime() - lastRenewal.getTime() > thirtyDays) {
-        // Time to renew credits
-        const newCreditData = {
-          credits: 10,
-          lastCreditRenewal: serverTimestamp(),
-        };
-        setDoc(userDocRef, newCreditData, { merge: true });
-        setCredits(10);
+      if (userDoc.lastCreditRenewal) {
+        const now = new Date();
+        const lastRenewal = new Date(userDoc.lastCreditRenewal.seconds * 1000);
+        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+        
+        if (now.getTime() - lastRenewal.getTime() > thirtyDays) {
+          // Time to renew credits
+          const newCreditData = {
+            credits: 10,
+            lastCreditRenewal: serverTimestamp(),
+          };
+          setDoc(userDocRef, newCreditData, { merge: true });
+          setCredits(10);
+        } else {
+          setCredits(userDoc.credits);
+        }
       } else {
-        setCredits(userDoc.credits);
+        // lastCreditRenewal is null, likely a new user, use existing credits
+         setCredits(userDoc.credits);
       }
       setIsLoading(false);
     } else if (user && !isUserDocLoading && !userDoc) {
