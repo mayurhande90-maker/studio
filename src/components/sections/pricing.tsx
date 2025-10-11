@@ -143,15 +143,15 @@ export function Pricing() {
               Choose a plan — Monthly or Yearly (Save up to 25%)
             </p>
           </div>
-          <div className="flex items-center space-x-2 pt-8">
-            <Label htmlFor="pricing-toggle">Monthly</Label>
+          <div className="flex items-center space-x-4 pt-8">
+            <Label htmlFor="pricing-toggle" className="font-bold text-lg">Monthly</Label>
             <Switch
               id="pricing-toggle"
               checked={isYearly}
               onCheckedChange={setIsYearly}
               aria-label="Toggle between monthly and yearly pricing"
             />
-            <Label htmlFor="pricing-toggle">Yearly</Label>
+            <Label htmlFor="pricing-toggle" className="font-bold text-lg">Yearly</Label>
           </div>
         </div>
 
