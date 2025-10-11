@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '../theme-toggle';
+import { useUser } from '@/firebase';
+import { UserDropdown } from '../auth/user-dropdown';
+import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -18,13 +21,14 @@ const navItems = [
 ];
 
 const authNavItems = [
-    { name: 'Login', href: '#', variant: 'ghost' as const },
-    { name: 'Sign Up', href: '#', variant: 'default' as const },
-]
+  { name: 'Login', href: '/login', variant: 'ghost' as const },
+  { name: 'Sign Up', href: '/signup', variant: 'default' as const },
+];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isUserLoading } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +37,30 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const AuthNav = () => {
+    if (isUserLoading) {
+      return <Skeleton className="h-10 w-24 rounded-md" />;
+    }
+    if (user) {
+      return <UserDropdown />;
+    }
+    return (
+      <div className="hidden md:flex items-center gap-2">
+        {authNavItems.map((item) => (
+          <Button
+            key={item.name}
+            asChild
+            variant={item.variant}
+            size="sm"
+            className="rounded-md font-bold"
+          >
+            <Link href={item.href}>{item.name}</Link>
+          </Button>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <header
@@ -51,7 +79,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-semibold text-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-bold text-foreground/80 hover:text-primary transition-colors"
               >
                 {item.name}
               </Link>
@@ -59,15 +87,8 @@ export function Header() {
           </nav>
         </div>
 
-
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2">
-            {authNavItems.map(item => (
-                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-md font-bold'>
-                    <Link href={item.href}>{item.name}</Link>
-                </Button>
-            ))}
-          </div>
+          <AuthNav />
           <ThemeToggle />
           <div className="md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -91,7 +112,7 @@ export function Header() {
                     </Button>
                   </div>
                   <nav className="flex flex-col space-y-6">
-                    {[...navItems, ...authNavItems].map((item) => (
+                    {navItems.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
@@ -101,6 +122,27 @@ export function Header() {
                         {item.name}
                       </Link>
                     ))}
+                    {user ? (
+                      <Button
+                        onClick={() => {
+                          // TODO: Implement Logout
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    ) : (
+                      authNavItems.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="text-lg font-bold text-foreground/80 hover:text-primary transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))
+                    )}
                   </nav>
                 </div>
               </SheetContent>

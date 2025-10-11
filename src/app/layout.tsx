@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
   title: 'Magicpixa – AI Photo & Design Studio',
@@ -57,12 +58,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange={false}
         >
-          <Header />
-          <div className="relative flex min-h-dvh flex-col">
-            <main className="flex-1">{children}</main>
-          </div>
-          <Footer />
-          <Toaster />
+          <FirebaseClientProvider>
+            <Header />
+            <div className="relative flex min-h-dvh flex-col">
+              <main className="flex-1">{children}</main>
+            </div>
+            <Footer />
+            <Toaster />
+          </FirebaseClientProvider>
         </ThemeProvider>
       </body>
     </html>
