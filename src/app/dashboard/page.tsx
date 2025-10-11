@@ -18,10 +18,22 @@ export default function DashboardPage() {
     return <div>Please log in to view the dashboard.</div>;
   }
 
+  const getDisplayName = () => {
+    if (user.displayName) {
+      return user.displayName;
+    }
+    if (user.email) {
+      const emailName = user.email.split('@')[0];
+      // Capitalize first letter of each part of the name (if separated by '.')
+      return emailName.split('.').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
+    return 'User';
+  };
+
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Welcome, {user.displayName || user.email}!</h1>
+        <h1 className="text-3xl font-bold">Welcome, {getDisplayName()}!</h1>
         <p className="text-muted-foreground">
           Here's a quick overview of your account and recent activity.
         </p>
