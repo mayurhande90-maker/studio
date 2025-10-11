@@ -192,7 +192,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="text-center text-muted-foreground text-sm mt-12">
+        <p className="text-center text-primary/80 font-medium text-sm mt-12">
             Upgrade or cancel anytime. Instant access after purchase.
         </p>
       </div>
