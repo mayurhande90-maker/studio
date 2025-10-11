@@ -165,7 +165,7 @@ const featureCategories = [
 
 export function Features() {
   return (
-    <section id="features" className="w-full py-12 lg:py-16 bg-background">
+    <section id="features" className="w-full py-8 lg:py-12 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -183,7 +183,7 @@ export function Features() {
                 key={category.category}
                 value={category.category}
                 className={cn(
-                  'py-2.5 text-center text-sm font-medium transition-all',
+                  'py-2.5 text-center text-base font-semibold transition-all',
                   category.category === 'premium' &&
                     'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
                 )}
@@ -243,7 +243,7 @@ export function Features() {
             </TabsContent>
           ))}
         </Tabs>
-        <p className="text-center text-primary/80 font-semibold text-lg mt-12">
+        <p className="text-center text-primary/80 font-bold text-lg mt-12">
             More features coming soon to Magicpixa Pro+
         </p>
       </div>
