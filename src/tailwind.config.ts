@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 const config = {
@@ -59,8 +60,10 @@ const config = {
       },
       borderRadius: {
         lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 4px)',
-        sm: 'calc(var(--radius) - 8px)',
+        md: 'calc(var(--radius) - 8px)',
+        sm: 'calc(var(--radius) - 12px)',
+        '2xl': 'calc(var(--radius) + 4px)',
+        '3xl': 'calc(var(--radius) + 12px)',
       },
       keyframes: {
         'accordion-down': {
@@ -85,11 +88,16 @@ const config = {
             transform: "tranlate(0px, 0px) scale(1)",
           },
         },
+        'fade-in': {
+          from: { opacity: '0', transform: 'translateY(10px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         "blob": "blob 7s infinite",
+        'fade-in': 'fade-in 0.5s ease-out forwards',
       },
       backgroundSize: {
         'size-200': '200% 200%',
@@ -100,7 +108,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/aspect-ratio')],
 } satisfies Config;
 
 export default config;

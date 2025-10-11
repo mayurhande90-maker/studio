@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -53,14 +54,14 @@ export const featureCategories: FeatureCategory[] = [
         icon: Wand2,
         title: 'Magic Enhance',
         description: 'Auto color & lighting correction',
-        href: '/enhance',
+        href: '/dashboard/enhance',
         comingSoon: false,
       },
       {
         icon: Scissors,
         title: 'Background Eraser',
         description: 'Remove background, export PNG',
-        href: '/background-remover',
+        href: '/dashboard/background-remover',
         comingSoon: false,
       },
       {
@@ -74,7 +75,7 @@ export const featureCategories: FeatureCategory[] = [
         icon: Paintbrush,
         title: 'Vintage Colorizer',
         description: 'Bring old black-and-white photos to life',
-        href: '/colorizer',
+        href: '/dashboard/colorizer',
         comingSoon: false,
       },
     ],
@@ -88,28 +89,28 @@ export const featureCategories: FeatureCategory[] = [
         icon: ScanLine,
         title: 'DocuScan Pro',
         description: 'Scan & enhance physical documents',
-        href: '/doc-scanner',
+        href: '/dashboard/doc-scanner',
         comingSoon: false,
       },
       {
         icon: FileText,
         title: 'PDF Master Suite',
         description: 'Compress, summarize, translate PDFs',
-        href: '/pdf-tools',
+        href: '/dashboard/pdf-tools',
         comingSoon: false,
       },
       {
         icon: Notebook,
         title: 'Smart Notes Generator',
         description: 'Convert textbook pages into summarized notes',
-        href: '/notes-generator',
+        href: '/dashboard/notes-generator',
         comingSoon: false,
       },
       {
         icon: MessageSquare,
         title: 'AutoCaption AI',
         description: 'Generate captions & hashtags from your uploads',
-        href: '/caption-generator',
+        href: '/dashboard/caption-generator',
         comingSoon: false,
       },
     ],
@@ -123,35 +124,35 @@ export const featureCategories: FeatureCategory[] = [
         icon: ImageIcon,
         title: 'Thumbnail Forge',
         description: 'Create YouTube thumbnails instantly',
-        href: '/thumbnail-creator',
+        href: '/dashboard/thumbnail-creator',
         comingSoon: false,
       },
       {
         icon: ImageIcon,
         title: 'Mockup Maker',
         description: 'Generate realistic product mockups',
-        href: '/mockup-generator',
+        href: '/dashboard/mockup-generator',
         comingSoon: false,
       },
       {
         icon: ImageIcon,
         title: 'Festive Post Generator',
         description: 'Make festival posts with your name/brand',
-        href: '/festive-post',
+        href: '/dashboard/festive-post',
         comingSoon: false,
       },
       {
         icon: ImageIcon,
         title: 'Celebrity Collab AI',
         description: 'Get AI photos with your favorite celebrity',
-        href: '/celebrity-photo',
+        href: '/dashboard/celebrity-photo',
         comingSoon: false,
       },
       {
         icon: ImageIcon,
         title: 'FutureMe Vision',
         description: 'See your future self in cinematic or fantasy style',
-        href: '/future-self',
+        href: '/dashboard/future-self',
         comingSoon: false,
       },
     ],
@@ -222,7 +223,7 @@ export function Features() {
                     <Card
                       key={feature.title}
                       className={cn(
-                        'relative flex flex-col rounded-lg shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-secondary',
+                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-secondary',
                         feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
                       )}
                     >
@@ -230,7 +231,7 @@ export function Features() {
                         <Badge variant="default" className="absolute top-4 right-4 z-10">Coming Soon</Badge>
                       )}
                       <CardHeader className="p-6 items-center text-center">
-                        <div className="icon-container mb-4">
+                        <div className="icon-container mb-4 rounded-2xl">
                           <feature.icon className="h-6 w-6 text-primary-foreground" strokeWidth={2.5} />
                         </div>
                         <CardTitle className="text-lg font-semibold">

@@ -1,9 +1,11 @@
+
 'use client';
 
 import { usePathname } from 'next/navigation';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
+import { Toaster } from '../ui/toaster';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,6 +16,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     return (
       <div className="relative flex min-h-dvh flex-col">
         <main className="flex-1">{children}</main>
+        <Toaster />
       </div>
     );
   }
@@ -24,6 +27,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     return (
       <div className={cn("relative flex min-h-dvh flex-col")}>
         <main className="flex-1">{children}</main>
+        <Toaster />
       </div>
     );
   }
@@ -35,6 +39,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1">{children}</main>
       </div>
       <Footer />
+      <Toaster />
     </>
   );
 }

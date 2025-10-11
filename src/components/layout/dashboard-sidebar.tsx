@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -8,23 +9,40 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import {
   BookImage,
   LayoutGrid,
   Sparkles,
+  Settings,
+  CreditCard,
+  LifeBuoy,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { featureCategories } from '../sections/features';
 import { Logo } from '../logo';
 import { useEffect, useState } from 'react';
+import { useUser } from '@/firebase';
+import { Skeleton } from '../ui/skeleton';
+
+const mainNav = [
+    { name: 'Dashboard', icon: LayoutGrid, href: '/dashboard' },
+    { name: 'My Creations', icon: BookImage, href: '/dashboard/creations' },
+];
+
+const accountNav = [
+    { name: 'Settings', icon: Settings, href: '/dashboard/settings' },
+    { name: 'Billing', icon: CreditCard, href: '/dashboard/billing' },
+    { name: 'Help/FAQ', icon: LifeBuoy, href: '/dashboard/help' },
+]
+
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const defaultOpenCategories = featureCategories.map(c => c.category);
   const [isMounted, setIsMounted] = useState(false);
+  const { user, isUserLoading } = useUser();
 
   useEffect(() => {
     setIsMounted(true);
@@ -32,56 +50,53 @@ export function DashboardSidebar() {
 
   const getVariant = (href: string) => {
     if (!isMounted) return 'ghost';
-    // This is a simple check. For more complex routing, you might need a more robust solution.
-    // e.g., if you have /dashboard/settings and /dashboard/settings/profile
     if (pathname === href) return 'secondary';
-    // Handle case for nested routes if needed, e.g. pathname.startsWith(href) for parent links
     return 'ghost';
   };
   
   if (!isMounted) {
     return (
         <div className="hidden md:flex flex-col h-full w-80 border-r bg-background">
-          {/* You can put a skeleton loader here if you want */}
+          <div className="p-6">
+            <Logo />
+          </div>
+          <div className="px-6 py-4 space-y-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
         </div>
     );
   }
 
   return (
-    <div className="hidden md:flex flex-col h-full w-80 border-r bg-background">
-      <div className="p-6">
+    <aside className="hidden md:flex flex-col h-full w-80 border-r bg-background">
+      <div className="p-6 border-b">
         <Logo />
       </div>
       <ScrollArea className="flex-1">
-        <div className="px-6 py-4 space-y-4">
-          <Button
-            variant={getVariant('/dashboard')}
-            className="w-full justify-start"
-            asChild
-          >
-            <Link href="/dashboard">
-              <LayoutGrid className="mr-2 h-4 w-4" />
-              Dashboard
-            </Link>
-          </Button>
-          <Button
-            variant={getVariant('/dashboard/creations')}
-            className="w-full justify-start"
-            asChild
-          >
-            <Link href="/dashboard/creations">
-              <BookImage className="mr-2 h-4 w-4" />
-              My Creations
-            </Link>
-          </Button>
+        <div className="px-4 py-4 space-y-4">
+            <h3 className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Main</h3>
+             {mainNav.map(item => (
+                 <Button
+                    key={item.name}
+                    variant={getVariant(item.href)}
+                    className="w-full justify-start text-base py-6 rounded-2xl"
+                    asChild
+                >
+                    <Link href={item.href}>
+                        <item.icon className="mr-3 h-5 w-5" />
+                        {item.name}
+                    </Link>
+                </Button>
+             ))}
 
-          <Separator />
-
+          <h3 className="px-4 pt-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">AI Tools</h3>
           <Accordion type="multiple" className="w-full" defaultValue={defaultOpenCategories}>
             {featureCategories.map((category) => (
-              <AccordionItem value={category.category} key={category.category}>
+              <AccordionItem value={category.category} key={category.category} className="border-b-0">
                 <AccordionTrigger
-                  className={cn('text-sm font-semibold hover:no-underline',
+                  className={cn('text-sm font-bold hover:no-underline rounded-2xl px-4 py-2 hover:bg-secondary',
                     category.category === 'premium' && 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
                   )}
                 >
@@ -93,17 +108,17 @@ export function DashboardSidebar() {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex flex-col space-y-1 pl-2 border-l-2 border-primary/50 ml-2">
+                  <div className="flex flex-col space-y-1 mt-1 pl-4 border-l-2 border-primary/20 ml-2">
                     {category.features.map((feature) => (
                       <Button
                         key={feature.title}
                         variant={getVariant(feature.href)}
-                        className="w-full justify-start h-auto py-2"
+                        className="w-full justify-start h-auto py-3 rounded-xl"
                         asChild
                       >
                         <Link href={feature.href} className="flex items-center text-sm">
-                           <feature.icon className="mr-3 h-4 w-4" />
-                           <div className="flex flex-col">
+                           <feature.icon className="mr-3 h-5 w-5" />
+                           <div className="flex flex-col text-left">
                             <span>{feature.title}</span>
                            </div>
                         </Link>
@@ -114,8 +129,23 @@ export function DashboardSidebar() {
               </AccordionItem>
             ))}
           </Accordion>
+          
+           <h3 className="px-4 pt-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Account</h3>
+             {accountNav.map(item => (
+                 <Button
+                    key={item.name}
+                    variant={getVariant(item.href)}
+                    className="w-full justify-start text-base py-6 rounded-2xl"
+                    asChild
+                >
+                    <Link href={item.href}>
+                        <item.icon className="mr-3 h-5 w-5" />
+                        {item.name}
+                    </Link>
+                </Button>
+             ))}
         </div>
       </ScrollArea>
-    </div>
+    </aside>
   );
 }

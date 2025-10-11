@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -18,10 +19,10 @@ export function DashboardHeader() {
 
   const CreditsDisplay = () => {
     if (isCreditsLoading || isUserLoading) {
-      return <Skeleton className="h-8 w-24 rounded-md" />;
+      return <Skeleton className="h-8 w-24 rounded-full" />;
     }
     return (
-      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-3 py-1.5 rounded-md">
+      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-4 py-2 rounded-full shadow-inner">
         <Coins className="w-5 h-5 text-primary" />
         <span>{credits ?? 0} Credits</span>
       </div>
@@ -36,11 +37,11 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-40 flex h-20 items-center gap-4 border-b bg-background/80 backdrop-blur-lg px-4 md:px-6">
        <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className='rounded-full'>
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
