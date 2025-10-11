@@ -39,7 +39,7 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-background/80 backdrop-blur-lg border-b border-border/10'
+          ? 'bg-background/80 backdrop-blur-lg border-b border-border/50'
           : 'bg-transparent'
       )}
     >
@@ -63,7 +63,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             {authNavItems.map(item => (
-                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-lg'>
+                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-md'>
                     <Link href={item.href}>{item.name}</Link>
                 </Button>
             ))}

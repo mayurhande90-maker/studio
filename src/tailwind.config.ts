@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Manrope', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
         headline: ['Poppins', 'sans-serif'],
         code: ['monospace'],
       },
@@ -75,8 +75,8 @@ export default {
       },
       borderRadius: {
         lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 8px)',
-        sm: 'calc(var(--radius) - 12px)',
+        md: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 8px)',
       },
       keyframes: {
         'accordion-down': {

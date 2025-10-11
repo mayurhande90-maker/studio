@@ -16,10 +16,10 @@ const pricingData = {
       price: '₹0',
       period: '/month',
       features: [
-        '10 credits/month upon signup',
+        '10 credits/month',
         'Access to basic tools',
         'Watermark on exports',
-        'Standard processing speed',
+        'Standard processing',
       ],
       buttonLabel: 'Start Free',
       variant: 'outline' as const,
@@ -29,27 +29,28 @@ const pricingData = {
       price: '₹299',
       period: '/month',
       features: [
-        '100 credits/month',
+        '100 credits',
         'No watermark',
-        'Access to premium templates',
+        'Premium templates',
         'Priority processing',
       ],
       buttonLabel: 'Upgrade to Pro',
       variant: 'default' as const,
-      recommended: true,
+      recommended: false,
     },
     {
       plan: 'Premium Plan',
       price: '₹499',
       period: '/month',
       features: [
-        '350 credits/month',
+        '350 credits',
         'No watermark',
-        'Access to premium templates',
+        'Premium templates & priority processing',
         'Priority processing',
       ],
-      buttonLabel: 'Get Premium',
+      buttonLabel: 'Go Premium',
       variant: 'outline' as const,
+      recommended: true,
     },
      {
       plan: 'VIP Plan',
@@ -57,9 +58,9 @@ const pricingData = {
       period: '/month',
       features: [
         'Unlimited credits',
-        'Exclusive new AI tools',
+        'Exclusive tools',
         'Dedicated support',
-        'Highest priority queue',
+        'Top priority queue',
       ],
       buttonLabel: 'Go VIP',
       variant: 'outline' as const,
@@ -71,10 +72,10 @@ const pricingData = {
       price: '₹0',
       period: '/month',
       features: [
-        '10 credits/month upon signup',
+        '10 credits/month',
         'Access to basic tools',
         'Watermark on exports',
-        'Standard processing speed',
+        'Standard processing',
       ],
       buttonLabel: 'Start Free',
       variant: 'outline' as const,
@@ -84,27 +85,28 @@ const pricingData = {
       price: '₹249',
       period: '/month (billed yearly)',
       features: [
-        '100 credits/month',
+        '100 credits',
         'No watermark',
-        'Access to premium templates',
+        'Premium templates',
         'Priority processing',
       ],
       buttonLabel: 'Upgrade to Pro',
       variant: 'default' as const,
-      recommended: true,
+      recommended: false,
     },
     {
       plan: 'Premium Plan',
       price: '₹399',
       period: '/month (billed yearly)',
       features: [
-        '350 credits/month',
+        '350 credits',
         'No watermark',
         'Premium templates & priority processing',
         'Priority processing',
       ],
-      buttonLabel: 'Get Premium',
+      buttonLabel: 'Go Premium',
       variant: 'outline' as const,
+      recommended: true,
     },
      {
       plan: 'VIP Plan',
@@ -112,9 +114,9 @@ const pricingData = {
       period: '/month (billed yearly)',
       features: [
         'Unlimited credits',
-        'Exclusive new AI tools',
+        'Exclusive tools',
         'Dedicated support',
-        'Highest priority queue',
+        'Top priority queue',
       ],
       buttonLabel: 'Go VIP',
       variant: 'outline' as const,
@@ -128,15 +130,15 @@ export function Pricing() {
   const plans = isYearly ? pricingData.yearly : pricingData.monthly;
 
   return (
-    <section id="pricing" className="w-full py-20 lg:py-32 bg-background">
+    <section id="pricing" className="w-full py-20 lg:py-32 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Simple Pricing, No Hidden Costs
+              Plans for Everyone
             </h2>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              Choose the plan that fits your needs.
+              Choose a plan — Monthly or Yearly (Save up to 25%)
             </p>
           </div>
           <div className="flex items-center space-x-2 pt-8">
@@ -151,19 +153,19 @@ export function Pricing() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-7xl items-start gap-8 md:grid-cols-2 lg:grid-cols-4 mt-16">
+        <div className="mx-auto grid max-w-7xl items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4 mt-16">
           {plans.map((plan) => (
             <Card
               key={plan.plan}
               className={cn(
-                'relative flex flex-col rounded-3xl shadow-lg hover:shadow-primary/20 transition-all duration-300',
+                'relative flex flex-col rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-2',
                 plan.recommended ? 'border-2 border-primary shadow-primary/10' : 'border'
               )}
             >
               {plan.recommended && (
                 <Badge className="absolute top-6 right-6" variant="default">Recommended</Badge>
               )}
-              <CardHeader className="p-8">
+              <CardHeader className="p-6">
                 <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
                 <CardDescription className="flex items-baseline gap-2 pt-4">
                   <span className="text-4xl font-extrabold text-foreground">
@@ -172,18 +174,18 @@ export function Pricing() {
                   <span className="text-sm text-muted-foreground">{plan.period}</span>
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-8 pt-0 flex-1">
+              <CardContent className="p-6 pt-0 flex-1">
                 <ul className="space-y-4">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
                       <Check className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
+                      <span className="text-muted-foreground text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
-              <CardFooter className="p-8">
-                <Button className="w-full rounded-2xl text-base py-6" variant={plan.variant}>
+              <CardFooter className="p-6">
+                <Button className="w-full rounded-md text-base py-6" variant={plan.variant}>
                   {plan.buttonLabel}
                 </Button>
               </CardFooter>

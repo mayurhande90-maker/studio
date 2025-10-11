@@ -7,13 +7,13 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Magicpixa - Your Everyday AI Studio',
+  title: 'Magicpixa – AI Photo & Design Studio',
   description:
-    'Create. Enhance. Imagine. Your all-in-one AI toolkit for photo editing, content creation, and more.',
+    'Enhance photos, remove backgrounds, colorize memories, and design creative visuals — all powered by Magicpixa.',
   openGraph: {
-    title: 'Magicpixa - Your Everyday AI Studio',
+    title: 'Magicpixa – AI Photo & Design Studio',
     description:
-      'Instantly improve your photos, generate content, and bring your ideas to life with our advanced AI.',
+      'Enhance photos, remove backgrounds, colorize memories, and design creative visuals — all powered by Magicpixa.',
     type: 'website',
     locale: 'en_US',
     url: 'https://magicpixa.com',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F9FAFB' },
+    { media: '(prefers-color-scheme: light)', color: '#F8FAFC' },
     { media: '(prefers-color-scheme: dark)', color: '#0F172A' },
   ],
 };
@@ -43,7 +43,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
