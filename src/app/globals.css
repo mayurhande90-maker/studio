@@ -95,6 +95,6 @@
   }
 
   .icon-container {
-    @apply w-16 h-16 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center;
+    @apply w-16 h-16 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center;
   }
 }
