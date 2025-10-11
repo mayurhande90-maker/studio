@@ -17,6 +17,7 @@ const EnhanceUploadedImageInputSchema = z.object({
     .describe(
       "A raw photo of a product, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+   mimeType: z.string().describe('The MIME type of the image (e.g., "image/jpeg").')
 });
 export type EnhanceUploadedImageInput = z.infer<typeof EnhanceUploadedImageInputSchema>;
 
@@ -48,13 +49,14 @@ const analysisPrompt = ai.definePrompt({
     })},
     prompt: `Analyze the following product image. Identify the product type and assess the image quality.
 
-    Photo: {{media url=photoDataUri}}`
+    Photo: {{media url=photoDataUri contentType=mimeType}}`
 });
 
 const enhanceImagePrompt = ai.definePrompt({
   name: 'enhanceProductImagePrompt',
   input: { schema: z.object({
     photoDataUri: z.string(),
+    mimeType: z.string(),
     productType: z.string(),
   }) },
   prompt: `You are an expert product photographer. Generate a hyper-realistic, professionally shot image of the product provided.
@@ -63,7 +65,7 @@ const enhanceImagePrompt = ai.definePrompt({
   
   The product is a: {{{productType}}}
   
-  Original Photo: {{media url=photoDataUri}}
+  Original Photo: {{media url=photoDataUri contentType=mimeType}}
   
   Generate a new image with a beautiful, clean, and professional studio background that complements the product.`,
 });
@@ -91,7 +93,7 @@ const enhanceUploadedImageFlow = ai.defineFlow(
 
 The product is a: ${analysis.productType}`
         },
-        { media: { url: input.photoDataUri } }
+        { media: { url: input.photoDataUri, contentType: input.mimeType } }
       ],
       config: {
         // Specify JPG output if the model supports it, otherwise, it will be PNG by default.

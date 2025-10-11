@@ -35,6 +35,7 @@ const GENERATION_COST = 3;
 export default function AIPhotoStudioPage() {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [mimeType, setMimeType] = useState<string | null>(null);
     const [uploadProgress, setUploadProgress] = useState<number | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [generationStep, setGenerationStep] = useState(0);
@@ -51,6 +52,7 @@ export default function AIPhotoStudioPage() {
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
             setFile(selectedFile);
+            setMimeType(selectedFile.type);
             const objectUrl = URL.createObjectURL(selectedFile);
             setPreview(objectUrl);
             setGeneratedImage(null);
@@ -92,7 +94,7 @@ export default function AIPhotoStudioPage() {
 
 
     const handleGenerate = async () => {
-        if (!file || !preview) return;
+        if (!file || !preview || !mimeType) return;
         if (credits === null || credits < GENERATION_COST) {
             setShowInsufficientCredits(true);
             return;
@@ -109,7 +111,7 @@ export default function AIPhotoStudioPage() {
         }, 2500);
 
         try {
-            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: preview });
+            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: preview, mimeType });
             setGeneratedImage(response.enhancedPhotoDataUri);
             setAnalysisResult(response.analysis);
             deductCredits(GENERATION_COST);
@@ -133,6 +135,7 @@ export default function AIPhotoStudioPage() {
     const handleReset = () => {
         setFile(null);
         setPreview(null);
+        setMimeType(null);
         setGeneratedImage(null);
         setAnalysisResult(null);
         setUploadProgress(null);
