@@ -7,13 +7,13 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Magicpixa - Transform Your Photos with the Magic of AI',
+  title: 'Magicpixa - Your Everyday AI Studio',
   description:
-    'Remove backgrounds, enhance lighting, colorize memories, and create marketing-ready photos — all in seconds.',
+    'Create. Enhance. Imagine. Your all-in-one AI toolkit for photo editing, content creation, and more.',
   openGraph: {
-    title: 'Magicpixa - Transform Your Photos with the Magic of AI',
+    title: 'Magicpixa - Your Everyday AI Studio',
     description:
-      'Instantly improve your photos with our advanced AI enhancement tool.',
+      'Instantly improve your photos, generate content, and bring your ideas to life with our advanced AI.',
     type: 'website',
     locale: 'en_US',
     url: 'https://magicpixa.com',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
+    { media: '(prefers-color-scheme: light)', color: '#F9FAFB' },
+    { media: '(prefers-color-scheme: dark)', color: '#0F172A' },
   ],
 };
 
@@ -43,7 +43,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -55,7 +55,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false}
         >
           <Header />
           <div className="relative flex min-h-dvh flex-col">

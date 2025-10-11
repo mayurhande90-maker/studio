@@ -13,15 +13,40 @@ const socialLinks = [
   { icon: Linkedin, href: '#', name: 'LinkedIn' },
 ];
 
-const footerLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'About', href: '#' },
-    { name: 'Contact', href: '#' },
-    { name: 'Privacy Policy', href: '#' },
-    { name: 'Terms', href: '#' },
+const footerLinkGroups = [
+  {
+    title: 'Magicpixa',
+    links: [
+      { name: 'About Us', href: '#' },
+      { name: 'Careers', href: '#' },
+      { name: 'Press', href: '#' },
+    ],
+  },
+  {
+    title: 'Features',
+    links: [
+      { name: 'Photo Enhancements', href: '#features' },
+      { name: 'Productivity Tools', href: '#features' },
+      { name: 'Creative Studio', href: '#features' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { name: 'Blog', href: '#' },
+      { name: 'Help Center', href: '#' },
+      { name: 'Contact Us', href: '#' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { name: 'Privacy Policy', href: '#' },
+      { name: 'Terms of Service', href: '#' },
+    ],
+  },
 ];
+
 
 export function Footer() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -45,33 +70,35 @@ export function Footer() {
 
   return (
     <footer className="bg-background border-t border-border/10">
-      <div className="container mx-auto py-12 px-4 md:px-6">
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="flex flex-col gap-4">
+      <div className="container mx-auto py-16 px-4 md:px-6">
+        <div className="grid gap-12 md:grid-cols-5">
+          <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
             <Logo />
             <p className="text-muted-foreground max-w-xs">
-              Your personal AI photo studio. Enhance, edit, and colorize photos
-              effortlessly.
+             Your Everyday AI Studio — Create. Enhance. Imagine.
             </p>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              {footerLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
+          {footerLinkGroups.map(group => (
+            <div key={group.title}>
+              <h3 className="text-sm font-semibold mb-4 text-foreground/90">{group.title}</h3>
+              <ul className="space-y-3">
+                {group.links.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-16 pt-8 border-t border-border/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className='text-sm text-muted-foreground'>© {new Date().getFullYear()} Magicpixa. All rights reserved.</p>
+          <div className="flex space-x-4">
               {socialLinks.map((social) => (
                 <Link
                   key={social.name}
@@ -79,21 +106,18 @@ export function Footer() {
                   className="text-muted-foreground hover:text-primary transition-colors"
                   aria-label={social.name}
                 >
-                  <social.icon className="h-6 w-6" />
+                  <social.icon className="h-5 w-5" />
                 </Link>
               ))}
             </div>
-          </div>
-        </div>
-        <div className="mt-12 pt-8 border-t border-border/10 text-center text-muted-foreground">
-          <p>© 2025 Magicpixa. All rights reserved.</p>
         </div>
       </div>
       <Button
         onClick={scrollToTop}
         className={cn(
-          'fixed bottom-4 right-4 rounded-full p-2 transition-opacity duration-300 shadow-lg',
-          showBackToTop ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          'fixed bottom-6 right-6 rounded-full p-2.5 transition-all duration-300 shadow-lg z-50',
+          'bg-primary/90 text-primary-foreground backdrop-blur-sm ring-2 ring-primary/50',
+          showBackToTop ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
         )}
         variant="default"
         size="icon"

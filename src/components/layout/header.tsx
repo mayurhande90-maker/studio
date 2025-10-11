@@ -39,29 +39,31 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         scrolled
-          ? 'bg-background/80 backdrop-blur-sm shadow-md'
+          ? 'bg-background/80 backdrop-blur-lg border-b border-border/10'
           : 'bg-transparent'
       )}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Logo />
+        <div className="flex items-center gap-10">
+          <Logo />
+          <nav className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-        <nav className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-foreground/80 hover:text-primary font-medium transition-colors"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
 
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             {authNavItems.map(item => (
-                <Button key={item.name} asChild variant={item.variant}>
+                <Button key={item.name} asChild variant={item.variant} size='sm' className='rounded-lg'>
                     <Link href={item.href}>{item.name}</Link>
                 </Button>
             ))}
@@ -86,7 +88,6 @@ export function Header() {
                       aria-label="Close menu"
                     >
                       <X className="h-6 w-6" />
-                      <span className="sr-only">Close menu</span>
                     </Button>
                   </div>
                   <nav className="flex flex-col space-y-6">
