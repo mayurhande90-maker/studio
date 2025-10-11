@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Info, Loader2, Sparkles, UploadCloud, FileImage } from 'lucide-react';
+import { ArrowRight, Download, Info, Loader2, Sparkles, UploadCloud, FileImage, CheckCircle, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -39,7 +39,7 @@ export default function AIPhotoStudioPage() {
     const [uploadProgress, setUploadProgress] = useState<number | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [generationStep, setGenerationStep] = useState(0);
-    const [analysisResult, setAnalysisResult] = useState<{ productType: string; imageQuality: string } | null>(null);
+    const [analysisResult, setAnalysisResult] = useState<EnhanceUploadedImageOutput['analysis'] | null>(null);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [showInsufficientCredits, setShowInsufficientCredits] = useState(false);
     
@@ -48,25 +48,37 @@ export default function AIPhotoStudioPage() {
     const { toast } = useToast();
     const { credits, deductCredits, isLoading: isCreditsLoading } = useCredits();
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
+    const readDataUrl = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
             setFile(selectedFile);
             setMimeType(selectedFile.type);
-            const objectUrl = URL.createObjectURL(selectedFile);
-            setPreview(objectUrl);
             setGeneratedImage(null);
             setAnalysisResult(null);
             setUploadProgress(0);
+
+            // Show preview immediately
+            const objectUrl = URL.createObjectURL(selectedFile);
+            setPreview(objectUrl);
 
             // Simulate upload progress
             const timer = setInterval(() => {
                 setUploadProgress((prev) => {
                     if (prev === null || prev >= 100) {
                         clearInterval(timer);
-                         setTimeout(() => {
+                         setTimeout(async () => {
                            setUploadProgress(null);
-                           handleImageAnalysis(objectUrl);
+                           const dataUri = await readDataUrl(selectedFile);
+                           handleImageAnalysis(dataUri, selectedFile.type);
                         }, 500);
                         return 100;
                     }
@@ -82,19 +94,19 @@ export default function AIPhotoStudioPage() {
         multiple: false,
     });
 
-    const handleImageAnalysis = async (dataUri: string) => {
+    const handleImageAnalysis = async (dataUri: string, mime: string) => {
          try {
-            // Mock analysis for speed
-            setAnalysisResult({ productType: 'Face Cream Jar', imageQuality: 'Good quality photo.' });
+            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: dataUri, mimeType: mime });
+            setAnalysisResult(response.analysis);
         } catch (error) {
             console.error("Analysis failed:", error);
-            setAnalysisResult({ productType: 'Unknown', imageQuality: 'Analysis failed' });
+            setAnalysisResult({ productType: 'Unknown', imageQuality: 'Analysis failed', friendlyCaption: "Perfect upload! Let's see what Magicpixa can do." });
         }
     };
 
 
     const handleGenerate = async () => {
-        if (!file || !preview || !mimeType) return;
+        if (!file || !mimeType) return;
         if (credits === null || credits < GENERATION_COST) {
             setShowInsufficientCredits(true);
             return;
@@ -111,7 +123,8 @@ export default function AIPhotoStudioPage() {
         }, 2500);
 
         try {
-            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: preview, mimeType });
+            const dataUri = await readDataUrl(file);
+            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: dataUri, mimeType: mimeType });
             setGeneratedImage(response.enhancedPhotoDataUri);
             setAnalysisResult(response.analysis);
             deductCredits(GENERATION_COST);
@@ -152,6 +165,63 @@ export default function AIPhotoStudioPage() {
         document.body.removeChild(link);
     };
 
+    const SmartFeedbackZone = () => {
+        if (uploadProgress !== null) {
+             return (
+                <div className="space-y-2 text-center animate-fade-in">
+                    <p className="font-semibold">Uploading...</p>
+                    <Progress value={uploadProgress} />
+                    <p className="text-sm text-muted-foreground">Optimizing image for best results...</p>
+                </div>
+            )
+        }
+
+        if(isGenerating) {
+            return (
+                 <div className="relative w-full h-full p-8 bg-secondary/50 rounded-2xl animate-fade-in">
+                    <div className="flex flex-col items-center justify-center">
+                        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                        <p className="font-semibold text-lg text-foreground mt-4">{generationMessages[generationStep]}</p>
+                        <p className="text-muted-foreground text-sm">Enhancing colors, fixing lighting, and adding clarity.</p>
+                    </div>
+                </div>
+            )
+        }
+
+        if (analysisResult) {
+            return (
+                <div className="p-4 rounded-2xl bg-secondary/50 space-y-4 animate-fade-in">
+                    <div className="flex items-center gap-4">
+                        <Image src={preview!} alt="thumbnail" width={64} height={64} className="rounded-lg" />
+                        <div className="flex-1">
+                            <p className="font-bold text-sm truncate">{file?.name}</p>
+                            <p className="text-xs text-muted-foreground">{file && (file.size / 1024).toFixed(2)} KB</p>
+                        </div>
+                        <CheckCircle className="w-6 h-6 text-green-500" />
+                    </div>
+                     <p className='text-base font-semibold text-center text-primary'>{analysisResult.friendlyCaption}</p>
+                </div>
+            )
+        }
+        
+         if (generatedImage) {
+            return (
+                <div className="p-6 rounded-2xl bg-green-500/10 text-center space-y-3 animate-fade-in">
+                    <h3 className="font-bold text-lg text-green-700 dark:text-green-400">✅ Done! Your image has been enhanced.</h3>
+                    <p className="text-sm text-muted-foreground">This one turned out great — want to try another?</p>
+                </div>
+            );
+        }
+
+        return (
+            <div className="p-4 rounded-2xl bg-secondary/50 space-y-3 text-center animate-fade-in">
+                <p className="text-sm text-muted-foreground"><Info className="inline-block w-4 h-4 mr-1" />Upload a clear, front-facing photo for best results.</p>
+                <p className="text-xs text-muted-foreground">Supported formats: JPG, PNG (max 20MB).</p>
+                <Button variant="outline" size="sm" className="mt-2">Try Sample Image</Button>
+            </div>
+        )
+    }
+
     return (
         <div className="w-full space-y-8">
             <div className="text-center">
@@ -164,27 +234,11 @@ export default function AIPhotoStudioPage() {
                 </p>
             </div>
 
-            <Card className="rounded-3xl p-4 sm:p-6 lg:p-8 border-2 border-dashed border-primary/20 bg-background/50">
-                 <div
-                    {...getRootProps()}
-                    className={cn(
-                        'flex flex-col items-center justify-center text-center p-12 rounded-2xl cursor-pointer transition-all duration-300',
-                        isDragActive ? 'bg-primary/10 border-primary' : 'bg-secondary/50 border-transparent',
-                        'border-2 border-dashed'
-                    )}
-                >
-                    <input {...getInputProps()} />
-                    <UploadCloud className="w-16 h-16 text-primary mb-4" />
-                    <p className="text-xl font-bold">Drop your product photo here</p>
-                    <p className="text-muted-foreground">or click to upload (JPG, PNG)</p>
-                </div>
-            </Card>
-
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                  {/* Preview / Generated Image Column */}
                  <div className="space-y-6">
                      <h2 className="text-2xl font-bold">
-                        {generatedImage ? 'AI Generated Result' : 'Your Upload'}
+                        {generatedImage ? 'AI Generated Result' : 'Your Workspace'}
                      </h2>
                     <Card className="rounded-3xl shadow-lg overflow-hidden aspect-w-4 aspect-h-3">
                         <CardContent className="p-0">
@@ -204,9 +258,18 @@ export default function AIPhotoStudioPage() {
                                 <Image src={preview} alt="Preview" layout="responsive" width={800} height={600} />
                             )}
                              {!isGenerating && !preview && (
-                                <div className="flex flex-col items-center justify-center h-full bg-secondary/30 text-muted-foreground p-12">
-                                    <FileImage className="w-24 h-24" />
-                                    <p className="mt-4 font-semibold">Your image will appear here</p>
+                                <div
+                                    {...getRootProps()}
+                                    className={cn(
+                                        'flex flex-col items-center justify-center text-center p-12 rounded-2xl cursor-pointer transition-all duration-300 h-full min-h-[400px]',
+                                        isDragActive ? 'bg-primary/10 border-primary' : 'bg-secondary/30 border-transparent',
+                                        'border-2 border-dashed'
+                                    )}
+                                >
+                                    <input {...getInputProps()} />
+                                    <UploadCloud className="w-16 h-16 text-primary mb-4" />
+                                    <p className="text-xl font-bold">Drop your product photo here</p>
+                                    <p className="text-muted-foreground">or click to upload (JPG, PNG)</p>
                                 </div>
                             )}
                         </CardContent>
@@ -218,61 +281,42 @@ export default function AIPhotoStudioPage() {
                     <h2 className="text-2xl font-bold">Configuration & Actions</h2>
                     <Card className="rounded-3xl shadow-lg">
                         <CardContent className="p-6 space-y-6">
-                            {uploadProgress !== null && (
-                                <div className="space-y-2">
-                                    <p className="font-semibold">Uploading...</p>
-                                    <Progress value={uploadProgress} />
-                                    <p className="text-sm text-muted-foreground">Optimizing image for best results...</p>
-                                </div>
-                            )}
-
-                             {analysisResult && !isGenerating && (
-                                <div className="p-4 rounded-xl bg-secondary/50 text-center space-y-1 animate-fade-in">
-                                    <p className='text-sm'><span className='font-bold'>Detected Product:</span> {analysisResult.productType}</p>
-                                    <p className='text-sm'><span className='font-bold'>Quality:</span> {analysisResult.imageQuality}</p>
-                                    <p className='text-sm font-bold text-green-500'>Ready for AI enhancement.</p>
-                                </div>
-                            )}
+                           
+                           <SmartFeedbackZone />
                             
                             <div className="space-y-4">
-                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl" disabled={isGenerating || !preview}>
-                                    {isGenerating ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                            Creating Magic...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Generate Image <ArrowRight className="ml-2 h-5 w-5" />
-                                        </>
-                                    )}
-                                </Button>
-                                <p className="text-center text-sm text-muted-foreground">
-                                    Generation will cost {GENERATION_COST} credits.
-                                </p>
+                               {generatedImage && !isGenerating ? (
+                                    <div className="grid grid-cols-1 gap-4 pt-4 border-t">
+                                        <Button onClick={handleReset} variant="outline" size="lg" className="rounded-2xl">
+                                            <UploadCloud className="mr-2 h-4 w-4" />
+                                            Upload New Image
+                                        </Button>
+                                        <Button onClick={handleDownload} size="lg" className="rounded-2xl">
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Download (JPG)
+                                        </Button>
+                                    </div>
+                               ) : (
+                                <>
+                                    <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl" disabled={isGenerating || !preview}>
+                                        {isGenerating ? (
+                                            <>
+                                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                                Creating Magic...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Generate Image <ArrowRight className="ml-2 h-5 w-5" />
+                                            </>
+                                        )}
+                                    </Button>
+                                    <p className="text-center text-sm text-muted-foreground">
+                                        Generation will cost {GENERATION_COST} credits.
+                                    </p>
+                                </>
+                               )}
                             </div>
                             
-                            {generatedImage && !isGenerating && (
-                                <div className="grid grid-cols-1 gap-4 pt-4 border-t">
-                                     <Button onClick={handleReset} variant="outline" size="lg" className="rounded-2xl">
-                                        <UploadCloud className="mr-2 h-4 w-4" />
-                                        Upload New Image
-                                    </Button>
-                                    <Button onClick={handleDownload} size="lg" className="rounded-2xl">
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Download (JPG)
-                                    </Button>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                    
-                    <Card className="rounded-3xl shadow-sm bg-secondary/50">
-                        <CardContent className="p-4">
-                            <div className="flex items-center">
-                                <Info className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-                                <p className="text-sm text-muted-foreground">{smartTips[0]}</p>
-                            </div>
                         </CardContent>
                     </Card>
                 </div>

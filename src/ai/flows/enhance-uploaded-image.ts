@@ -25,7 +25,8 @@ export type EnhanceUploadedImageInput = z.infer<typeof EnhanceUploadedImageInput
 const EnhanceUploadedImageOutputSchema = z.object({
   analysis: z.object({
     productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe").'),
-    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").')
+    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").'),
+    friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details." or "Clean product shot detected. Ready for a cinematic touch?"')
   }),
   enhancedPhotoDataUri: z
     .string()
@@ -45,31 +46,21 @@ const analysisPrompt = ai.definePrompt({
     input: { schema: EnhanceUploadedImageInputSchema },
     output: { schema: z.object({
         productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe").'),
-        imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").')
+        imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").'),
+        friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details." or "Clean product shot detected. Ready for a cinematic touch?"')
     })},
-    prompt: `Analyze the following product image. Identify the product type and assess the image quality.
+    prompt: `Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
+
+    Here are some examples for the friendly caption:
+    - If it's a portrait: "Nice portrait! Let's bring out those natural details."
+    - If it's a product: "Clean product shot detected. Ready for a cinematic touch?"
+    - If it's a landscape: "Beautiful view! Let's enhance those colors."
+    - If it's blurry: "A bit out of focus — our AI will fix that in seconds."
+    - If it's old/B&W: "Vintage vibes detected — we'll colorize this beautifully."
+    - If unknown: "Perfect upload! Let's see what Magicpixa can do."
 
     Photo: {{media url=photoDataUri contentType=mimeType}}`
 });
-
-const enhanceImagePrompt = ai.definePrompt({
-  name: 'enhanceProductImagePrompt',
-  input: { schema: z.object({
-    photoDataUri: z.string(),
-    mimeType: z.string(),
-    productType: z.string(),
-  }) },
-  prompt: `You are an expert product photographer. Generate a hyper-realistic, professionally shot image of the product provided.
-
-  **CRITICAL RULE:** Do NOT modify the product itself. The product's packaging, logo, brand name, text, and labels must remain 100% original and unchanged. Only enhance the environment, lighting, background, and overall presentation to make it look like a professional photograph. The final image should be in high-definition (HD) and look photorealistic, not AI-generated.
-  
-  The product is a: {{{productType}}}
-  
-  Original Photo: {{media url=photoDataUri contentType=mimeType}}
-  
-  Generate a new image with a beautiful, clean, and professional studio background that complements the product.`,
-});
-
 
 const enhanceUploadedImageFlow = ai.defineFlow(
   {
