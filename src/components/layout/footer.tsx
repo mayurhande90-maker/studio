@@ -17,8 +17,10 @@ const footerLinks = [
     { name: 'Home', href: '/' },
     { name: 'Features', href: '#features' },
     { name: 'Pricing', href: '#pricing' },
+    { name: 'About', href: '#' },
     { name: 'Contact', href: '#' },
     { name: 'Privacy Policy', href: '#' },
+    { name: 'Terms', href: '#' },
 ];
 
 export function Footer() {
@@ -42,7 +44,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t border-white/10">
+    <footer className="bg-background border-t border-border/10">
       <div className="container mx-auto py-12 px-4 md:px-6">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="flex flex-col gap-4">
@@ -83,7 +85,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-white/10 text-center text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-border/10 text-center text-muted-foreground">
           <p>© 2025 Magicpixa. All rights reserved.</p>
         </div>
       </div>
@@ -95,6 +97,7 @@ export function Footer() {
         )}
         variant="default"
         size="icon"
+        aria-label="Back to Top"
       >
         <ArrowUp className="h-5 w-5" />
         <span className="sr-only">Back to Top</span>

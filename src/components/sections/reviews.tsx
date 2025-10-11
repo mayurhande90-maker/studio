@@ -18,7 +18,7 @@ const reviews = [
     designation: 'Product Photographer',
     rating: 5,
     review:
-      'The background remover is unbelievably fast and accurate. Saves me hours every day!',
+      'The background removal tool is lightning fast. My workflow is now seamless.',
   },
   {
     name: 'Priya Deshmukh',
@@ -26,7 +26,7 @@ const reviews = [
     designation: 'Digital Marketer',
     rating: 4,
     review:
-      'Photo Studio makes my product photos look like they were shot professionally. Super impressed!',
+      'AutoCaption and Photo Studio saved me hours. Love the smooth results.',
   },
   {
     name: 'Rohan Nair',
@@ -34,7 +34,7 @@ const reviews = [
     designation: 'E-commerce Seller',
     rating: 5,
     review:
-      'Enhancement tool is a game changer! My product images look 10x better instantly.',
+      'Every product image now looks polished. The enhance tool is a game-changer.',
   },
   {
     name: 'Sneha Patil',
@@ -42,7 +42,7 @@ const reviews = [
     designation: 'Wedding Photographer',
     rating: 4,
     review:
-      'Loved the colorizer feature — it brought life to my grandparents’ old photos beautifully.',
+      'Colorizing old family photos brought tears to my eyes.',
   },
   {
     name: 'Karan Sharma',
@@ -50,7 +50,7 @@ const reviews = [
     designation: 'Designer',
     rating: 5,
     review:
-      'Very clean interface and amazing results. Definitely worth upgrading to Pro.',
+      'The design is clean, but the AI tools are powerful. Worth every rupee.',
   },
 ];
 
@@ -64,10 +64,10 @@ export function Reviews() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Loved by Thousands of Users
+              Loved by Creators All Over India
             </h2>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              See what our Indian users say about Magicpixa.
+              Real feedback from users who’ve transformed their creative flow.
             </p>
           </div>
         </div>
@@ -91,7 +91,7 @@ export function Reviews() {
                 className="md:basis-1/2 lg:basis-1/3"
               >
                 <div className="p-1">
-                  <Card className="h-full flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300 bg-card/50 backdrop-blur-sm border border-white/10">
+                  <Card className="h-full flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300 bg-card/50 backdrop-blur-sm border border-border/10">
                     <CardContent className="p-6 flex flex-col gap-4">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (

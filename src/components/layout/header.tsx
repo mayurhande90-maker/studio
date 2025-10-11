@@ -14,6 +14,7 @@ const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Features', href: '#features' },
   { name: 'Pricing', href: '#pricing' },
+  { name: 'About', href: '#' },
 ];
 
 const authNavItems = [
@@ -82,6 +83,7 @@ export function Header() {
                       variant="ghost"
                       size="icon"
                       onClick={() => setIsMobileMenuOpen(false)}
+                      aria-label="Close menu"
                     >
                       <X className="h-6 w-6" />
                       <span className="sr-only">Close menu</span>
