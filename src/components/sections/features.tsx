@@ -189,8 +189,9 @@ export function Features() {
             </TabsTrigger>
           </TabsList>
           {featureCategories.map((category, catIndex) => (
-            <TabsContent key={catIndex} value={category.value} className="mt-12">
+            <TabsContent key={catIndex} value={category.value} className="mt-12 rounded-xl bg-card/20 p-6 md:p-10">
               <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-foreground">{category.title}</h3>
                 <p className="mt-2 text-muted-foreground md:text-lg">
                   {category.description}
                 </p>
