@@ -67,7 +67,7 @@ export const featureCategories: FeatureCategory[] = [
         icon: ImageIcon,
         title: 'AI Photo Studio',
         description: 'Turn raw product photo into cinematic marketing photo',
-        href: '/photo-studio',
+        href: '/dashboard/photo-studio',
         comingSoon: false,
       },
       {

@@ -276,65 +276,55 @@ export default function AIPhotoStudioPage() {
 
     return (
         <div className="w-full">
-            {/* Hero Section */}
-            <section className="relative text-center py-16 md:py-24 overflow-hidden">
-                 <div className="absolute inset-0 z-0">
-                    <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full filter blur-3xl opacity-50 animate-blob"></div>
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-accent/10 rounded-full filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
-                </div>
-                <div className="container relative z-10">
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-gradient animated-gradient">AI Photo Studio</h1>
-                    <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                        Transform your raw product photo into a hyper-realistic image ready to post.
-                    </p>
-                </div>
-            </section>
+            <div className="space-y-2 mb-8">
+                <h1 className="text-3xl font-bold">AI Photo Studio</h1>
+                <p className="text-muted-foreground">
+                    Transform your raw product photo into a hyper-realistic image ready to post.
+                </p>
+            </div>
             
-            {/* Main Content */}
-            <main className="container pb-24">
-                <div className="max-w-2xl mx-auto space-y-8">
-                    {/* Main Interaction Area */}
-                    <div>
-                        {!preview && !isGenerating && renderUploadBox()}
-                        {preview && uploadProgress !== null && renderUploadingState()}
-                        {preview && uploadProgress === null && !generatedImage && !isGenerating && renderPreviewAndGenerate()}
-                        {isGenerating && renderGeneratingState()}
-                        {generatedImage && !isGenerating && renderGeneratedImage()}
-                    </div>
-
-                    {/* AI Feedback Section */}
-                    {analysisResult && !isGenerating && (
-                         <Card className="bg-background/80 backdrop-blur-sm shadow-md transition-all animate-fade-in">
-                            <CardContent className="p-4 text-center space-y-1">
-                                <p className='text-sm'><span className='font-bold'>Detected Product:</span> {analysisResult.productType}</p>
-                                <p className='text-sm'><span className='font-bold'>Quality:</span> {analysisResult.imageQuality}</p>
-                                <p className='text-sm font-bold text-green-500'>Ready for AI enhancement.</p>
-                            </CardContent>
-                        </Card>
-                    )}
-                   
-
-                    {/* Smart Tip Box */}
-                    {!generatedImage && (
-                        <Card className="rounded-xl shadow-sm bg-secondary/50">
-                             <CardContent className="p-4">
-                                <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000 })]} opts={{ loop: true }}>
-                                    <CarouselContent>
-                                    {smartTips.map((tip, index) => (
-                                        <CarouselItem key={index}>
-                                            <div className="flex items-center text-center">
-                                                <Info className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
-                                                <p className="text-sm text-muted-foreground">{tip}</p>
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                    </CarouselContent>
-                                </Carousel>
-                            </CardContent>
-                        </Card>
-                    )}
+            <div className="max-w-2xl mx-auto space-y-8">
+                {/* Main Interaction Area */}
+                <div>
+                    {!preview && !isGenerating && renderUploadBox()}
+                    {preview && uploadProgress !== null && renderUploadingState()}
+                    {preview && uploadProgress === null && !generatedImage && !isGenerating && renderPreviewAndGenerate()}
+                    {isGenerating && renderGeneratingState()}
+                    {generatedImage && !isGenerating && renderGeneratedImage()}
                 </div>
-            </main>
+
+                {/* AI Feedback Section */}
+                {analysisResult && !isGenerating && (
+                        <Card className="bg-background/80 backdrop-blur-sm shadow-md transition-all animate-fade-in">
+                        <CardContent className="p-4 text-center space-y-1">
+                            <p className='text-sm'><span className='font-bold'>Detected Product:</span> {analysisResult.productType}</p>
+                            <p className='text-sm'><span className='font-bold'>Quality:</span> {analysisResult.imageQuality}</p>
+                            <p className='text-sm font-bold text-green-500'>Ready for AI enhancement.</p>
+                        </CardContent>
+                    </Card>
+                )}
+                
+
+                {/* Smart Tip Box */}
+                {!generatedImage && (
+                    <Card className="rounded-xl shadow-sm bg-secondary/50">
+                            <CardContent className="p-4">
+                            <Carousel setApi={setCarouselApi} plugins={[Autoplay({ delay: 5000 })]} opts={{ loop: true }}>
+                                <CarouselContent>
+                                {smartTips.map((tip, index) => (
+                                    <CarouselItem key={index}>
+                                        <div className="flex items-center text-center">
+                                            <Info className="w-5 h-5 mr-3 text-primary flex-shrink-0" />
+                                            <p className="text-sm text-muted-foreground">{tip}</p>
+                                        </div>
+                                    </CarouselItem>
+                                ))}
+                                </CarouselContent>
+                            </Carousel>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
 
             <AlertDialog open={showInsufficientCredits} onOpenChange={setShowInsufficientCredits}>
                 <AlertDialogContent>
