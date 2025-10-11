@@ -91,13 +91,6 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "blob": "blob 7s infinite",
       },
-      backgroundSize: {
-        'size-200': '200% 200%',
-      },
-      backgroundPosition: {
-        'pos-0': '0% 0%',
-        'pos-100': '100% 100%',
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
