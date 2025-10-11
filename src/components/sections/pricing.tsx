@@ -29,7 +29,8 @@ const pricingData = {
       price: '₹299',
       period: '/month',
       features: [
-        '100 credits',
+        'Everything from Free Plan',
+        '100 credits per month',
         'No watermark',
         'Premium templates',
         'Priority processing',
@@ -43,10 +44,9 @@ const pricingData = {
       price: '₹499',
       period: '/month',
       features: [
-        '350 credits',
-        'No watermark',
+        'Everything from Pro Plan',
+        '350 credits per month',
         'Premium templates & priority processing',
-        'Priority processing',
       ],
       buttonLabel: 'Go Premium',
       variant: 'outline' as const,
@@ -57,6 +57,7 @@ const pricingData = {
       price: '₹1999',
       period: '/month',
       features: [
+        'Everything from Premium Plan',
         'Unlimited credits',
         'Exclusive tools',
         'Dedicated support',
@@ -85,7 +86,8 @@ const pricingData = {
       price: '₹249',
       period: '/month (billed yearly)',
       features: [
-        '100 credits',
+        'Everything from Free Plan',
+        '100 credits per month',
         'No watermark',
         'Premium templates',
         'Priority processing',
@@ -99,10 +101,9 @@ const pricingData = {
       price: '₹399',
       period: '/month (billed yearly)',
       features: [
-        '350 credits',
-        'No watermark',
+        'Everything from Pro Plan',
+        '350 credits per month',
         'Premium templates & priority processing',
-        'Priority processing',
       ],
       buttonLabel: 'Go Premium',
       variant: 'outline' as const,
@@ -113,6 +114,7 @@ const pricingData = {
       price: '₹1499',
       period: '/month (billed yearly)',
       features: [
+        'Everything from Premium Plan',
         'Unlimited credits',
         'Exclusive tools',
         'Dedicated support',
@@ -130,14 +132,14 @@ export function Pricing() {
   const plans = isYearly ? pricingData.yearly : pricingData.monthly;
 
   return (
-    <section id="pricing" className="w-full py-16 lg:py-24 bg-secondary/30">
+    <section id="pricing" className="w-full py-12 lg:py-16 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Plans for Everyone
             </h2>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl font-medium">
               Choose a plan — Monthly or Yearly (Save up to 25%)
             </p>
           </div>
@@ -192,7 +194,7 @@ export function Pricing() {
             </Card>
           ))}
         </div>
-        <p className="text-center text-primary/80 font-medium text-sm mt-12">
+        <p className="text-center text-primary/80 font-semibold text-base mt-12">
             Upgrade or cancel anytime. Instant access after purchase.
         </p>
       </div>
