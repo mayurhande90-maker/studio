@@ -1,26 +1,30 @@
 'use client';
 
-import { ArrowRight, CheckCircle, Coins } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCredits } from '@/hooks/use-credits';
 import { Skeleton } from '../ui/skeleton';
+import { useUser } from '@/firebase';
 
 export function Hero() {
+    const { user, isUserLoading } = useUser();
     const { credits, isLoading } = useCredits();
 
   const CreditsDisplay = () => {
-    if (isLoading) {
+    if (isLoading || isUserLoading) {
       return <Skeleton className="h-6 w-48 rounded-md" />;
     }
-    if (credits === 1) {
+
+    if (!user) {
          return (
             <p className="text-sm text-muted-foreground flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              You have 1 free credit to start — no card required.
+              You have {credits ?? 0} free credit to start — no card required.
             </p>
          )
     }
+
     return (
         <p className="text-sm text-muted-foreground flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-green-500" />

@@ -9,12 +9,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
   BookImage,
   LayoutGrid,
-  Menu,
   Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -32,14 +30,13 @@ export function DashboardSidebar() {
     setIsMounted(true);
   }, []);
 
-
   const getVariant = (href: string) => {
     if (!isMounted) return 'ghost';
     return pathname === href ? 'secondary' : 'ghost';
   };
 
-  const sidebarContent = (
-    <div className="flex flex-col h-full">
+  return (
+    <div className="hidden md:flex flex-col h-full w-80 border-r bg-background">
       <div className="p-6">
         <Logo />
       </div>
@@ -108,25 +105,5 @@ export function DashboardSidebar() {
         </div>
       </ScrollArea>
     </div>
-  );
-
-  return (
-    <>
-      <div className="hidden md:block md:w-80 md:flex-shrink-0 border-r">
-        {sidebarContent}
-      </div>
-      <div className="md:hidden p-4">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-80">
-            {sidebarContent}
-          </SheetContent>
-        </Sheet>
-      </div>
-    </>
   );
 }

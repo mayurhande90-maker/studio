@@ -28,6 +28,7 @@ import { useToast } from '@/hooks/use-toast';
 import { FirebaseError } from 'firebase/app';
 import { AuthErrorCodes, signInWithEmailAndPassword } from 'firebase/auth';
 import { Eye, EyeOff } from 'lucide-react';
+import { Logo } from '@/components/logo';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -94,7 +95,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6">
+    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6 bg-secondary/30">
+        <div className='absolute top-8 left-8'>
+            <Logo />
+        </div>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>

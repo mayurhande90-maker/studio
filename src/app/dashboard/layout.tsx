@@ -1,6 +1,5 @@
+import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { DashboardSidebar } from '@/components/layout/dashboard-sidebar';
-import { useUser } from '@/firebase';
-import { redirect } from 'next/navigation';
 
 export default function DashboardLayout({
   children,
@@ -8,11 +7,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen">
       <DashboardSidebar />
-      <main className="flex-1 p-4 md:p-8 overflow-auto">
-        {children}
-      </main>
+      <div className="flex flex-col flex-1">
+        <DashboardHeader />
+        <main className="flex-1 p-4 md:p-8 overflow-auto bg-secondary/20">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
