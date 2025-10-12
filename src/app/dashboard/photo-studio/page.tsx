@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
-import { analyzeImage, EnhanceUploadedImageOutput, EnhanceUploadedImageInput } from '@/ai/flows/enhance-uploaded-image';
+import { EnhanceUploadedImageOutput, EnhanceUploadedImageInput, ProductImageAnalysis } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
@@ -60,7 +60,16 @@ export default function AIPhotoStudioPage() {
         if (!file) return;
         setIsAnalyzing(true);
         try {
-            const result = await analyzeImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
+            const response = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' }),
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Request failed with status ${response.status}`);
+            }
+            const result: ProductImageAnalysis = await response.json();
             setAnalysisResult(result);
         } catch (error: any) {
             console.error('Analysis Error:', error);
@@ -433,5 +442,7 @@ export default function AIPhotoStudioPage() {
     
 
 
+
+    
 
     
