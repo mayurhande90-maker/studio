@@ -45,19 +45,21 @@ const analysisPrompt = ai.definePrompt({
     name: 'productImageAnalysisPrompt',
     input: { schema: EnhanceUploadedImageInputSchema },
     output: { schema: z.object({
-        productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe").'),
-        imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").'),
-        friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details." or "Clean product shot detected. Ready for a cinematic touch?"')
+        productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe", "face cream jar", "group photo", "document", "landscape", "old photo", "blurry photo").'),
+        imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit", "low resolution").'),
+        friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details.", "Clean product shot detected. Ready for a cinematic touch?", "A bit out of focus — our AI will fix that in seconds.", "Vintage vibes detected — we\'ll colorize this beautifully.", "Perfect upload! Let\'s see what Magicpixa can do."')
     })},
-    prompt: `Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
+    prompt: `You are an expert image analyst. Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
 
-    Here are some examples for the friendly caption:
-    - If it's a portrait: "Nice portrait! Let's bring out those natural details."
+    Here are some examples for the friendly caption based on image type:
+    - If it's a portrait of a person: "Nice portrait! Let's bring out those natural details."
     - If it's a product: "Clean product shot detected. Ready for a cinematic touch?"
+    - If it's a group photo: "Looks like a group picture — we’ll balance lighting for everyone."
+    - If it's a document: "Text detected — optimizing clarity and readability."
     - If it's a landscape: "Beautiful view! Let's enhance those colors."
+    - If it's an old or B&W image: "Vintage vibes detected — we'll colorize this beautifully."
     - If it's blurry: "A bit out of focus — our AI will fix that in seconds."
-    - If it's old/B&W: "Vintage vibes detected — we'll colorize this beautifully."
-    - If unknown: "Perfect upload! Let's see what Magicpixa can do."
+    - If you are not sure: "Perfect upload! Let's see what Magicpixa can do."
 
     Photo: {{media url=photoDataUri contentType=mimeType}}`
 });

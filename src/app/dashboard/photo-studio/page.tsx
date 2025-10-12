@@ -261,7 +261,7 @@ export default function AIPhotoStudioPage() {
                                 <div
                                     {...getRootProps()}
                                     className={cn(
-                                        'flex flex-col items-center justify-center text-center p-12 rounded-2xl cursor-pointer transition-all duration-300 h-full min-h-[400px]',
+                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 h-full min-h-[400px]',
                                         isDragActive ? 'bg-primary/10 border-primary' : 'bg-secondary/30 border-transparent',
                                         'border-2 border-dashed'
                                     )}
