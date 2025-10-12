@@ -152,12 +152,12 @@ export default function AIPhotoStudioPage() {
         try {
             const result = await analyzeImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
             setAnalysisResult(result);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Analysis Error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Analysis Failed',
-                description: 'Could not analyze the image. Please try another one.',
+                description: error.message || 'Could not analyze the image. Please try another one.',
             });
             setAnalysisResult({
                 productType: 'Unknown',
@@ -203,12 +203,12 @@ export default function AIPhotoStudioPage() {
                 title: 'Success! Image Generated',
                 description: `${GENERATION_COST} credits were deducted.`,
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Generation Error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Generation Failed',
-                description: 'Something went wrong. Please try again.',
+                description: error.message || 'Something went wrong. Please try again.',
             });
         } finally {
             clearInterval(stepInterval);
@@ -399,3 +399,5 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
+
+    
