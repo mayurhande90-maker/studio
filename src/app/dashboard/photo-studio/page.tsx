@@ -37,6 +37,7 @@ export default function AIPhotoStudioPage() {
     const [analysisResult, setAnalysisResult] = useState<EnhanceUploadedImageOutput['analysis'] | null>(null);
     const [generatedImage, setGeneratedImage] = useState<string | null>(null);
     const [showInsufficientCredits, setShowInsufficientCredits] = useState(false);
+    const [postGenerationAnalysis, setPostGenerationAnalysis] = useState<EnhanceUploadedImageOutput['postGenerationAnalysis'] | null>(null);
     
     const outputRef = useRef<HTMLDivElement>(null);
 
@@ -118,8 +119,7 @@ export default function AIPhotoStudioPage() {
 
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
-            setGeneratedImage(null);
-            setAnalysisResult(null);
+            handleReset();
 
             try {
                  const compressedFile = await compressImage(selectedFile);
@@ -178,6 +178,7 @@ export default function AIPhotoStudioPage() {
 
         setIsGenerating(true);
         setGeneratedImage(null);
+        setPostGenerationAnalysis(null);
         setGenerationStep(0);
         setGenerationProgress(0);
         
@@ -194,6 +195,7 @@ export default function AIPhotoStudioPage() {
         try {
             const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
             setGeneratedImage(response.enhancedPhotoDataUri);
+            setPostGenerationAnalysis(response.postGenerationAnalysis);
             deductCredits(GENERATION_COST);
             setGenerationProgress(100);
             toast({
@@ -218,12 +220,14 @@ export default function AIPhotoStudioPage() {
         setPreview(null);
         setGeneratedImage(null);
         setAnalysisResult(null);
+        setPostGenerationAnalysis(null);
         setIsGenerating(false);
         setGenerationProgress(0);
     };
     
     const handleRegenerate = () => {
         setGeneratedImage(null);
+        setPostGenerationAnalysis(null);
         handleGenerate();
     };
 
@@ -247,58 +251,56 @@ export default function AIPhotoStudioPage() {
             </div>
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                 <div className="space-y-6 flex flex-col">
-                    <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
-                        <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
-                            {preview && (
-                                <Image 
-                                    src={generatedImage || preview} 
-                                    alt={generatedImage ? "Generated" : "Preview"}
-                                    fill
-                                    objectFit="cover"
-                                    className={cn('transition-all duration-500', {
-                                        'blur-lg scale-105': isGenerating,
-                                    })}
-                                />
-                            )}
-                            
-                            {isGenerating && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
-                                    <ImageIcon className="w-16 h-16 text-primary animate-pulse" />
-                                    <p className="font-bold text-2xl text-primary-foreground mt-4">{generationMessages[generationStep].text}</p>
-                                    <p className="text-muted-foreground mt-2">Our AI is creating magic. Please wait a moment.</p>
-                                    <Progress value={generationProgress} className="w-3/4 mt-6 h-3" />
-                                    <p className="text-primary-foreground font-mono text-sm mt-2">{generationProgress}%</p>
-                                </div>
-                            )}
+                <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
+                    <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
+                        {preview && (
+                            <Image 
+                                src={generatedImage || preview} 
+                                alt={generatedImage ? "Generated" : "Preview"}
+                                fill
+                                objectFit="cover"
+                                className={cn('transition-all duration-500', {
+                                    'blur-lg scale-105': isGenerating,
+                                })}
+                            />
+                        )}
+                        
+                        {isGenerating && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
+                                <ImageIcon className="w-16 h-16 text-primary animate-pulse" />
+                                <p className="font-bold text-2xl text-primary-foreground mt-4">{generationMessages[generationStep].text}</p>
+                                <p className="text-muted-foreground mt-2">Our AI is creating magic. Please wait a moment.</p>
+                                <Progress value={generationProgress} className="w-3/4 mt-6 h-3" />
+                                <p className="text-primary-foreground font-mono text-sm mt-2">{generationProgress}%</p>
+                            </div>
+                        )}
 
-                             {generatedImage && !isGenerating && (
-                                <div className="absolute top-4 right-4">
-                                     <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
-                                        <RefreshCw className="h-5 w-5" />
-                                        <span className="sr-only">Regenerate</span>
-                                    </Button>
-                                </div>
-                            )}
-                            
-                             {!preview && (
-                                <div
-                                    {...getRootProps()}
-                                    className={cn(
-                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
-                                        isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
-                                        'border-2 border-dashed'
-                                    )}
-                                >
-                                    <input {...getInputProps()} />
-                                    <UploadCloud className="w-16 h-16 text-primary mb-4" />
-                                    <p className="text-xl font-bold">Drop your product photo here</p>
-                                    <p className="text-muted-foreground">or click to upload (JPG, PNG, max 5MB)</p>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                 </div>
+                            {generatedImage && !isGenerating && (
+                            <div className="absolute top-4 right-4">
+                                    <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                    <RefreshCw className="h-5 w-5" />
+                                    <span className="sr-only">Regenerate</span>
+                                </Button>
+                            </div>
+                        )}
+                        
+                            {!preview && (
+                            <div
+                                {...getRootProps()}
+                                className={cn(
+                                    'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
+                                    isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
+                                    'border-2 border-dashed'
+                                )}
+                            >
+                                <input {...getInputProps()} />
+                                <UploadCloud className="w-16 h-16 text-primary mb-4" />
+                                <p className="text-xl font-bold">Drop your product photo here</p>
+                                <p className="text-muted-foreground">or click to upload (JPG, PNG, max 5MB)</p>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
 
                 <div className="flex flex-col space-y-6">
                     <Card className="rounded-3xl shadow-lg">
@@ -306,15 +308,24 @@ export default function AIPhotoStudioPage() {
                             <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                           <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50">
+                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 min-h-[90px]">
                                 <Sparkles className={cn("w-6 h-6 text-yellow-500 flex-shrink-0 mt-1", { 'animate-pulse': isAnalyzing })} />
                                 <div className="space-y-1 w-full">
-                                    { isAnalyzing ? (
+                                    {isAnalyzing ? (
                                         <p className="font-semibold text-foreground animate-pulse">
                                             Analysing the Photo...
                                         </p>
+                                    ) : postGenerationAnalysis ? (
+                                        <>
+                                            <p className="font-semibold text-foreground">
+                                                {postGenerationAnalysis.description}
+                                            </p>
+                                            <div className="text-xs text-muted-foreground">
+                                                <strong>Marketing Tip:</strong> {postGenerationAnalysis.marketingTip}
+                                            </div>
+                                        </>
                                     ) : (
-                                         <>
+                                            <>
                                             <p className="font-semibold text-foreground">
                                                 {analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}
                                             </p>
@@ -326,15 +337,15 @@ export default function AIPhotoStudioPage() {
                                         </>
                                     )}
                                 </div>
-                           </div>
+                            </div>
                         </CardContent>
                     </Card>
                     <Card className="rounded-3xl shadow-lg flex-1">
                         <CardHeader>
-                             <CardTitle className="text-2xl font-bold">Actions</CardTitle>
+                                <CardTitle className="text-2xl font-bold">Actions</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                           {generatedImage && !isGenerating ? (
+                            {generatedImage && !isGenerating ? (
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="grid grid-cols-2 gap-4">
                                         <Button onClick={handleDownload} size="lg" className="rounded-2xl">
@@ -347,7 +358,7 @@ export default function AIPhotoStudioPage() {
                                         </Button>
                                     </div>
                                 </div>
-                           ) : (
+                            ) : (
                             <>
                                 <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || isAnalyzing || !analysisResult}>
                                     {isGenerating ? (
@@ -365,7 +376,7 @@ export default function AIPhotoStudioPage() {
                                     This will cost {GENERATION_COST} credits.
                                 </p>
                             </>
-                           )}
+                            )}
                         </CardContent>
                     </Card>
                 </div>
@@ -387,7 +398,3 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
-
-
-
-    

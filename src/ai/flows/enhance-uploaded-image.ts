@@ -5,7 +5,8 @@
  * @fileOverview A flow to enhance uploaded product images using AI.
  *
  * - enhanceUploadedImage - A function that handles the image enhancement process.
- * - EnhanceUploadedImageInput - The input type for the enhanceUploadedImage function.
+ * - analyzeImage - A function that analyzes an image before enhancement.
+ * - EnhanceUploadedImageInput - The input type for the enhancement/analysis functions.
  * - EnhanceUploadedImageOutput - The return type for the enhanceUploadedImage function.
  */
 
@@ -23,15 +24,25 @@ const EnhanceUploadedImageInputSchema = z.object({
 export type EnhanceUploadedImageInput = z.infer<typeof EnhanceUploadedImageInputSchema>;
 
 
+const ProductImageAnalysisSchema = z.object({
+    productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe", "face cream jar", "group photo", "document", "landscape", "old photo", "blurry photo").'),
+    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit", "low resolution").'),
+    friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details.", "Clean product shot detected. Ready for a cinematic touch?", "A bit out of focus — our AI will fix that in seconds.", "Vintage vibes detected — we\'ll colorize this beautifully.", "Perfect upload! Let\'s see what Magicpixa can do."')
+});
+
+
+const PostGenerationAnalysisSchema = z.object({
+    description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We've placed your product in a professional studio setting with cinematic lighting.'"),
+    marketingTip: z.string().describe("A short, actionable marketing tip for the user. Example: 'Use this on your product listings or social media to boost engagement!'")
+});
+
+
 const EnhanceUploadedImageOutputSchema = z.object({
-  analysis: z.object({
-    productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe").'),
-    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit").'),
-    friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details." or "Clean product shot detected. Ready for a cinematic touch?"')
-  }),
+  analysis: ProductImageAnalysisSchema,
   enhancedPhotoDataUri: z
     .string()
     .describe('The enhanced hyper-realistic photo, as a data URI in JPG format.'),
+  postGenerationAnalysis: PostGenerationAnalysisSchema,
 });
 export type EnhanceUploadedImageOutput = z.infer<typeof EnhanceUploadedImageOutputSchema>;
 
@@ -41,12 +52,6 @@ export async function enhanceUploadedImage(
   return enhanceUploadedImageFlow(input);
 }
 
-
-const ProductImageAnalysisSchema = z.object({
-    productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe", "face cream jar", "group photo", "document", "landscape", "old photo", "blurry photo").'),
-    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit", "low resolution").'),
-    friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details.", "Clean product shot detected. Ready for a cinematic touch?", "A bit out of focus — our AI will fix that in seconds.", "Vintage vibes detected — we\'ll colorize this beautifully.", "Perfect upload! Let\'s see what Magicpixa can do."')
-});
 
 const analysisPrompt = ai.definePrompt({
     name: 'productImageAnalysisPrompt',
@@ -86,6 +91,22 @@ export async function analyzeImage(input: EnhanceUploadedImageInput) {
 }
 
 
+const postGenerationPrompt = ai.definePrompt({
+    name: 'postGenerationAnalysisPrompt',
+    input: { schema: z.object({ productType: z.string() }) },
+    output: { schema: PostGenerationAnalysisSchema },
+    prompt: `You are a marketing expert. An AI has just generated a professional image of a user's product, which is a "{{productType}}". 
+    
+    Generate a one-sentence description of the new image and a short, actionable marketing tip.
+    
+    Example Output:
+    {
+      "description": "We've placed your {{productType}} in a professional studio setting with cinematic lighting to make it stand out.",
+      "marketingTip": "Use this stunning image on your product listings, social media ads, or website hero banner to grab attention and boost sales!"
+    }`
+});
+
+
 const enhanceUploadedImageFlow = ai.defineFlow(
   {
     name: 'enhanceUploadedImageFlow',
@@ -116,9 +137,13 @@ The product is a: ${analysis.productType}`
       },
     });
 
+    // 3. Generate post-generation analysis and marketing tips
+    const { output: postGenAnalysis } = await postGenerationPrompt({ productType: analysis.productType });
+
     return {
       analysis: analysis,
       enhancedPhotoDataUri: media.url!,
+      postGenerationAnalysis: postGenAnalysis!,
     };
   }
 );
