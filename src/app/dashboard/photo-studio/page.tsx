@@ -5,7 +5,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ArrowRight, Download, Info, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
@@ -218,9 +218,11 @@ export default function AIPhotoStudioPage() {
 
                 {/* Control Panel Column */}
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-bold">Configuration & Actions</h2>
                     <Card className="rounded-3xl shadow-lg">
-                        <CardContent className="p-6 space-y-6">
+                        <CardHeader>
+                            <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 animate-fade-in">
                                 <Info className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                                 <div className="space-y-1">
@@ -234,42 +236,45 @@ export default function AIPhotoStudioPage() {
                                    )}
                                 </div>
                            </div>
-                            
-                            <div className="space-y-4">
-                               {generatedImage && !isGenerating ? (
-                                    <div className="grid grid-cols-1 gap-4 pt-4 border-t">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <Button onClick={handleDownload} size="lg" className="rounded-2xl">
-                                                <Download className="mr-2 h-4 w-4" />
-                                                Download
-                                            </Button>
-                                            <Button onClick={handleReset} variant="secondary" size="lg" className="rounded-2xl">
-                                                <UploadCloud className="mr-2 h-4 w-4" />
-                                                Start New
-                                            </Button>
-                                        </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="rounded-3xl shadow-lg">
+                        <CardHeader>
+                             <CardTitle className="text-2xl font-bold">Actions</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           {generatedImage && !isGenerating ? (
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Button onClick={handleDownload} size="lg" className="rounded-2xl">
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Download
+                                        </Button>
+                                        <Button onClick={handleReset} variant="secondary" size="lg" className="rounded-2xl">
+                                            <UploadCloud className="mr-2 h-4 w-4" />
+                                            Start New
+                                        </Button>
                                     </div>
-                               ) : (
-                                <>
-                                    <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl" disabled={isGenerating || !preview}>
-                                        {isGenerating ? (
-                                            <>
-                                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                                Creating Magic...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Generate Image <ArrowRight className="ml-2 h-5 w-5" />
-                                            </>
-                                        )}
-                                    </Button>
-                                    <p className="text-center text-sm text-muted-foreground">
-                                        This will cost {GENERATION_COST} credits.
-                                    </p>
-                                </>
-                               )}
-                            </div>
-                            
+                                </div>
+                           ) : (
+                            <>
+                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl" disabled={isGenerating || !preview}>
+                                    {isGenerating ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                            Creating Magic...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Generate Image <ArrowRight className="ml-2 h-5 w-5" />
+                                        </>
+                                    )}
+                                </Button>
+                                <p className="text-center text-sm text-muted-foreground">
+                                    This will cost {GENERATION_COST} credits.
+                                </p>
+                            </>
+                           )}
                         </CardContent>
                     </Card>
                 </div>
