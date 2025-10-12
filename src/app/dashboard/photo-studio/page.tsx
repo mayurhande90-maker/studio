@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Lightbulb, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -281,7 +281,7 @@ export default function AIPhotoStudioPage() {
                         </CardHeader>
                         <CardContent className="space-y-6">
                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 animate-fade-in">
-                                <Lightbulb className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
+                                <Sparkles className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
                                 <div className="space-y-1">
                                     <p className="font-semibold text-foreground">
                                         {analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}
