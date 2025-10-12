@@ -40,7 +40,6 @@ export default function AIPhotoStudioPage() {
     const [postGenerationAnalysis, setPostGenerationAnalysis] = useState<EnhanceUploadedImageOutput['postGenerationAnalysis'] | null>(null);
     
     const outputRef = useRef<HTMLDivElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
@@ -280,8 +279,8 @@ export default function AIPhotoStudioPage() {
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                 <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
-                    <CardContent {...getRootProps()} className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
-                        <input {...getInputProps()} ref={fileInputRef} />
+                    <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
+                        <input {...getInputProps()} />
                         {preview && (
                             <Image 
                                 src={generatedImage || preview} 
@@ -324,12 +323,15 @@ export default function AIPhotoStudioPage() {
                         
                         {!preview && (
                             <div
+                                {...getRootProps({
+                                    onClick: (event) => event.stopPropagation(),
+                                    className: cn(
+                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
+                                        isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
+                                        'border-2 border-dashed hover:bg-secondary/50'
+                                    )
+                                })}
                                 onClick={open}
-                                className={cn(
-                                    'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
-                                    isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
-                                    'border-2 border-dashed hover:bg-secondary/50'
-                                )}
                             >
                                 <UploadCloud className="w-16 h-16 text-primary mb-4" />
                                 <p className="text-xl font-bold">Drop your product photo here</p>
@@ -442,6 +444,8 @@ export default function AIPhotoStudioPage() {
     
 
 
+
+    
 
     
 
