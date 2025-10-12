@@ -1,5 +1,6 @@
 
 'use server';
+import 'dotenv/config';
 
 /**
  * @fileOverview A flow to enhance uploaded product images using AI.
