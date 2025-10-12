@@ -145,20 +145,17 @@ export default function AIPhotoStudioPage() {
     return (
         <div className="w-full space-y-8">
             <div className="text-center">
-                <div className="inline-block px-4 py-2 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-full text-sm font-bold mb-4">
-                    AI Photo Studio
-                </div>
-                <h1 className="text-4xl font-bold tracking-tight">Transform Your Product Photos</h1>
+                <h1 className="text-4xl font-bold tracking-tight">AI Photo Studio</h1>
                 <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
-                    Upload a raw product photo, and our AI will generate a hyper-realistic, ready-to-post image in seconds.
+                    Transform your raw product photo into a hyper-realistic image ready to post.
                 </p>
             </div>
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                  {/* Workspace Column */}
                  <div className="space-y-6 flex flex-col">
-                    <Card className="rounded-3xl shadow-lg overflow-hidden aspect-w-4 aspect-h-3 bg-secondary/30 flex-1">
-                        <CardContent className="p-0 relative h-full">
+                    <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
+                        <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
                             {/* Base Preview Image */}
                             {preview && (
                                 <Image 
@@ -197,7 +194,7 @@ export default function AIPhotoStudioPage() {
                                 <div
                                     {...getRootProps()}
                                     className={cn(
-                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 h-full min-h-[400px]',
+                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
                                         isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
                                         'border-2 border-dashed'
                                     )}
@@ -254,7 +251,7 @@ export default function AIPhotoStudioPage() {
                                 </div>
                            ) : (
                             <>
-                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl" disabled={isGenerating || !preview}>
+                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent" disabled={isGenerating || !preview}>
                                     {isGenerating ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
