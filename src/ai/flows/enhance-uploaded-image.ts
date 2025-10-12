@@ -1,6 +1,5 @@
 
 'use server';
-import 'dotenv/config';
 
 /**
  * @fileOverview A flow to enhance uploaded product images using AI.
@@ -33,7 +32,7 @@ const ProductImageAnalysisSchema = z.object({
 
 
 const PostGenerationAnalysisSchema = z.object({
-    description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We've placed your product in a professional studio setting with cinematic lighting.'"),
+    description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We\'ve placed your product in a professional studio setting with cinematic lighting.'"),
     marketingTip: z.string().describe("A short, actionable marketing tip for the user. Example: 'Use this on your product listings or social media to boost engagement!'")
 });
 
