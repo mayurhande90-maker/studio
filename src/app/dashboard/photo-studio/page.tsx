@@ -46,12 +46,45 @@ export default function AIPhotoStudioPage() {
     const { credits, deductCredits } = useCredits();
     const { user } = useUser();
     
+    const handleReset = useCallback(() => {
+        setFile(null);
+        setPreview(null);
+        setGeneratedImage(null);
+        setAnalysisResult(null);
+        setPostGenerationAnalysis(null);
+        setIsGenerating(false);
+        setGenerationProgress(0);
+    }, []);
+
+    const handleAnalysis = useCallback(async () => {
+        if (!file) return;
+        setIsAnalyzing(true);
+        try {
+            const result = await analyzeImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
+            setAnalysisResult(result);
+        } catch (error: any) {
+            console.error('Analysis Error:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Analysis Failed',
+                description: error.message || 'Could not analyze the image. Please try another one.',
+            });
+            setAnalysisResult({
+                productType: 'Unknown',
+                imageQuality: 'Analysis failed',
+                friendlyCaption: 'There was an issue analyzing this image. You can still try to generate.'
+            });
+        } finally {
+            setIsAnalyzing(false);
+        }
+    }, [file, toast]);
+
     useEffect(() => {
         // When a new file is uploaded, trigger analysis
         if (file && !analysisResult && !isAnalyzing) {
             handleAnalysis();
         }
-    }, [file, analysisResult, isAnalyzing]);
+    }, [file, analysisResult, isAnalyzing, handleAnalysis]);
 
 
     const compressImage = (file: File): Promise<{blob: Blob, dataUri: string}> => {
@@ -138,7 +171,7 @@ export default function AIPhotoStudioPage() {
             }
 
         }
-    }, [toast]);
+    }, [toast, handleReset]);
 
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
         onDrop,
@@ -147,30 +180,7 @@ export default function AIPhotoStudioPage() {
         maxSize: MAX_FILE_SIZE,
     });
     
-     const handleAnalysis = useCallback(async () => {
-        if (!file) return;
-        setIsAnalyzing(true);
-        try {
-            const result = await analyzeImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
-            setAnalysisResult(result);
-        } catch (error: any) {
-            console.error('Analysis Error:', error);
-            toast({
-                variant: 'destructive',
-                title: 'Analysis Failed',
-                description: error.message || 'Could not analyze the image. Please try another one.',
-            });
-            setAnalysisResult({
-                productType: 'Unknown',
-                imageQuality: 'Analysis failed',
-                friendlyCaption: 'There was an issue analyzing this image. You can still try to generate.'
-            });
-        } finally {
-            setIsAnalyzing(false);
-        }
-    }, [file, toast]);
-
-
+    
     const handleGenerate = async () => {
         if (!file || !analysisResult) return;
         if (credits === null || credits < GENERATION_COST) {
@@ -231,16 +241,6 @@ export default function AIPhotoStudioPage() {
             clearInterval(stepInterval);
             setIsGenerating(false);
         }
-    };
-    
-    const handleReset = () => {
-        setFile(null);
-        setPreview(null);
-        setGeneratedImage(null);
-        setAnalysisResult(null);
-        setPostGenerationAnalysis(null);
-        setIsGenerating(false);
-        setGenerationProgress(0);
     };
     
     const handleRegenerate = () => {
