@@ -64,6 +64,25 @@ const analysisPrompt = ai.definePrompt({
     Photo: {{media url=photoDataUri contentType=mimeType}}`
 });
 
+// We define a separate flow just for analysis so the client can call it first.
+const analyzeImageFlow = ai.defineFlow(
+  {
+    name: 'analyzeImageFlow',
+    inputSchema: EnhanceUploadedImageInputSchema,
+    outputSchema: analysisPrompt.output.schema,
+  },
+  async (input) => {
+    const { output } = await analysisPrompt(input);
+    return output!;
+  }
+);
+
+// We define a new function that the client can import and call.
+export async function analyzeImage(input: EnhanceUploadedImageInput) {
+    return analyzeImageFlow(input);
+}
+
+
 const enhanceUploadedImageFlow = ai.defineFlow(
   {
     name: 'enhanceUploadedImageFlow',
@@ -72,8 +91,7 @@ const enhanceUploadedImageFlow = ai.defineFlow(
   },
   async (input) => {
     // 1. Analyze the image first
-    const analysisResponse = await analysisPrompt(input);
-    const analysis = analysisResponse.output!;
+    const analysis = await analyzeImageFlow(input);
 
     // 2. Generate the enhanced image
     const { media } = await ai.generate({

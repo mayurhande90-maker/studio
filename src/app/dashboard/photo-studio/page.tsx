@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,10 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
-import { enhanceUploadedImage, EnhanceUploadedImageOutput } from '@/ai/flows/enhance-uploaded-image';
+import { enhanceUploadedImage, analyzeImage, EnhanceUploadedImageOutput } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const generationMessages = [
@@ -30,6 +31,7 @@ export default function AIPhotoStudioPage() {
     const [file, setFile] = useState<{blob: Blob, dataUri: string} | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [generationStep, setGenerationStep] = useState(0);
     const [generationProgress, setGenerationProgress] = useState(0);
     const [analysisResult, setAnalysisResult] = useState<EnhanceUploadedImageOutput['analysis'] | null>(null);
@@ -40,6 +42,14 @@ export default function AIPhotoStudioPage() {
 
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
+    
+    useEffect(() => {
+        // When a new file is uploaded, trigger analysis
+        if (file && !analysisResult && !isAnalyzing) {
+            handleAnalysis();
+        }
+    }, [file]);
+
 
     const compressImage = (file: File): Promise<{blob: Blob, dataUri: string}> => {
         return new Promise((resolve, reject) => {
@@ -134,10 +144,33 @@ export default function AIPhotoStudioPage() {
         multiple: false,
         maxSize: MAX_FILE_SIZE,
     });
+    
+     const handleAnalysis = async () => {
+        if (!file) return;
+        setIsAnalyzing(true);
+        try {
+            const result = await analyzeImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
+            setAnalysisResult(result);
+        } catch (error) {
+            console.error('Analysis Error:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Analysis Failed',
+                description: 'Could not analyze the image. Please try another one.',
+            });
+            setAnalysisResult({
+                productType: 'Unknown',
+                imageQuality: 'Analysis failed',
+                friendlyCaption: 'There was an issue analyzing this image. You can still try to generate.'
+            });
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
 
 
     const handleGenerate = async () => {
-        if (!file) return;
+        if (!file || !analysisResult) return;
         if (credits === null || credits < GENERATION_COST) {
             setShowInsufficientCredits(true);
             return;
@@ -161,7 +194,6 @@ export default function AIPhotoStudioPage() {
         try {
             const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
             setGeneratedImage(response.enhancedPhotoDataUri);
-            setAnalysisResult(response.analysis);
             deductCredits(GENERATION_COST);
             setGenerationProgress(100);
             toast({
@@ -191,7 +223,6 @@ export default function AIPhotoStudioPage() {
     };
     
     const handleRegenerate = () => {
-        // Reset generated image but keep the uploaded file to re-run
         setGeneratedImage(null);
         handleGenerate();
     };
@@ -216,11 +247,9 @@ export default function AIPhotoStudioPage() {
             </div>
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                 {/* Workspace Column */}
                  <div className="space-y-6 flex flex-col">
                     <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
                         <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
-                            {/* Base Preview Image */}
                             {preview && (
                                 <Image 
                                     src={generatedImage || preview} 
@@ -233,7 +262,6 @@ export default function AIPhotoStudioPage() {
                                 />
                             )}
                             
-                            {/* Generation Overlay */}
                             {isGenerating && (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
                                     <ImageIcon className="w-16 h-16 text-primary animate-pulse" />
@@ -253,7 +281,6 @@ export default function AIPhotoStudioPage() {
                                 </div>
                             )}
                             
-                            {/* Upload Dropzone */}
                              {!preview && (
                                 <div
                                     {...getRootProps()}
@@ -273,7 +300,6 @@ export default function AIPhotoStudioPage() {
                     </Card>
                  </div>
 
-                {/* Control Panel Column */}
                 <div className="flex flex-col space-y-6">
                     <Card className="rounded-3xl shadow-lg">
                         <CardHeader>
@@ -282,15 +308,24 @@ export default function AIPhotoStudioPage() {
                         <CardContent className="space-y-6">
                            <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 animate-fade-in">
                                 <Sparkles className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
-                                <div className="space-y-1">
-                                    <p className="font-semibold text-foreground">
-                                        {analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}
-                                    </p>
-                                    {analysisResult && (
-                                       <div className="text-xs text-muted-foreground">
-                                           <span>Detected: <strong>{analysisResult.productType}</strong></span> | <span>Quality: <strong>{analysisResult.imageQuality}</strong></span>
-                                       </div>
-                                   )}
+                                <div className="space-y-1 w-full">
+                                    { isAnalyzing ? (
+                                        <div className='space-y-2'>
+                                            <Skeleton className="h-5 w-3/4" />
+                                            <Skeleton className="h-4 w-full" />
+                                        </div>
+                                    ) : (
+                                         <>
+                                            <p className="font-semibold text-foreground">
+                                                {analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}
+                                            </p>
+                                            {analysisResult && (
+                                            <div className="text-xs text-muted-foreground">
+                                                <span>Detected: <strong>{analysisResult.productType}</strong></span> | <span>Quality: <strong>{analysisResult.imageQuality}</strong></span>
+                                            </div>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                            </div>
                         </CardContent>
@@ -315,11 +350,16 @@ export default function AIPhotoStudioPage() {
                                 </div>
                            ) : (
                             <>
-                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || !preview}>
+                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || !preview || isAnalyzing || !analysisResult}>
                                     {isGenerating ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                             Creating Magic...
+                                        </>
+                                    ) : isAnalyzing ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                            Analyzing...
                                         </>
                                     ) : (
                                         <>
@@ -353,5 +393,3 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
-
-    
