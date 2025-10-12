@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon, Upload } from 'lucide-react';
+import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -145,8 +145,6 @@ export default function AIPhotoStudioPage() {
         accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
         multiple: false,
         maxSize: MAX_FILE_SIZE,
-        noClick: true,
-        noKeyboard: true
     });
     
      const handleAnalysis = useCallback(async () => {
@@ -304,15 +302,6 @@ export default function AIPhotoStudioPage() {
                                 </Button>
                             </div>
                         )}
-
-                        {preview && !generatedImage && !isGenerating && (
-                            <div className="absolute top-4 right-4">
-                                <Button onClick={open} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
-                                    <Upload className="h-5 w-5" />
-                                    <span className="sr-only">Re-upload</span>
-                                </Button>
-                            </div>
-                        )}
                         
                         {!preview && (
                             <div
@@ -321,7 +310,6 @@ export default function AIPhotoStudioPage() {
                                     isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
                                     'border-2 border-dashed'
                                 )}
-                                onClick={open}
                             >
                                 <UploadCloud className="w-16 h-16 text-primary mb-4" />
                                 <p className="text-xl font-bold">Drop your product photo here</p>
@@ -427,6 +415,8 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
+    
+
     
 
     
