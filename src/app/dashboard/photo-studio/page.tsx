@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -40,6 +40,7 @@ export default function AIPhotoStudioPage() {
     const [postGenerationAnalysis, setPostGenerationAnalysis] = useState<EnhanceUploadedImageOutput['postGenerationAnalysis'] | null>(null);
     
     const outputRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
@@ -139,11 +140,13 @@ export default function AIPhotoStudioPage() {
         }
     }, [toast]);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
         onDrop,
         accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
         multiple: false,
         maxSize: MAX_FILE_SIZE,
+        noClick: true,
+        noKeyboard: true
     });
     
      const handleAnalysis = useCallback(async () => {
@@ -269,7 +272,8 @@ export default function AIPhotoStudioPage() {
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                 <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
-                    <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
+                    <CardContent {...getRootProps()} className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
+                        <input {...getInputProps()} ref={fileInputRef} />
                         {preview && (
                             <Image 
                                 src={generatedImage || preview} 
@@ -294,23 +298,31 @@ export default function AIPhotoStudioPage() {
 
                         {generatedImage && !isGenerating && (
                             <div className="absolute top-4 right-4">
-                                    <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
-                                    <RefreshCw className="h-5 w-5" />
-                                    <span className="sr-only">Regenerate</span>
+                                <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                <RefreshCw className="h-5 w-5" />
+                                <span className="sr-only">Regenerate</span>
+                                </Button>
+                            </div>
+                        )}
+
+                        {preview && !generatedImage && !isGenerating && (
+                            <div className="absolute top-4 right-4">
+                                <Button onClick={open} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                    <Upload className="h-5 w-5" />
+                                    <span className="sr-only">Re-upload</span>
                                 </Button>
                             </div>
                         )}
                         
-                            {!preview && (
+                        {!preview && (
                             <div
-                                {...getRootProps()}
                                 className={cn(
                                     'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
                                     isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
                                     'border-2 border-dashed'
                                 )}
+                                onClick={open}
                             >
-                                <input {...getInputProps()} />
                                 <UploadCloud className="w-16 h-16 text-primary mb-4" />
                                 <p className="text-xl font-bold">Drop your product photo here</p>
                                 <p className="text-muted-foreground">or click to upload (JPG, PNG, max 5MB)</p>
@@ -415,7 +427,6 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
-
     
 
     
