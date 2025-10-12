@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -36,7 +37,7 @@ const pricingData = {
         'Priority processing',
       ],
       buttonLabel: 'Upgrade to Pro',
-      variant: 'default' as const,
+      variant: 'gradient' as const,
       recommended: false,
     },
     {
@@ -93,7 +94,7 @@ const pricingData = {
         'Priority processing',
       ],
       buttonLabel: 'Upgrade to Pro',
-      variant: 'default' as const,
+      variant: 'gradient' as const,
       recommended: false,
     },
     {
@@ -161,7 +162,7 @@ export function Pricing() {
               key={plan.plan}
               className={cn(
                 'relative flex flex-col rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-2',
-                plan.recommended ? 'border-2 border-primary shadow-primary/10' : 'border'
+                plan.recommended ? 'border-2 border-accent shadow-accent/10' : 'border'
               )}
             >
               {plan.recommended && (

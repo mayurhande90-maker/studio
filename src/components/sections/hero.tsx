@@ -1,3 +1,4 @@
+
 'use client';
 
 import { ArrowRight, CheckCircle } from 'lucide-react';
@@ -55,6 +56,7 @@ export function Hero() {
               <Button
                 asChild
                 size="lg"
+                variant="gradient"
                 className="text-primary-foreground transition-transform hover:scale-105 rounded-md shadow-lg text-base py-6 px-8 font-semibold"
               >
                 <Link href="/enhance">

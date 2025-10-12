@@ -399,7 +399,7 @@ export default function AIPhotoStudioPage() {
                                 </div>
                             ) : (
                             <>
-                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || isAnalyzing || !analysisResult}>
+                                <Button onClick={handleGenerate} variant="gradient" size="lg" className="w-full font-bold text-lg py-7 rounded-2xl hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || isAnalyzing || !analysisResult}>
                                     {isGenerating ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
