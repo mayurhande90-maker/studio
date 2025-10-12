@@ -53,7 +53,7 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-3">
         <StatCard title="Credits Left" value={credits ?? 0} icon={Coins} isLoading={isCreditsLoading || isUserLoading} description="Available for use" />
         <StatCard title="Creations This Week" value={7} icon={BookImage} isLoading={isUserLoading} description="+2 since last week" />
-        <StatCard title="Plan Type" value="Pro" icon={CreditCard} isLoading={isUserLoading} description="Renews next month" />
+        <StatCard title="Plan Type" value="Free" icon={CreditCard} isLoading={isUserLoading} description="Upgrade for more features" />
       </div>
 
       <Tabs defaultValue="overview" className="w-full">
