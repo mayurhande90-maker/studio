@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Download, Sparkles, Loader2, UploadCloud, RefreshCw, Image as ImageIcon, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -178,6 +178,7 @@ export default function AIPhotoStudioPage() {
         accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
         multiple: false,
         maxSize: MAX_FILE_SIZE,
+        noClick: true, // We'll trigger the file dialog manually
     });
     
     
@@ -294,8 +295,17 @@ export default function AIPhotoStudioPage() {
                             </div>
                         )}
 
+                        {preview && !generatedImage && !isGenerating && (
+                            <div className="absolute top-4 right-4 z-10">
+                                <Button onClick={open} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                    <Upload className="h-5 w-5" />
+                                    <span className="sr-only">Upload new image</span>
+                                </Button>
+                            </div>
+                        )}
+
                         {generatedImage && !isGenerating && (
-                            <div className="absolute top-4 right-4">
+                            <div className="absolute top-4 right-4 z-10">
                                 <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
                                 <RefreshCw className="h-5 w-5" />
                                 <span className="sr-only">Regenerate</span>
@@ -305,10 +315,11 @@ export default function AIPhotoStudioPage() {
                         
                         {!preview && (
                             <div
+                                onClick={open}
                                 className={cn(
                                     'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
                                     isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
-                                    'border-2 border-dashed'
+                                    'border-2 border-dashed hover:bg-secondary/50'
                                 )}
                             >
                                 <UploadCloud className="w-16 h-16 text-primary mb-4" />
@@ -420,3 +431,4 @@ export default function AIPhotoStudioPage() {
     
 
     
+
