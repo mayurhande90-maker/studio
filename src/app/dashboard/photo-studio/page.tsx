@@ -24,6 +24,7 @@ const generationMessages = [
 ];
 
 const GENERATION_COST = 3;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function AIPhotoStudioPage() {
     const [file, setFile] = useState<File | null>(null);
@@ -50,7 +51,25 @@ export default function AIPhotoStudioPage() {
         });
     }
 
-    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+        if (fileRejections.length > 0) {
+            const rejection = fileRejections[0];
+            if (rejection.errors[0].code === 'file-too-large') {
+                toast({
+                    variant: 'destructive',
+                    title: 'Upload Failed',
+                    description: `File is larger than 5MB. Please upload a smaller image.`,
+                });
+            } else {
+                 toast({
+                    variant: 'destructive',
+                    title: 'Upload Failed',
+                    description: rejection.errors[0].message,
+                });
+            }
+            return;
+        }
+
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
             setFile(selectedFile);
@@ -61,12 +80,13 @@ export default function AIPhotoStudioPage() {
             const objectUrl = URL.createObjectURL(selectedFile);
             setPreview(objectUrl);
         }
-    }, []);
+    }, [toast]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
         multiple: false,
+        maxSize: MAX_FILE_SIZE,
     });
 
 
@@ -202,7 +222,7 @@ export default function AIPhotoStudioPage() {
                                     <input {...getInputProps()} />
                                     <UploadCloud className="w-16 h-16 text-primary mb-4" />
                                     <p className="text-xl font-bold">Drop your product photo here</p>
-                                    <p className="text-muted-foreground">or click to upload (JPG, PNG)</p>
+                                    <p className="text-muted-foreground">or click to upload (JPG, PNG, max 5MB)</p>
                                 </div>
                             )}
                         </CardContent>
@@ -288,4 +308,5 @@ export default function AIPhotoStudioPage() {
             </AlertDialog>
         </div>
     );
-}
+
+    
