@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
-import { enhanceUploadedImage, analyzeImage, EnhanceUploadedImageOutput } from '@/ai/flows/enhance-uploaded-image';
+import { analyzeImage, EnhanceUploadedImageOutput, EnhanceUploadedImageInput } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
@@ -194,9 +194,25 @@ export default function AIPhotoStudioPage() {
         }, 2000);
 
         try {
-            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
-            setGeneratedImage(response.enhancedPhotoDataUri);
-            setPostGenerationAnalysis(response.postGenerationAnalysis);
+            const input: EnhanceUploadedImageInput = { photoDataUri: file.dataUri, mimeType: 'image/jpeg' };
+            
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(input),
+            });
+
+            if (!response.ok) {
+                 const errorData = await response.json();
+                 throw new Error(errorData.error || `Request failed with status ${response.status}`);
+            }
+
+            const result: EnhanceUploadedImageOutput = await response.json();
+
+            setGeneratedImage(result.enhancedPhotoDataUri);
+            setPostGenerationAnalysis(result.postGenerationAnalysis);
             deductCredits(GENERATION_COST);
             setGenerationProgress(100);
             toast({
@@ -399,5 +415,7 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
+
+    
 
     
