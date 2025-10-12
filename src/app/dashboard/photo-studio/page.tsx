@@ -313,6 +313,7 @@ export default function AIPhotoStudioPage() {
                                         <div className='space-y-2'>
                                             <Skeleton className="h-5 w-3/4" />
                                             <Skeleton className="h-4 w-full" />
+                                            <Skeleton className="h-4 w-1/2" />
                                         </div>
                                     ) : (
                                          <>
@@ -350,16 +351,11 @@ export default function AIPhotoStudioPage() {
                                 </div>
                            ) : (
                             <>
-                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || !preview || isAnalyzing || !analysisResult}>
+                                <Button onClick={handleGenerate} size="lg" className="w-full font-bold text-lg py-7 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || isAnalyzing || !analysisResult}>
                                     {isGenerating ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                             Creating Magic...
-                                        </>
-                                    ) : isAnalyzing ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                            Analyzing...
                                         </>
                                     ) : (
                                         <>
@@ -393,3 +389,4 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
+
