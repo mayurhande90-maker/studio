@@ -27,7 +27,7 @@ const footerLinkGroups = [
     title: 'Resources',
     links: [
       { name: 'Contact', href: '#' },
-      { name: 'Privacy Policy', href: '#' },
+      { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Terms of Service', href: '#' },
     ],
   },
