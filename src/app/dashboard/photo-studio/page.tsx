@@ -27,9 +27,8 @@ const GENERATION_COST = 3;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function AIPhotoStudioPage() {
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<{blob: Blob, dataUri: string} | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
-    const [mimeType, setMimeType] = useState<string | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [generationStep, setGenerationStep] = useState(0);
     const [generationProgress, setGenerationProgress] = useState(0);
@@ -42,16 +41,53 @@ export default function AIPhotoStudioPage() {
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
 
-    const readDataUrl = (file: File): Promise<string> => {
+    const compressImage = (file: File): Promise<{blob: Blob, dataUri: string}> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
             reader.readAsDataURL(file);
-        });
-    }
+            reader.onload = (event) => {
+                const img = document.createElement('img');
+                img.src = event.target?.result as string;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1920;
+                    const MAX_HEIGHT = 1920;
+                    let width = img.width;
+                    let height = img.height;
 
-    const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) return reject(new Error('Could not get canvas context'));
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8); // Compress to 80% quality JPEG
+
+                    canvas.toBlob((blob) => {
+                         if (!blob) return reject(new Error('Canvas to Blob conversion failed'));
+                         resolve({ blob, dataUri: dataUrl });
+                    }, 'image/jpeg', 0.8);
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
+        });
+    };
+
+
+    const onDrop = useCallback(async (acceptedFiles: File[], fileRejections: any[]) => {
         if (fileRejections.length > 0) {
             const rejection = fileRejections[0];
             if (rejection.errors[0].code === 'file-too-large') {
@@ -72,13 +108,23 @@ export default function AIPhotoStudioPage() {
 
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
-            setFile(selectedFile);
-            setMimeType(selectedFile.type);
             setGeneratedImage(null);
             setAnalysisResult(null);
 
-            const objectUrl = URL.createObjectURL(selectedFile);
-            setPreview(objectUrl);
+            try {
+                 const compressedFile = await compressImage(selectedFile);
+                 setFile(compressedFile);
+                 const objectUrl = URL.createObjectURL(compressedFile.blob);
+                 setPreview(objectUrl);
+            } catch (error) {
+                console.error("Image compression error:", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Upload Failed',
+                    description: 'Could not process the image. Please try another one.',
+                });
+            }
+
         }
     }, [toast]);
 
@@ -91,7 +137,7 @@ export default function AIPhotoStudioPage() {
 
 
     const handleGenerate = async () => {
-        if (!file || !mimeType) return;
+        if (!file) return;
         if (credits === null || credits < GENERATION_COST) {
             setShowInsufficientCredits(true);
             return;
@@ -113,8 +159,7 @@ export default function AIPhotoStudioPage() {
         }, 2000);
 
         try {
-            const dataUri = await readDataUrl(file);
-            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: dataUri, mimeType: mimeType });
+            const response: EnhanceUploadedImageOutput = await enhanceUploadedImage({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' });
             setGeneratedImage(response.enhancedPhotoDataUri);
             setAnalysisResult(response.analysis);
             deductCredits(GENERATION_COST);
@@ -139,7 +184,6 @@ export default function AIPhotoStudioPage() {
     const handleReset = () => {
         setFile(null);
         setPreview(null);
-        setMimeType(null);
         setGeneratedImage(null);
         setAnalysisResult(null);
         setIsGenerating(false);
@@ -308,5 +352,6 @@ export default function AIPhotoStudioPage() {
             </AlertDialog>
         </div>
     );
+}
 
     
