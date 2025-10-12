@@ -13,7 +13,6 @@ import { enhanceUploadedImage, analyzeImage, EnhanceUploadedImageOutput } from '
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useUser } from '@/firebase';
 
 
@@ -278,19 +277,12 @@ export default function AIPhotoStudioPage() {
                         )}
 
                         {generatedImage && !isGenerating && (
-                            <>
-                                <div className="absolute top-4 right-4">
-                                        <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
-                                        <RefreshCw className="h-5 w-5" />
-                                        <span className="sr-only">Regenerate</span>
-                                    </Button>
-                                </div>
-                                {!user && (
-                                    <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm font-bold">
-                                        Made with MagicPixa
-                                    </div>
-                                )}
-                            </>
+                            <div className="absolute top-4 right-4">
+                                    <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                    <RefreshCw className="h-5 w-5" />
+                                    <span className="sr-only">Regenerate</span>
+                                </Button>
+                            </div>
                         )}
                         
                             {!preview && (
@@ -406,5 +398,4 @@ export default function AIPhotoStudioPage() {
             </AlertDialog>
         </div>
     );
-
-    
+}
