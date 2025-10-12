@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Instagram, Linkedin, Twitter, ArrowUp } from 'lucide-react';
@@ -17,7 +18,7 @@ const footerLinkGroups = [
   {
     title: 'Magicpixa',
     links: [
-      { name: 'About Us', href: '#' },
+      { name: 'About Us', href: '/about' },
       { name: 'Features', href: '#features' },
       { name: 'Pricing', href: '#pricing' },
     ],
