@@ -154,22 +154,21 @@ export default function AIPhotoStudioPage() {
                 </p>
             </div>
 
-            <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                  {/* Workspace Column */}
-                 <div className="space-y-6">
+                 <div className="space-y-6 flex flex-col">
                      <h2 className="text-2xl font-bold">
                         {generatedImage ? 'Your Masterpiece ✨' : 'Your Workspace'}
                      </h2>
-                    <Card className="rounded-3xl shadow-lg overflow-hidden aspect-w-4 aspect-h-3 bg-secondary/30">
-                        <CardContent className="p-0 relative">
+                    <Card className="rounded-3xl shadow-lg overflow-hidden aspect-w-4 aspect-h-3 bg-secondary/30 flex-1">
+                        <CardContent className="p-0 relative h-full">
                             {/* Base Preview Image */}
                             {preview && (
                                 <Image 
                                     src={generatedImage || preview} 
                                     alt={generatedImage ? "Generated" : "Preview"}
-                                    layout="responsive" 
-                                    width={800} 
-                                    height={600}
+                                    layout="fill" 
+                                    objectFit="cover"
                                     className={cn('transition-all duration-500', {
                                         'blur-lg scale-105': isGenerating,
                                     })}
@@ -217,7 +216,7 @@ export default function AIPhotoStudioPage() {
                  </div>
 
                 {/* Control Panel Column */}
-                <div className="space-y-6">
+                <div className="flex flex-col space-y-6">
                     <Card className="rounded-3xl shadow-lg">
                         <CardHeader>
                             <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
@@ -238,7 +237,7 @@ export default function AIPhotoStudioPage() {
                            </div>
                         </CardContent>
                     </Card>
-                    <Card className="rounded-3xl shadow-lg">
+                    <Card className="rounded-3xl shadow-lg flex-1">
                         <CardHeader>
                              <CardTitle className="text-2xl font-bold">Actions</CardTitle>
                         </CardHeader>
