@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ArrowRight, Download, Info, Loader2, Sparkles, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Download, Info, Loader2, UploadCloud, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -179,11 +179,20 @@ export default function AIPhotoStudioPage() {
                             {/* Generation Overlay */}
                             {isGenerating && (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
-                                    <Sparkles className="w-16 h-16 text-primary animate-pulse" />
+                                    <ImageIcon className="w-16 h-16 text-primary animate-pulse" />
                                     <p className="font-bold text-2xl text-primary-foreground mt-4">{generationMessages[generationStep].text}</p>
                                     <p className="text-muted-foreground mt-2">Our AI is creating magic. Please wait a moment.</p>
                                     <Progress value={generationProgress} className="w-3/4 mt-6 h-3" />
                                     <p className="text-primary-foreground font-mono text-sm mt-2">{generationProgress}%</p>
+                                </div>
+                            )}
+
+                             {generatedImage && !isGenerating && (
+                                <div className="absolute top-4 right-4">
+                                     <Button onClick={handleRegenerate} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
+                                        <RefreshCw className="h-5 w-5" />
+                                        <span className="sr-only">Regenerate</span>
+                                    </Button>
                                 </div>
                             )}
                             
@@ -213,27 +222,27 @@ export default function AIPhotoStudioPage() {
                     <Card className="rounded-3xl shadow-lg">
                         <CardContent className="p-6 space-y-6">
                            <div className="p-4 rounded-2xl bg-secondary/50 space-y-3 text-center animate-fade-in">
-                                <p className="text-sm text-muted-foreground"><Info className="inline-block w-4 h-4 mr-1" />Upload a clear, front-facing photo for best results.</p>
-                                <p className="text-xs text-muted-foreground">Supported formats: JPG, PNG (max 20MB).</p>
+                               <p className="text-sm text-muted-foreground"><Info className="inline-block w-4 h-4 mr-1" />{analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}</p>
+                               {analysisResult && (
+                                   <div className="text-xs text-muted-foreground">
+                                       <span>Detected: <strong>{analysisResult.productType}</strong></span> | <span>Quality: <strong>{analysisResult.imageQuality}</strong></span>
+                                   </div>
+                               )}
                            </div>
                             
                             <div className="space-y-4">
                                {generatedImage && !isGenerating ? (
                                     <div className="grid grid-cols-1 gap-4 pt-4 border-t">
                                         <div className="grid grid-cols-2 gap-4">
-                                            <Button onClick={handleRegenerate} variant="outline" size="lg" className="rounded-2xl">
-                                                <RefreshCw className="mr-2 h-4 w-4" />
-                                                Regenerate
-                                            </Button>
                                             <Button onClick={handleDownload} size="lg" className="rounded-2xl">
                                                 <Download className="mr-2 h-4 w-4" />
                                                 Download
                                             </Button>
+                                            <Button onClick={handleReset} variant="secondary" size="lg" className="rounded-2xl">
+                                                <UploadCloud className="mr-2 h-4 w-4" />
+                                                Start New
+                                            </Button>
                                         </div>
-                                         <Button onClick={handleReset} variant="secondary" size="lg" className="rounded-2xl w-full">
-                                            <UploadCloud className="mr-2 h-4 w-4" />
-                                            Generate Another Image
-                                        </Button>
                                     </div>
                                ) : (
                                 <>
@@ -276,5 +285,5 @@ export default function AIPhotoStudioPage() {
             </AlertDialog>
         </div>
     );
-}
 
+    
