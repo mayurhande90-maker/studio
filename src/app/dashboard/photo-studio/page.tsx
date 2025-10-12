@@ -48,7 +48,7 @@ export default function AIPhotoStudioPage() {
         if (file && !analysisResult && !isAnalyzing) {
             handleAnalysis();
         }
-    }, [file]);
+    }, [file, analysisResult, isAnalyzing]);
 
 
     const compressImage = (file: File): Promise<{blob: Blob, dataUri: string}> => {
@@ -145,7 +145,7 @@ export default function AIPhotoStudioPage() {
         maxSize: MAX_FILE_SIZE,
     });
     
-     const handleAnalysis = async () => {
+     const handleAnalysis = useCallback(async () => {
         if (!file) return;
         setIsAnalyzing(true);
         try {
@@ -166,7 +166,7 @@ export default function AIPhotoStudioPage() {
         } finally {
             setIsAnalyzing(false);
         }
-    };
+    }, [file, toast]);
 
 
     const handleGenerate = async () => {
@@ -306,15 +306,13 @@ export default function AIPhotoStudioPage() {
                             <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                           <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 animate-fade-in">
+                           <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50">
                                 <Sparkles className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
                                 <div className="space-y-1 w-full">
                                     { isAnalyzing ? (
-                                        <div className='space-y-2'>
-                                            <Skeleton className="h-5 w-3/4" />
-                                            <Skeleton className="h-4 w-full" />
-                                            <Skeleton className="h-4 w-1/2" />
-                                        </div>
+                                        <p className="font-semibold text-foreground animate-pulse">
+                                            Analysing the Photo...
+                                        </p>
                                     ) : (
                                          <>
                                             <p className="font-semibold text-foreground">
