@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -41,14 +42,16 @@ export async function enhanceUploadedImage(
 }
 
 
+const ProductImageAnalysisSchema = z.object({
+    productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe", "face cream jar", "group photo", "document", "landscape", "old photo", "blurry photo").'),
+    imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit", "low resolution").'),
+    friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details.", "Clean product shot detected. Ready for a cinematic touch?", "A bit out of focus — our AI will fix that in seconds.", "Vintage vibes detected — we\'ll colorize this beautifully.", "Perfect upload! Let\'s see what Magicpixa can do."')
+});
+
 const analysisPrompt = ai.definePrompt({
     name: 'productImageAnalysisPrompt',
     input: { schema: EnhanceUploadedImageInputSchema },
-    output: { schema: z.object({
-        productType: z.string().describe('The type of product detected in the image (e.g., "bottle", "box", "shoe", "face cream jar", "group photo", "document", "landscape", "old photo", "blurry photo").'),
-        imageQuality: z.string().describe('A brief assessment of the image quality (e.g., "good lighting", "blurry", "well-lit", "low resolution").'),
-        friendlyCaption: z.string().describe('A friendly, one-line caption to show the user based on the image analysis. Examples: "Nice portrait! Let\'s bring out those natural details.", "Clean product shot detected. Ready for a cinematic touch?", "A bit out of focus — our AI will fix that in seconds.", "Vintage vibes detected — we\'ll colorize this beautifully.", "Perfect upload! Let\'s see what Magicpixa can do."')
-    })},
+    output: { schema: ProductImageAnalysisSchema},
     prompt: `You are an expert image analyst. Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
 
     Here are some examples for the friendly caption based on image type:
@@ -69,7 +72,7 @@ const analyzeImageFlow = ai.defineFlow(
   {
     name: 'analyzeImageFlow',
     inputSchema: EnhanceUploadedImageInputSchema,
-    outputSchema: analysisPrompt.output.schema,
+    outputSchema: ProductImageAnalysisSchema,
   },
   async (input) => {
     const { output } = await analysisPrompt(input);
