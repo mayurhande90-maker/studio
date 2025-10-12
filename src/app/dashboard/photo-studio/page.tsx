@@ -157,9 +157,6 @@ export default function AIPhotoStudioPage() {
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                  {/* Workspace Column */}
                  <div className="space-y-6 flex flex-col">
-                     <h2 className="text-2xl font-bold">
-                        {generatedImage ? 'Your Masterpiece ✨' : 'Your Workspace'}
-                     </h2>
                     <Card className="rounded-3xl shadow-lg overflow-hidden aspect-w-4 aspect-h-3 bg-secondary/30 flex-1">
                         <CardContent className="p-0 relative h-full">
                             {/* Base Preview Image */}
