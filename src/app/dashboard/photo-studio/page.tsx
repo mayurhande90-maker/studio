@@ -221,13 +221,18 @@ export default function AIPhotoStudioPage() {
                     <h2 className="text-2xl font-bold">Configuration & Actions</h2>
                     <Card className="rounded-3xl shadow-lg">
                         <CardContent className="p-6 space-y-6">
-                           <div className="p-4 rounded-2xl bg-secondary/50 space-y-3 text-center animate-fade-in">
-                               <p className="text-sm text-muted-foreground"><Info className="inline-block w-4 h-4 mr-1" />{analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}</p>
-                               {analysisResult && (
-                                   <div className="text-xs text-muted-foreground">
-                                       <span>Detected: <strong>{analysisResult.productType}</strong></span> | <span>Quality: <strong>{analysisResult.imageQuality}</strong></span>
-                                   </div>
-                               )}
+                           <div className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 animate-fade-in">
+                                <Info className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                                <div className="space-y-1">
+                                    <p className="font-semibold text-foreground">
+                                        {analysisResult ? analysisResult.friendlyCaption : 'Upload a clear, front-facing photo for best results.'}
+                                    </p>
+                                    {analysisResult && (
+                                       <div className="text-xs text-muted-foreground">
+                                           <span>Detected: <strong>{analysisResult.productType}</strong></span> | <span>Quality: <strong>{analysisResult.imageQuality}</strong></span>
+                                       </div>
+                                   )}
+                                </div>
                            </div>
                             
                             <div className="space-y-4">
@@ -285,5 +290,4 @@ export default function AIPhotoStudioPage() {
             </AlertDialog>
         </div>
     );
-
-    
+}
