@@ -113,7 +113,7 @@ export function DashboardSidebar() {
                       <Button
                         key={feature.title}
                         variant={getVariant(feature.href)}
-                        className="w-full justify-start h-auto py-3 rounded-xl"
+                        className={cn("w-full justify-start h-auto py-3 rounded-xl", getVariant(feature.href) === 'ghost' && 'sidebar-feature-button')}
                         asChild
                       >
                         <Link href={feature.href} className="flex items-center text-sm">

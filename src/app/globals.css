@@ -100,4 +100,9 @@
   .icon-container {
     @apply w-14 h-14 rounded-lg bg-premium-gradient flex items-center justify-center;
   }
+  
+  .sidebar-feature-button:hover {
+    background-color: hsl(217 91% 60%);
+    color: hsl(var(--primary-foreground));
+  }
 }
