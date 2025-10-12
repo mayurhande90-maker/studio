@@ -145,7 +145,7 @@ export default function AIPhotoStudioPage() {
     return (
         <div className="w-full space-y-8">
             <div className="text-center">
-                <h1 className="text-4xl font-bold tracking-tight">AI Photo Studio</h1>
+                <h1 className="text-4xl font-bold tracking-tight text-gradient">AI Photo Studio</h1>
                 <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
                     Transform your raw product photo into a hyper-realistic image ready to post.
                 </p>
@@ -161,7 +161,7 @@ export default function AIPhotoStudioPage() {
                                 <Image 
                                     src={generatedImage || preview} 
                                     alt={generatedImage ? "Generated" : "Preview"}
-                                    layout="fill" 
+                                    fill
                                     objectFit="cover"
                                     className={cn('transition-all duration-500', {
                                         'blur-lg scale-105': isGenerating,
