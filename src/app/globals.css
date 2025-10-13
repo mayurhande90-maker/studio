@@ -25,6 +25,7 @@
     --radius: 1.5rem;
     --gradient-purple: 260 83% 53%;
     --gradient-blue: 217 91% 60%;
+    --hover-blue: 217 91% 60%;
   }
 
   .dark {
@@ -49,6 +50,7 @@
     --ring: 221 83% 53%;
     --gradient-purple: 260 83% 53%;
     --gradient-blue: 217 91% 60%;
+    --hover-blue: 217 91% 60%;
   }
 }
 
