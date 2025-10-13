@@ -342,7 +342,7 @@ export default function AIPhotoStudioPage() {
                 </Card>
 
                 <div className="flex flex-col space-y-6">
-                    <Card className="rounded-3xl shadow-lg">
+                    <Card className="rounded-3xl shadow-lg bg-background">
                         <CardHeader>
                             <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
                         </CardHeader>
