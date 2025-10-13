@@ -2,6 +2,8 @@
 import { enhanceUploadedImage, EnhanceUploadedImageInput } from '@/ai/flows/enhance-uploaded-image';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 120; // Set timeout to 120 seconds
+
 export async function POST(req: NextRequest) {
   try {
     const input: EnhanceUploadedImageInput = await req.json();
@@ -28,5 +30,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-    
