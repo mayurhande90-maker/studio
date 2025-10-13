@@ -223,7 +223,7 @@ export function Features() {
                     <Card
                       key={feature.title}
                       className={cn(
-                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-secondary',
+                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-card',
                         feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
                       )}
                     >
