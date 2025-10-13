@@ -182,7 +182,7 @@ export const featureCategories: FeatureCategory[] = [
 
 export function Features() {
   return (
-    <section id="features" className="w-full py-8 lg:py-12 bg-background">
+    <section id="features" className="w-full py-8 lg:py-12 bg-card">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -223,7 +223,7 @@ export function Features() {
                     <Card
                       key={feature.title}
                       className={cn(
-                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-card',
+                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-background',
                         feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
                       )}
                     >

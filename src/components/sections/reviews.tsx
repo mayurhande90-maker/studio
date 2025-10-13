@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Star } from 'lucide-react';
@@ -57,7 +58,7 @@ export function Reviews() {
   return (
     <section
       id="reviews"
-      className="w-full py-16 lg:py-24 bg-background"
+      className="w-full py-16 lg:py-24 bg-card"
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
@@ -86,7 +87,7 @@ export function Reviews() {
             {reviews.map((review, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                  <div className="p-1">
-                    <Card key={index} className="rounded-lg shadow-md bg-card h-full">
+                    <Card key={index} className="rounded-lg shadow-md bg-background h-full">
                     <CardContent className="p-6 flex flex-col gap-4 justify-between h-full">
                         <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
