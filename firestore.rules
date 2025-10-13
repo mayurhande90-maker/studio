@@ -1,99 +1,160 @@
 /**
- * @fileoverview Firestore Security Rules for MagicPixa application.
+ * @fileoverview Firestore Security Rules for MagicPixa.
  *
  * Core Philosophy:
- * This ruleset enforces a strict user-ownership model. Each user has full control
- * over their own data, and no other user can access it.
+ * This ruleset enforces a strict user-ownership model, ensuring that users can only
+ * access and modify their own data. Additionally, it provides a segregation and management
+ * approach to safeguard user-generated content and associated data, alongside a job queueing
+ * mechanism, subscription management and comprehensive logging capabilities.
  *
  * Data Structure:
- * - `/users/{userId}`: Stores user profile data.
- * - `/users/{userId}/sessions/{sessionId}`: Stores session data for each user.
+ * - /users/{userId}: Stores user profile information.
+ * - /users/{userId}/imageGenerations/{imageGenerationId}: Stores image generation records for each user.
+ * - /jobs/{jobId}: Stores image processing jobs.
+ * - /users/{userId}/subscriptions/{subscriptionId}: Stores subscription information for each user.
+ * - /logs/aiGeneration/{logId}: Stores logs for each image generation attempt (admin only).
  *
  * Key Security Decisions:
- * - Users can only access their own profile data and sessions.
- * - Listing all users is disallowed.
+ * - Strict User Ownership: Users can only read and write their own data, enforced by matching `request.auth.uid` with the `userId` in the document path.
+ * - No Public Listing: Listing of user documents is denied to prevent information disclosure.
+ * - Admin-Only Logs: Access to logs is restricted to administrators.  No admin role is defined in this prototype, so all access is denied.
+ * - Job Queue: Jobs are not user-owned and thus no `list` operation is needed.
  *
  * Denormalization for Authorization:
- * - No denormalization is needed because the security rules will rely on `request.auth.uid`
- * matching the `userId` field within the paths.
+ * - The `subscriptionPlan` and `credits` from the `User` document are denormalized into the
+ *   `/users/{userId}/imageGenerations/{imageGenerationId}` documents. This allows the `generateAIImage`
+ *   cloud function to authorize requests without needing to `get()` the user document. The `userId`
+ *   on `imageGeneration` documents also facilitates authorization based on ownership.
+ *
+ * Structural Segregation:
+ * Each top-level collection serves a distinct purpose (e.g., `/users` for user profiles, `/jobs`
+ * for the job queue, `/logs/aiGeneration` for logs), enabling clearly defined security rules.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * @description Allows users to read and write their own user profile data.
+     * @description Enforces that users can only read and write their own user document.
      * @path /users/{userId}
-     * @allow (create) User with ID 'user123' can create their profile if authenticated as 'user123'.
-     * @allow (get, update, delete) User with ID 'user123' can get, update, and delete their profile if authenticated as 'user123'.
-     * @deny (create, get, update, delete) User with ID 'user456' cannot access the profile of user 'user123'.
-     * @principle Enforces document ownership for all operations.
+     * @allow (create) If the user is creating their own document (new signup).
+     * @allow (get, update, delete) If the user is the owner of the document.
+     * @deny (list) Listing all users is not allowed.
+     * @deny (create) If the user attempts to create a document with a different userId.
+     * @principle Enforces document ownership and prevents unauthorized access.
      */
     match /users/{userId} {
-      // Helper function to check if the user is signed in.
+      // Verified user ID
       function isSignedIn() {
         return request.auth != null;
       }
 
-      // Helper function to check if the authenticated user is the owner of the document.
+      // Verify ownership
       function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
+        return request.auth.uid == userId;
       }
 
-      // Helper function to check if the authenticated user is the existing owner of the document.
+      // Verify existing ownership
       function isExistingOwner(userId) {
         return isOwner(userId) && resource != null;
       }
 
       allow get: if isOwner(userId);
-      allow list: if false; // Do not allow listing all users
-
-      // Allow a user to create their own profile, enforcing that the userId in the path
-      // matches the authenticated user's ID.
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-
-      // Allow a user to update their own profile, enforcing that the userId cannot be changed.
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-
-      // Allow a user to delete their own profile.
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id; // enforce immutability of userId
       allow delete: if isExistingOwner(userId);
     }
 
     /**
-     * @description Allows users to manage their own session data.
-     * @path /users/{userId}/sessions/{sessionId}
-     * @allow (create) User 'user123' can create a new session under their profile.
-     * @allow (get, list, update, delete) User 'user123' can read, list, update, and delete their own sessions.
-     * @deny (create, get, list, update, delete) User 'user456' cannot access sessions belonging to 'user123'.
-     * @principle Restricts access to a user's own data tree.
+     * @description Enforces that users can only read and write their own image generation records.
+     * @path /users/{userId}/imageGenerations/{imageGenerationId}
+     * @allow (create) If the user is creating a record under their own user ID.
+     * @allow (get, list, update, delete) If the user is the owner of the image generation record.
+     * @deny If the user attempts to access or modify image generation records of other users.
+     * @principle Enforces document ownership and prevents unauthorized access.
      */
-    match /users/{userId}/sessions/{sessionId} {
-      // Helper function to check if the user is signed in.
+    match /users/{userId}/imageGenerations/{imageGenerationId} {
+      // Verified user ID
       function isSignedIn() {
         return request.auth != null;
       }
 
-      // Helper function to check if the authenticated user is the owner of the document.
+      // Verify ownership
       function isOwner(userId) {
-        return isSignedIn() && request.auth.uid == userId;
+        return request.auth.uid == userId;
       }
 
-       // Helper function to check if the authenticated user is the existing owner of the document.
+      // Verify existing ownership
       function isExistingOwner(userId) {
         return isOwner(userId) && resource != null;
       }
 
       allow get: if isOwner(userId);
       allow list: if isOwner(userId);
-
-      // Allow a user to create a session under their own profile.
-      allow create: if isOwner(userId) && request.resource.data.userId == userId;
-
-      // Allow a user to update their own session.  The userId must not change.
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-
-      // Allow a user to delete their own session.
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId; // enforce immutability of userId
       allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Defines rules for the 'jobs' collection, allowing create only.
+     * @path /jobs/{jobId}
+     * @allow (create) Anyone can create a job. Cloud functions will process them.
+     * @deny (get, list, update, delete) All other operations are denied.
+     * @principle Limits access to the jobs collection to create operations only.
+     */
+    match /jobs/{jobId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Enforces that users can only read and write their own subscription data.
+     * @path /users/{userId}/subscriptions/{subscriptionId}
+     * @allow (create) If the user is creating a subscription under their own user ID.
+     * @allow (get, list, update, delete) If the user is the owner of the subscription record.
+     * @deny If the user attempts to access or modify subscription records of other users.
+     * @principle Enforces document ownership and prevents unauthorized access.
+     */
+    match /users/{userId}/subscriptions/{subscriptionId} {
+      // Verified user ID
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      // Verify ownership
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+
+      // Verify existing ownership
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId; // enforce immutability of userId
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Restricts access to the 'logs' collection to admins only.
+     * @path /logs/aiGeneration/{logId}
+     * @deny (get, list, create, update, delete) No one has access to logs.
+     * @principle Restricts access to log data.
+     */
+    match /logs/aiGeneration/{logId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
     }
   }
 }

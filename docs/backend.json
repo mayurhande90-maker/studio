@@ -8,70 +8,201 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the User entity."
+          "description": "Unique identifier for the user."
+        },
+        "name": {
+          "type": "string",
+          "description": "User's display name."
         },
         "email": {
           "type": "string",
-          "description": "Email address of the user.",
+          "description": "User's email address.",
           "format": "email"
         },
-        "displayName": {
+        "profilePhoto": {
           "type": "string",
-          "description": "The name the user wishes to be displayed as."
+          "description": "URL of the user's profile photo."
         },
-        "creationDate": {
+        "subscriptionPlan": {
           "type": "string",
-          "description": "Date and time when the user account was created.",
-          "format": "date-time"
+          "description": "The user's current subscription plan (e.g., 'free', 'basic', 'pro', 'premium')."
         },
         "credits": {
           "type": "number",
-          "description": "The number of available credits for the user."
-        },
-        "lastCreditRenewal": {
-          "type": "string",
-          "description": "The date when the user's credits were last renewed.",
-          "format": "date-time"
+          "description": "Number of credits available to the user for image generation."
         }
       },
       "required": [
         "id",
+        "name",
         "email",
-        "displayName",
-        "creationDate",
-        "credits",
-        "lastCreditRenewal"
+        "profilePhoto",
+        "subscriptionPlan",
+        "credits"
       ]
     },
-    "Session": {
+    "ImageGeneration": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Session",
+      "title": "ImageGeneration",
       "type": "object",
-      "description": "Represents a user session.",
+      "description": "Represents a single image generation request and its outcome.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Session entity."
+          "description": "Unique identifier for the image generation record."
         },
         "userId": {
           "type": "string",
-          "description": "Reference to User. (Relationship: User 1:N Session)"
+          "description": "Reference to User. (Relationship: User 1:N ImageGeneration)"
         },
-        "sessionStart": {
+        "inputPrompt": {
           "type": "string",
-          "description": "Date and time when the session started.",
-          "format": "date-time"
+          "description": "The prompt used for image generation."
         },
-        "sessionEnd": {
+        "processedImageUrl": {
           "type": "string",
-          "description": "Date and time when the session ended. Null if the session is still active.",
+          "description": "URL of the processed (generated) image."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the image generation was requested.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
         "userId",
-        "sessionStart"
+        "inputPrompt",
+        "processedImageUrl",
+        "timestamp"
+      ]
+    },
+    "Job": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Job",
+      "type": "object",
+      "description": "Represents an image processing job in the queue.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the job."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Job)"
+        },
+        "inputPrompt": {
+          "type": "string",
+          "description": "The prompt used for image generation."
+        },
+        "inputImage": {
+          "type": "string",
+          "description": "URL or reference to the input image (optional)."
+        },
+        "status": {
+          "type": "string",
+          "description": "The status of the job (e.g., 'pending', 'processing', 'completed', 'failed')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the job was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "inputPrompt",
+        "status",
+        "createdAt"
+      ]
+    },
+    "Subscription": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Subscription",
+      "type": "object",
+      "description": "Represents a user's subscription plan and related payment information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the subscription."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:1 Subscription)"
+        },
+        "planName": {
+          "type": "string",
+          "description": "The name of the subscription plan (e.g., 'basic', 'pro', 'premium')."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The date the subscription started.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The date the subscription ends.",
+          "format": "date-time"
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Identifier for the payment in the payment gateway (e.g., Razorpay)."
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Indicates whether the subscription is currently active."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "planName",
+        "startDate",
+        "endDate",
+        "paymentId",
+        "active"
+      ]
+    },
+    "Log": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Log",
+      "type": "object",
+      "description": "Represents a log entry for an image generation attempt.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the log entry."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Log)"
+        },
+        "apiProviderUsed": {
+          "type": "string",
+          "description": "The API provider used for image generation (e.g., 'Gemini', 'ChatGPT', 'Perplexity')."
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Indicates whether the image generation was successful."
+        },
+        "generationDuration": {
+          "type": "number",
+          "description": "The duration of the image generation process in milliseconds."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the image generation attempt occurred.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "apiProviderUsed",
+        "success",
+        "generationDuration",
+        "timestamp"
       ]
     }
   },
@@ -90,36 +221,88 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profile data. Only the user can read/write their own profile. No denormalization required as direct ownership is enforced via path.",
+          "description": "Stores user profile information. User data is private and accessible only to the user with matching userId. Includes standard profile information (name, email, profilePhoto, subscriptionPlan, credits).",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier for the user."
+              "description": "The unique identifier of the user."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/sessions/{sessionId}",
+        "path": "/users/{userId}/imageGenerations/{imageGenerationId}",
         "definition": {
-          "entityName": "Session",
+          "entityName": "ImageGeneration",
           "schema": {
-            "$ref": "#/backend/entities/Session"
+            "$ref": "#/backend/entities/ImageGeneration"
           },
-          "description": "Stores session data for each user.  Enforces path-based ownership; only the user can access their own sessions. `userId` field must match `request.auth.uid`. No denormalization is needed, as path ownership is sufficient. Supports secure listing of sessions by user.",
+          "description": "Stores image generation records for each user. Includes denormalized subscriptionPlan and credits for authorization independence. Only the user with the matching userId can access these records.  This path enables listing of images generated by the user.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier for the user."
+              "description": "The unique identifier of the user."
             },
             {
-              "name": "sessionId",
-              "description": "The unique identifier for the session."
+              "name": "imageGenerationId",
+              "description": "The unique identifier of the image generation record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/jobs/{jobId}",
+        "definition": {
+          "entityName": "Job",
+          "schema": {
+            "$ref": "#/backend/entities/Job"
+          },
+          "description": "Stores image processing jobs.  The Firebase Function `processImageJob` processes the documents in this collection.  The userId field allows for tracing the job back to the user who requested it.",
+          "params": [
+            {
+              "name": "jobId",
+              "description": "The unique identifier of the job."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/subscriptions/{subscriptionId}",
+        "definition": {
+          "entityName": "Subscription",
+          "schema": {
+            "$ref": "#/backend/entities/Subscription"
+          },
+          "description": "Stores subscription information for each user.  Only the user with matching userId can read/write their subscription. This collection tracks the subscription plan, start/end dates, payment ID, and active status.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "subscriptionId",
+              "description": "The unique identifier of the subscription."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/logs/aiGeneration/{logId}",
+        "definition": {
+          "entityName": "Log",
+          "schema": {
+            "$ref": "#/backend/entities/Log"
+          },
+          "description": "Stores logs for each image generation attempt. Contains information about the API provider used, success/failure status, and generation duration. Accessible to admins only.",
+          "params": [
+            {
+              "name": "logId",
+              "description": "The unique identifier of the log entry."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to securely manage user data and sessions. It leverages path-based ownership for private user data, specifically for storing session information. Authorization Independence is achieved without denormalization, as the security rules will primarily rely on `request.auth.uid` matching the `userId` field within the `/users/{userId}/sessions/{sessionId}` path. Segregation is achieved by storing all session-related data under the user's specific path, ensuring consistent security postures within those collections. This structure facilitates secure list operations via path-based ownership, ensures clear ownership invariants, and offers a predictable data schema. The structure focuses on simplicity and security, optimizing for easy debugging and maintenance."
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence and support QAPs (Rules are not Filters). User data and image generations are segregated into user-specific subcollections to enforce strict ownership and prevent unauthorized access. Denormalization is used to propagate subscription plan and credits information to image generation records, removing authorization dependency on the user document. The structure also supports efficient list operations and maintains data integrity.\n\nSpecifically, the key strategies employed are:\n\n*   **Authorization Independence:** The `subscriptionPlan` and `credits` from the `User` document are denormalized into the `/users/{userId}/imageGenerations/{imageGenerationId}` documents to allow the `generateAIImage` cloud function to authorize requests without needing to `get()` the user document. The `userId` on `imageGeneration` documents also facilitates authorization based on ownership.\n*   **Structural Segregation:** Each top-level collection serves a distinct purpose (e.g., `/users` for user profiles, `/jobs` for job queue, `/logs/aiGeneration` for logs), enabling clearly defined security rules.\n*   **Access Modeling:** User-owned data (image generations, jobs, and subscriptions) are stored under the `/users/{userId}` path.  Collaborative data is not present in this design, but if it existed, a Membership Map would be used.\n*   **Data Clarity and Predictability:** Consistent naming conventions (`userId`, `timestamp`) and explicit state modeling (`status` in `/jobs`) improve debuggability and maintainability."
   }
 }
