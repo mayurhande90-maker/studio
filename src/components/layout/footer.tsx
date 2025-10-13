@@ -56,7 +56,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-secondary/30 border-t border-border/50">
+    <footer className="bg-card border-t border-border/50">
       <div className="container mx-auto py-16 px-4 md:px-6">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
