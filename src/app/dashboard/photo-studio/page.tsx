@@ -278,7 +278,7 @@ export default function AIPhotoStudioPage() {
             </div>
 
             <div ref={outputRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                <Card className="rounded-3xl shadow-lg overflow-hidden bg-secondary/30 flex-1">
+                <Card className="rounded-3xl shadow-lg overflow-hidden bg-background flex-1">
                     <CardContent className="p-0 relative h-full flex items-center justify-center min-h-[450px]">
                         <input {...getInputProps()} />
                         {preview && (
