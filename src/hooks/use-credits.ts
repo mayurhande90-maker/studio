@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const ANONYMOUS_CREDITS_KEY = 'magicpixa_anonymous_credits';
 
@@ -21,8 +21,7 @@ export function useCredits() {
 
   const { data: userDoc, isLoading: isUserDocLoading } = useDoc<{
     credits: number;
-    lastCreditRenewal: { seconds: number } | null;
-    creationDate: { seconds: number };
+    // other fields from your user document
   }>(userDocRef);
   
   const handleAnonymousCredits = useCallback(() => {
@@ -80,49 +79,17 @@ export function useCredits() {
     }
     
     if (userDoc) {
-      if (userDoc.lastCreditRenewal) {
-        const now = new Date();
-        const lastRenewal = new Date(userDoc.lastCreditRenewal.seconds * 1000);
-        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-        
-        if (now.getTime() - lastRenewal.getTime() > thirtyDays) {
-          // Time to renew credits
-          const newCreditData = {
-            credits: 10,
-            lastCreditRenewal: serverTimestamp(),
-          };
-          setDoc(userDocRef, newCreditData, { merge: true });
-          setCredits(10);
-        } else {
-          setCredits(userDoc.credits);
-        }
-      } else {
-        // lastCreditRenewal is null, likely a new user, use existing credits
-         setCredits(userDoc.credits);
-      }
+      setCredits(userDoc.credits);
       setIsLoading(false);
     } else if (user && !isUserDocLoading && !userDoc) {
-       // New user, create their document
-       const getDisplayName = () => {
-          if (user.displayName) return user.displayName;
-          if (user.email) return user.email.split('@')[0];
-          return "User";
-       };
-       const newUserDoc = {
-          id: user.uid,
-          email: user.email,
-          displayName: getDisplayName(),
-          creationDate: serverTimestamp(),
-          lastCreditRenewal: serverTimestamp(),
-          credits: 10,
-       };
-       setDoc(userDocRef, newUserDoc).then(() => {
-          setCredits(10);
-          setIsLoading(false);
-       });
+       // New user doc might not be available immediately after signup
+       // For now, let's be optimistic and assume new users get credits on doc creation.
+       // The signup flow handles the initial creation.
+       // We can provide a fallback or listen differently if needed.
+       setIsLoading(false); // Assume loading is done, even if doc is not there yet.
     }
 
-  }, [user, isUserLoading, handleAnonymousCredits, isUserDocLoading, userDoc, userDocRef]);
+  }, [user, isUserLoading, handleAnonymousCredits, isUserDocLoading, userDoc]);
 
   return { credits, isLoading, deductCredits };
 }
