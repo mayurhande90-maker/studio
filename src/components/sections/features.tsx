@@ -194,13 +194,13 @@ export function Features() {
         </div>
 
         <Tabs defaultValue="photo" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto rounded-2xl">
             {featureCategories.map((category) => (
               <TabsTrigger
                 key={category.category}
                 value={category.category}
                 className={cn(
-                  'py-2.5 text-center text-lg font-bold transition-all',
+                  'py-2.5 text-center text-lg font-bold transition-all rounded-xl',
                   category.category === 'premium' &&
                     'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
                 )}
