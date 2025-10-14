@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth, useFirestore } from '@/firebase';
+import { useAuth, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { FirebaseError } from 'firebase/app';
 import { AuthErrorCodes, createUserWithEmailAndPassword } from 'firebase/auth';
@@ -73,14 +73,24 @@ export default function SignupPage() {
 
       if (user && firestore) {
         const userDocRef = doc(firestore, 'users', user.uid);
-        await setDoc(userDocRef, {
+        const userData = {
           name: values.name,
           email: user.email,
           profilePhoto: user.photoURL || `https://avatar.vercel.sh/${user.email}.png`,
           subscriptionPlan: 'free',
           credits: 10,
           creationHistory: [],
-        });
+        };
+        
+        setDoc(userDocRef, userData)
+          .catch((error) => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'create',
+              requestResourceData: userData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+          });
       }
 
       toast({
