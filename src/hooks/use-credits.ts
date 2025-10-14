@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const ANONYMOUS_CREDITS_KEY = 'magicpixa_anonymous_credits';
 
@@ -46,11 +48,24 @@ export function useCredits() {
       if (credits === null) return;
 
       const newCredits = Math.max(0, credits - amount);
-      setCredits(newCredits);
-
-      if (user && userDocRef) {
-        setDoc(userDocRef, { credits: newCredits }, { merge: true });
-      } else {
+      
+      if (user && userDocRef && firestore) {
+        const updatedData = { credits: newCredits };
+        setDoc(userDocRef, updatedData, { merge: true })
+          .then(() => {
+             setCredits(newCredits); // Optimistically update state on success
+          })
+          .catch((error) => {
+            console.error("Failed to deduct credits:", error);
+            const permissionError = new FirestorePermissionError({
+                path: userDocRef.path,
+                operation: 'update',
+                requestResourceData: updatedData,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+          });
+      } else if (!user) {
+         setCredits(newCredits);
         try {
           localStorage.setItem(ANONYMOUS_CREDITS_KEY, newCredits.toString());
         } catch (error) {
@@ -58,7 +73,7 @@ export function useCredits() {
         }
       }
     },
-    [credits, user, userDocRef]
+    [credits, user, userDocRef, firestore]
   );
   
   useEffect(() => {
