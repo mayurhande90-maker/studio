@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useUser } from '@/firebase';
@@ -93,7 +94,7 @@ export default function DashboardPage() {
              <CardContent>
                 <h3 className="text-lg font-semibold">Your Creations</h3>
                 <p className="text-muted-foreground mb-4">You have 7 creations so far.</p>
-                <Button asChild>
+                <Button asChild variant="gradient">
                     <Link href="/dashboard/creations">View All Creations</Link>
                 </Button>
              </CardContent>

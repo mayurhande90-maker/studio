@@ -234,6 +234,7 @@ export default function SignupPage() {
                 type="submit"
                 className="w-full font-bold"
                 disabled={isLoading}
+                variant="gradient"
               >
                 {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>

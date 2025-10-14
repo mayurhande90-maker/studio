@@ -161,6 +161,7 @@ export default function LoginPage() {
                 type="submit"
                 className="w-full font-bold"
                 disabled={isLoading}
+                variant="gradient"
               >
                 {isLoading ? 'Signing In...' : 'Sign In'}
               </Button>

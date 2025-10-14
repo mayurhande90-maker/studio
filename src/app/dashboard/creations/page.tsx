@@ -200,7 +200,7 @@ export default function CreationsPage() {
           </p>
         </div>
       )}
-        <Button className="fixed bottom-8 right-8 rounded-full h-16 w-16 shadow-lg hover:scale-110 transition-transform">
+        <Button variant="gradient" className="fixed bottom-8 right-8 rounded-full h-16 w-16 shadow-lg hover:scale-110 transition-transform">
             <Plus className="h-8 w-8" />
         </Button>
     </div>

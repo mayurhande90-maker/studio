@@ -106,10 +106,10 @@ export function Footer() {
         onClick={scrollToTop}
         className={cn(
           'fixed bottom-6 right-6 rounded-full p-2.5 transition-all duration-300 shadow-lg z-50',
-          'bg-primary/90 text-primary-foreground backdrop-blur-sm ring-2 ring-primary/50',
+          'bg-primary/90 text-primary-foreground backdrop-blur-sm',
           showBackToTop ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
         )}
-        variant="default"
+        variant="gradient"
         size="icon"
         aria-label="Back to Top"
       >

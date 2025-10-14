@@ -105,4 +105,50 @@
     background-color: hsl(217 91% 60%);
     color: hsl(var(--primary-foreground));
   }
+
+  .btn-gradient-outline {
+    @apply relative bg-background text-foreground;
+  }
+
+  .btn-gradient-outline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit; 
+    border: 2px solid transparent;
+    background: linear-gradient(to right, hsl(var(--gradient-purple)), hsl(var(--gradient-blue))) border-box;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
+
+  .btn-gradient-outline:hover {
+    @apply bg-transparent text-primary;
+  }
+
+  .btn-solid-gradient:hover {
+     @apply bg-transparent text-primary;
+  }
+
+  .btn-solid-gradient:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit; 
+    border: 2px solid transparent;
+    background: linear-gradient(to right, hsl(var(--gradient-purple)), hsl(var(--gradient-blue))) border-box;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
 }

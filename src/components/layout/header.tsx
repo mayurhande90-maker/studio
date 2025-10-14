@@ -24,7 +24,7 @@ const navItems = [
 
 const authNavItems = [
   { name: 'Login', href: '/login', variant: 'ghost' as const },
-  { name: 'Sign Up', href: '/signup', variant: 'default' as const },
+  { name: 'Sign Up', href: '/signup', variant: 'gradient' as const },
 ];
 
 export function Header() {
@@ -61,7 +61,7 @@ export function Header() {
     if (user) {
       return (
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="rounded-md font-bold">
+          <Button asChild variant="gradient" size="sm" className="rounded-md font-bold">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
           <UserDropdown />
