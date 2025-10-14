@@ -11,7 +11,7 @@
     --card-foreground: 240 5.9% 10%;
     --primary: 260 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 217 91% 60%;
+    --secondary: 260 83% 53%;
     --secondary-foreground: 0 0% 100%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
@@ -21,7 +21,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 221 83% 53%;
+    --ring: 260 83% 53%;
     --radius: 1.5rem;
     --gradient-purple: 260 83% 53%;
     --gradient-blue: 217 91% 60%;
