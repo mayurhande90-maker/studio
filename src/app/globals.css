@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -130,7 +131,7 @@
   }
 
   .btn-solid-gradient:hover {
-     @apply bg-transparent text-primary;
+     @apply bg-transparent text-primary-foreground;
   }
 
   .btn-solid-gradient:hover::before {
