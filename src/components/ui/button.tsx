@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold ring-offset-background transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold ring-offset-background transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -23,10 +23,10 @@ const buttonVariants = cva(
         gradient: "bg-premium-gradient text-primary-foreground shadow-lg btn-solid-gradient relative"
       },
       size: {
-        default: "h-12 px-6 py-2",
-        sm: "h-9 rounded-full px-3",
-        lg: "h-14 rounded-full px-8 text-base",
-        icon: "h-10 w-10",
+        default: "h-12 px-6 py-2 rounded-xl",
+        sm: "h-9 px-3 rounded-xl",
+        lg: "h-14 px-8 text-base rounded-2xl",
+        icon: "h-10 w-10 rounded-full",
       },
     },
     defaultVariants: {
