@@ -135,7 +135,7 @@ export function Pricing() {
   return (
     <section id="pricing" className="w-full py-12 lg:py-16 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="bg-background border rounded-3xl p-8 md:p-12 shadow-lg">
+        <div className="bg-background rounded-3xl p-8 md:p-12 shadow-lg">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-4">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -189,7 +189,7 @@ export function Pricing() {
                   </ul>
                 </CardContent>
                 <CardFooter className="p-6">
-                  <Button className="w-full rounded-md text-base py-6 font-bold" variant={plan.variant}>
+                  <Button className="w-full text-base py-6 font-bold" variant={plan.variant}>
                     {plan.buttonLabel}
                   </Button>
                 </CardFooter>

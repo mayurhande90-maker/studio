@@ -47,7 +47,7 @@ export function Header() {
       return <Skeleton className="h-8 w-20 rounded-md" />;
     }
     return (
-      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-3 py-1.5 rounded-md">
+      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-3 py-1.5 rounded-xl">
         <Coins className="w-5 h-5 text-primary"/>
         <span>{credits ?? 0} Credits</span>
       </div>
@@ -56,12 +56,12 @@ export function Header() {
 
   const AuthNav = () => {
     if (isUserLoading) {
-      return <Skeleton className="h-10 w-24 rounded-md" />;
+      return <Skeleton className="h-10 w-24 rounded-xl" />;
     }
     if (user) {
       return (
         <div className="flex items-center gap-2">
-          <Button asChild variant="gradient" size="sm" className="rounded-md font-bold">
+          <Button asChild variant="gradient" size="sm" className="font-bold">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
           <UserDropdown />
@@ -76,7 +76,7 @@ export function Header() {
             asChild
             variant={item.variant}
             size="sm"
-            className="rounded-md font-bold"
+            className="font-bold"
           >
             <Link href={item.href}>{item.name}</Link>
           </Button>
