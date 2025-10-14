@@ -22,7 +22,7 @@ export function DashboardHeader() {
       return <Skeleton className="h-10 w-32 rounded-full" />;
     }
     return (
-      <Button variant="outline" className="rounded-full font-bold shadow-inner text-base">
+      <Button variant="outline" className="rounded-full font-bold text-base">
         <Coins className="w-5 h-5 text-primary animate-pulse" />
         <span className="ml-2">{credits ?? 0}</span>
       </Button>
