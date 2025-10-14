@@ -24,7 +24,7 @@
     --ring: 260 83% 53%;
     --radius: 1.5rem;
     --gradient-purple: 260 83% 53%;
-    --gradient-blue: 217 91% 60%;
+    --gradient-blue: 260 83% 53%;
   }
 
   .dark {
@@ -150,5 +150,20 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
+  }
+
+  .animate-pulse-badge {
+    animation: pulse-badge 2s infinite;
+  }
+
+  @keyframes pulse-badge {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 6px hsl(var(--primary) / 0);
+    }
   }
 }

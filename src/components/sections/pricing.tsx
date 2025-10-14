@@ -163,11 +163,11 @@ export function Pricing() {
                 key={plan.plan}
                 className={cn(
                   'relative flex flex-col rounded-3xl shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-2',
-                  plan.recommended ? 'border-2 border-accent shadow-accent/10' : 'border'
+                  plan.recommended ? 'border-2 border-primary shadow-primary/10' : 'border'
                 )}
               >
                 {plan.recommended && (
-                  <Badge className="absolute top-4 right-4 text-xs" variant="default">Recommended</Badge>
+                  <Badge className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 text-sm font-bold animate-pulse-badge" variant="gradient">Recommended</Badge>
                 )}
                 <CardHeader className="p-6">
                   <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
