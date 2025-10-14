@@ -57,13 +57,13 @@ export function Hero() {
                 asChild
                 size="lg"
                 variant="gradient"
-                className="text-primary-foreground transition-transform hover:scale-105 rounded-md shadow-lg text-base py-6 px-8 font-semibold"
+                className="text-primary-foreground transition-transform hover:scale-105 rounded-2xl shadow-lg text-base py-6 px-8 font-semibold"
               >
                 <Link href="/enhance">
                   Enhance Your First Photo <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-md py-6 px-8">
+              <Button asChild variant="outline" size="lg" className="rounded-2xl py-6 px-8">
                 <Link href="#features">Explore Features</Link>
               </Button>
             </div>
