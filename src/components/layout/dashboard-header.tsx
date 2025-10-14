@@ -19,12 +19,12 @@ export function DashboardHeader() {
 
   const CreditsDisplay = () => {
     if (isCreditsLoading || isUserLoading) {
-      return <Skeleton className="h-8 w-24 rounded-full" />;
+      return <Skeleton className="h-10 w-32 rounded-full" />;
     }
     return (
-      <Button variant="outline" className="rounded-full font-bold shadow-inner" disabled>
-        <Coins className="w-5 h-5 text-primary" />
-        <span>{credits ?? 0} Credits</span>
+      <Button variant="outline" className="rounded-full font-bold shadow-inner text-base">
+        <Coins className="w-5 h-5 text-primary animate-pulse" />
+        <span className="ml-2">{credits ?? 0}</span>
       </Button>
     );
   };
