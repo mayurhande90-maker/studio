@@ -96,7 +96,7 @@
   }
 
   .icon-container {
-    @apply w-14 h-14 rounded-lg bg-premium-gradient flex items-center justify-center;
+    @apply w-14 h-14 rounded-2xl bg-premium-gradient flex items-center justify-center;
   }
   
   .sidebar-feature-button:hover {
