@@ -167,7 +167,7 @@ export function Pricing() {
                 )}
               >
                 {plan.recommended && (
-                  <Badge className="absolute top-4 right-4" variant="gradient">Recommended</Badge>
+                  <Badge className="absolute top-4 right-4 px-2 py-0.5 text-[10px] font-bold" variant="gradient">Recommended</Badge>
                 )}
                 <CardHeader className="p-6">
                   <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
