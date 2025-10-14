@@ -184,85 +184,87 @@ export function Features() {
   return (
     <section id="features" className="w-full py-8 lg:py-12 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Explore Magicpixa Tools
-          </h2>
-          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-            All your AI features, organized neatly for easy access.
+        <div className="bg-card border rounded-3xl p-8 md:p-12 shadow-lg">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Explore Magicpixa Tools
+            </h2>
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+              All your AI features, organized neatly for easy access.
+            </p>
+          </div>
+
+          <Tabs defaultValue="photo" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto rounded-2xl">
+              {featureCategories.map((category) => (
+                <TabsTrigger
+                  key={category.category}
+                  value={category.category}
+                  className={cn(
+                    'py-2.5 text-center text-lg font-bold transition-all rounded-xl',
+                    category.category === 'premium' &&
+                      'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
+                  )}
+                >
+                  {category.category === 'premium' && (
+                    <Sparkles className="mr-2 h-4 w-4 text-primary" />
+                  )}
+                  {category.title}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            
+            {featureCategories.map((category) => (
+              <TabsContent key={category.category} value={category.category}>
+                  <div className="text-center mb-8">
+                      <p className="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    {category.features.map((feature) => (
+                      <Card
+                        key={feature.title}
+                        className={cn(
+                          'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-background',
+                          feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
+                        )}
+                      >
+                        {feature.comingSoon && (
+                          <Badge variant="default" className="absolute top-4 right-4 z-10">Coming Soon</Badge>
+                        )}
+                        <CardHeader className="p-6 items-center text-center">
+                          <div className="icon-container mb-4 rounded-2xl">
+                            <feature.icon className="h-6 w-6 text-primary-foreground" strokeWidth={2.5} />
+                          </div>
+                          <CardTitle className="text-lg font-semibold">
+                            {feature.title}
+                          </CardTitle>
+                          <CardDescription className="text-muted-foreground pt-1 text-sm">
+                            {feature.description}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardFooter className="p-6 pt-0 mt-auto justify-center">
+                          <Button
+                            asChild
+                            variant="link"
+                            className="p-0 h-auto font-semibold text-sm"
+                            disabled={feature.comingSoon}
+                          >
+                            <Link href={feature.href}>
+                              Try Now
+                              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                  </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+          <p className="text-center text-primary/80 font-extrabold text-2xl mt-12">
+              More features coming soon to Magicpixa Pro+
           </p>
         </div>
-
-        <Tabs defaultValue="photo" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8 h-auto rounded-2xl">
-            {featureCategories.map((category) => (
-              <TabsTrigger
-                key={category.category}
-                value={category.category}
-                className={cn(
-                  'py-2.5 text-center text-lg font-bold transition-all rounded-xl',
-                  category.category === 'premium' &&
-                    'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
-                )}
-              >
-                {category.category === 'premium' && (
-                  <Sparkles className="mr-2 h-4 w-4 text-primary" />
-                )}
-                {category.title}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          
-          {featureCategories.map((category) => (
-            <TabsContent key={category.category} value={category.category}>
-                <div className="text-center mb-8">
-                    <p className="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">{category.subtitle}</p>
-                </div>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {category.features.map((feature) => (
-                    <Card
-                      key={feature.title}
-                      className={cn(
-                        'relative flex flex-col rounded-3xl shadow-md hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 border-border/50 group', 'bg-background',
-                        feature.comingSoon && 'opacity-60 cursor-not-allowed hover:-translate-y-0'
-                      )}
-                    >
-                      {feature.comingSoon && (
-                        <Badge variant="default" className="absolute top-4 right-4 z-10">Coming Soon</Badge>
-                      )}
-                      <CardHeader className="p-6 items-center text-center">
-                        <div className="icon-container mb-4 rounded-2xl">
-                          <feature.icon className="h-6 w-6 text-primary-foreground" strokeWidth={2.5} />
-                        </div>
-                        <CardTitle className="text-lg font-semibold">
-                          {feature.title}
-                        </CardTitle>
-                        <CardDescription className="text-muted-foreground pt-1 text-sm">
-                          {feature.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardFooter className="p-6 pt-0 mt-auto justify-center">
-                        <Button
-                          asChild
-                          variant="link"
-                          className="p-0 h-auto font-semibold text-sm"
-                          disabled={feature.comingSoon}
-                        >
-                          <Link href={feature.href}>
-                            Try Now
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-        <p className="text-center text-primary/80 font-extrabold text-2xl mt-12">
-            More features coming soon to Magicpixa Pro+
-        </p>
       </div>
     </section>
   );

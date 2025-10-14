@@ -135,69 +135,71 @@ export function Pricing() {
   return (
     <section id="pricing" className="w-full py-12 lg:py-16 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Plans for Everyone
-            </h2>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl font-medium">
-              Choose a plan — Monthly or Yearly (Save up to 25%)
-            </p>
+        <div className="bg-card border rounded-3xl p-8 md:p-12 shadow-lg">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                Plans for Everyone
+              </h2>
+              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl font-medium">
+                Choose a plan — Monthly or Yearly (Save up to 25%)
+              </p>
+            </div>
+            <div className="flex items-center space-x-4 pt-8">
+              <Label htmlFor="pricing-toggle" className="font-bold text-lg">Monthly</Label>
+              <Switch
+                id="pricing-toggle"
+                checked={isYearly}
+                onCheckedChange={setIsYearly}
+                aria-label="Toggle between monthly and yearly pricing"
+              />
+              <Label htmlFor="pricing-toggle" className="font-bold text-lg">Yearly</Label>
+            </div>
           </div>
-          <div className="flex items-center space-x-4 pt-8">
-            <Label htmlFor="pricing-toggle" className="font-bold text-lg">Monthly</Label>
-            <Switch
-              id="pricing-toggle"
-              checked={isYearly}
-              onCheckedChange={setIsYearly}
-              aria-label="Toggle between monthly and yearly pricing"
-            />
-            <Label htmlFor="pricing-toggle" className="font-bold text-lg">Yearly</Label>
-          </div>
-        </div>
 
-        <div className="mx-auto grid max-w-7xl items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4 mt-16">
-          {plans.map((plan) => (
-            <Card
-              key={plan.plan}
-              className={cn(
-                'relative flex flex-col rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-2',
-                plan.recommended ? 'border-2 border-accent shadow-accent/10' : 'border'
-              )}
-            >
-              {plan.recommended && (
-                <Badge className="absolute top-6 right-6" variant="default">Recommended</Badge>
-              )}
-              <CardHeader className="p-6">
-                <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
-                <CardDescription className="flex items-baseline gap-2 pt-4">
-                  <span className="text-4xl font-extrabold text-foreground">
-                    {plan.price}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{plan.period}</span>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6 pt-0 flex-1">
-                <ul className="space-y-4">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <Check className="h-5 w-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                      <span className="text-muted-foreground text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter className="p-6">
-                <Button className="w-full rounded-md text-base py-6 font-bold" variant={plan.variant}>
-                  {plan.buttonLabel}
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+          <div className="mx-auto grid max-w-7xl items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4 mt-16">
+            {plans.map((plan) => (
+              <Card
+                key={plan.plan}
+                className={cn(
+                  'relative flex flex-col rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:-translate-y-2',
+                  plan.recommended ? 'border-2 border-accent shadow-accent/10' : 'border'
+                )}
+              >
+                {plan.recommended && (
+                  <Badge className="absolute top-6 right-6" variant="default">Recommended</Badge>
+                )}
+                <CardHeader className="p-6">
+                  <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
+                  <CardDescription className="flex items-baseline gap-2 pt-4">
+                    <span className="text-4xl font-extrabold text-foreground">
+                      {plan.price}
+                    </span>
+                    <span className="text-sm text-muted-foreground">{plan.period}</span>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-6 pt-0 flex-1">
+                  <ul className="space-y-4">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-start">
+                        <Check className="h-5 w-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                        <span className="text-muted-foreground text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter className="p-6">
+                  <Button className="w-full rounded-md text-base py-6 font-bold" variant={plan.variant}>
+                    {plan.buttonLabel}
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+          <p className="text-center text-muted-foreground font-extrabold text-xl mt-12">
+              Upgrade or cancel anytime. Instant access after purchase.
+          </p>
         </div>
-        <p className="text-center text-muted-foreground font-extrabold text-xl mt-12">
-            Upgrade or cancel anytime. Instant access after purchase.
-        </p>
       </div>
     </section>
   );
