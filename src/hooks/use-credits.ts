@@ -30,9 +30,9 @@ export function useCredits() {
     try {
       const storedCredits = localStorage.getItem(ANONYMOUS_CREDITS_KEY);
       if (storedCredits === null) {
-        // First-time anonymous user
-        localStorage.setItem(ANONYMOUS_CREDITS_KEY, '1');
-        setCredits(1);
+        // First-time anonymous user gets 10 credits
+        localStorage.setItem(ANONYMOUS_CREDITS_KEY, '10');
+        setCredits(10);
       } else {
         setCredits(parseInt(storedCredits, 10));
       }
@@ -102,9 +102,14 @@ export function useCredits() {
        // The signup flow handles the initial creation.
        // We can provide a fallback or listen differently if needed.
        setIsLoading(false); // Assume loading is done, even if doc is not there yet.
+       // If credits are still null for a logged-in user, it might be the brief moment before the doc is created.
+       // We can tentatively set it to 10.
+       if (credits === null) {
+          setCredits(10);
+       }
     }
 
-  }, [user, isUserLoading, handleAnonymousCredits, isUserDocLoading, userDoc]);
+  }, [user, isUserLoading, handleAnonymousCredits, isUserDocLoading, userDoc, credits]);
 
   return { credits, isLoading, deductCredits };
 }
