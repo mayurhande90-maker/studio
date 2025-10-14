@@ -167,7 +167,7 @@ export function Pricing() {
                 )}
               >
                 {plan.recommended && (
-                  <Badge className="absolute top-4 right-4 px-3 py-1 text-sm font-bold" variant="gradient">Recommended</Badge>
+                  <Badge className="absolute top-4 right-4" variant="gradient">Recommended</Badge>
                 )}
                 <CardHeader className="p-6">
                   <CardTitle className="text-xl font-bold">{plan.plan}</CardTitle>
@@ -189,7 +189,7 @@ export function Pricing() {
                   </ul>
                 </CardContent>
                 <CardFooter className="p-6">
-                  <Button className="w-full text-base py-6 font-bold" variant={plan.variant}>
+                  <Button className="w-full text-base py-6 font-bold rounded-2xl" variant={plan.variant}>
                     {plan.buttonLabel}
                   </Button>
                 </CardFooter>
