@@ -127,7 +127,7 @@
   }
 
   .btn-gradient-outline:hover {
-    @apply bg-transparent text-primary;
+    @apply bg-transparent text-foreground;
   }
 
   .btn-solid-gradient:hover {
