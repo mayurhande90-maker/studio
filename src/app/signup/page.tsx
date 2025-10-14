@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -77,7 +78,7 @@ export default function SignupPage() {
           email: user.email,
           profilePhoto: user.photoURL || `https://avatar.vercel.sh/${user.email}.png`,
           subscriptionPlan: 'free',
-          credits: 5,
+          credits: 10,
           creationHistory: [],
         });
       }
@@ -88,14 +89,17 @@ export default function SignupPage() {
       });
       router.push('/dashboard');
     } catch (error: any) {
-      console.error('Signup Error:', error);
       let title = 'An unexpected error occurred.';
       let description = 'Please try again later.';
       if (error instanceof FirebaseError) {
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
           title = 'Email Already in Use';
-          description = 'Please use a different email address.';
+          description = 'This email is already registered. Please sign in or use a different email.';
+        } else {
+           console.error('Signup Error:', error);
         }
+      } else {
+         console.error('Signup Error:', error);
       }
       toast({
         variant: 'destructive',
