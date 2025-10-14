@@ -22,10 +22,10 @@ export function DashboardHeader() {
       return <Skeleton className="h-8 w-24 rounded-full" />;
     }
     return (
-      <div className="flex items-center gap-2 font-bold text-sm bg-secondary text-secondary-foreground px-4 py-2 rounded-full shadow-inner">
+      <Button variant="outline" className="rounded-full font-bold shadow-inner" disabled>
         <Coins className="w-5 h-5 text-primary" />
         <span>{credits ?? 0} Credits</span>
-      </div>
+      </Button>
     );
   };
 
