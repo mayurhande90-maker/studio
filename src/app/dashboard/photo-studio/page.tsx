@@ -347,7 +347,7 @@ export default function AIPhotoStudioPage() {
                             <CardTitle className="text-2xl font-bold">Configuration</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <div className="flex items-start gap-4 p-4 rounded-2xl min-h-[90px]">
+                            <div className="flex items-start gap-4 rounded-2xl min-h-[90px]">
                                 <Sparkles className={cn("w-6 h-6 text-yellow-500 flex-shrink-0 mt-1", { 'animate-pulse': isAnalyzing })} />
                                 <div className="space-y-1 w-full">
                                     {isAnalyzing ? (
@@ -450,4 +450,5 @@ export default function AIPhotoStudioPage() {
     
 
     
+
 

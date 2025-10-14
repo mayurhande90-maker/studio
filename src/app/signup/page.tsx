@@ -122,7 +122,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6 bg-secondary/30">
+    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6 bg-background">
        <div className='absolute top-8 left-8'>
             <Logo />
         </div>

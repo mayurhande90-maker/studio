@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -50,7 +51,7 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof loginSchema>>) => {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
@@ -95,7 +96,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6 bg-secondary/30">
+    <div className="container mx-auto flex min-h-dvh items-center justify-center py-12 px-4 md:px-6 bg-background">
         <div className='absolute top-8 left-8'>
             <Logo />
         </div>
