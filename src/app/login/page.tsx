@@ -51,7 +51,7 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>>) => {
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
