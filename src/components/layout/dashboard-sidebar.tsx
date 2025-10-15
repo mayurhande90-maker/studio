@@ -75,13 +75,13 @@ export function DashboardSidebar() {
         <Logo />
       </div>
       <ScrollArea className="flex-1">
-        <div className="px-4 py-4 space-y-4">
+        <div className="py-4 space-y-4 px-2">
             <h3 className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Main</h3>
              {mainNav.map(item => (
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className={cn("w-full justify-start text-base py-6 rounded-2xl", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
+                    className={cn("w-full justify-start text-base py-6 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
@@ -135,7 +135,7 @@ export function DashboardSidebar() {
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className={cn("w-full justify-start text-base py-6 rounded-2xl", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
+                    className={cn("w-full justify-start text-base py-6 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
