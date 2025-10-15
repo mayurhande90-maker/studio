@@ -81,7 +81,7 @@ export function DashboardSidebar() {
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className={cn("w-full justify-start text-base py-6 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
+                    className={cn("w-full justify-start text-base py-4 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
@@ -135,7 +135,7 @@ export function DashboardSidebar() {
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className={cn("w-full justify-start text-base py-6 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
+                    className={cn("w-full justify-start text-base py-4 rounded-2xl mx-2", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
