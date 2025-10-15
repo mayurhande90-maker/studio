@@ -3,9 +3,6 @@ import { analyzeVintageImage } from '@/ai/flows/analyze-vintage-image-flow';
 import { ColorizeImageInput } from '@/ai/flows/schemas/vintage-image-schemas';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
-
 export const maxDuration = 60; // Set timeout to 60 seconds
 
 export async function POST(req: NextRequest) {
@@ -31,4 +28,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
