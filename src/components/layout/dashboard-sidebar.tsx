@@ -50,7 +50,7 @@ export function DashboardSidebar() {
 
   const getVariant = (href: string) => {
     if (!isMounted) return 'ghost';
-    if (pathname === href) return 'secondary';
+    if (pathname === href) return 'gradient';
     return 'outline';
   };
   
