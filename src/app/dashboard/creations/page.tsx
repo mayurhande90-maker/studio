@@ -40,15 +40,6 @@ const creations = [
     isFavorite: true,
   },
   {
-    id: 2,
-    imageUrl: 'https://picsum.photos/seed/creation2/400/300',
-    imageHint: 'old photo',
-    title: 'Grandparents Wedding',
-    feature: 'Vintage Colorizer',
-    date: '2024-07-27',
-    isFavorite: false,
-  },
-  {
     id: 3,
     imageUrl: 'https://picsum.photos/seed/creation3/400/300',
     imageHint: 'logo mockup',
@@ -128,9 +119,6 @@ export default function CreationsPage() {
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => setFilter('AI Photo Studio')}>
               AI Photo Studio
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => setFilter('Vintage Colorizer')}>
-              Vintage Colorizer
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => setFilter('Mockup Maker')}>
               Mockup Maker
