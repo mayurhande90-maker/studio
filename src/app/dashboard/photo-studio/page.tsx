@@ -10,6 +10,8 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
 import { EnhanceUploadedImageOutput, EnhanceUploadedImageInput, ProductImageAnalysis } from '@/ai/flows/enhance-uploaded-image';
+import { analyzeImage } from '@/ai/flows/analyze-image-flow';
+import { enhanceUploadedImage } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
@@ -59,16 +61,8 @@ export default function AIPhotoStudioPage() {
         if (!file) return;
         setIsAnalyzing(true);
         try {
-            const response = await fetch('/api/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ photoDataUri: file.dataUri, mimeType: 'image/jpeg' }),
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || `Request failed with status ${response.status}`);
-            }
-            const result: ProductImageAnalysis = await response.json();
+            const input = { photoDataUri: file.dataUri, mimeType: 'image/jpeg' };
+            const result: ProductImageAnalysis = await analyzeImage(input);
             setAnalysisResult(result);
         } catch (error: any) {
             console.error('Analysis Error:', error);
@@ -215,21 +209,7 @@ export default function AIPhotoStudioPage() {
 
         try {
             const input: EnhanceUploadedImageInput = { photoDataUri: file.dataUri, mimeType: 'image/jpeg' };
-            
-            const response = await fetch('/api/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(input),
-            });
-
-            if (!response.ok) {
-                 const errorData = await response.json();
-                 throw new Error(errorData.error || `Request failed with status ${response.status}`);
-            }
-
-            const result: EnhanceUploadedImageOutput = await response.json();
+            const result: EnhanceUploadedImageOutput = await enhanceUploadedImage(input);
 
             setGeneratedImage(result.enhancedPhotoDataUri);
             setPostGenerationAnalysis(result.postGenerationAnalysis);
@@ -456,5 +436,7 @@ export default function AIPhotoStudioPage() {
 
 
 
+
+    
 
     
