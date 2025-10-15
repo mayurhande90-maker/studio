@@ -11,8 +11,9 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { analyzeImageFlow, ImageAnalysisSchema, ColorizeImageInputSchema } from './analyze-vintage-image-flow';
-import type { ColorizeImageInput } from './analyze-vintage-image-flow';
+import { analyzeImageFlow } from './analyze-vintage-image-flow';
+import { ColorizeImageInputSchema, ImageAnalysisSchema, ColorizeImageInput } from './schemas/vintage-image-schemas';
+
 
 const ColorizeImageOutputSchema = z.object({
   analysis: ImageAnalysisSchema,
