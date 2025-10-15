@@ -11,11 +11,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'btn-gradient-outline',
+          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "btn-gradient-outline",
+          "border border-input bg-background",
         secondary:
           "bg-secondary text-secondary-foreground btn-solid-gradient",
         ghost: "hover:bg-accent hover:text-accent-foreground",

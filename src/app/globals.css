@@ -106,10 +106,14 @@
   }
 
   .btn-gradient-outline {
-    @apply relative bg-background text-foreground;
+    @apply relative bg-transparent;
   }
 
-  .btn-gradient-outline::before {
+  .btn-gradient-outline:hover {
+    @apply bg-transparent;
+  }
+  
+  .btn-gradient-outline:hover::before {
     content: '';
     position: absolute;
     top: 0;
@@ -124,10 +128,6 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
-  }
-
-  .btn-gradient-outline:hover {
-    @apply bg-transparent text-foreground;
   }
 
   .btn-solid-gradient:hover {

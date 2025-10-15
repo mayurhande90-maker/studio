@@ -51,7 +51,7 @@ export function DashboardSidebar() {
   const getVariant = (href: string) => {
     if (!isMounted) return 'ghost';
     if (pathname === href) return 'secondary';
-    return 'ghost';
+    return 'outline';
   };
   
   if (!isMounted) {
@@ -81,7 +81,7 @@ export function DashboardSidebar() {
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className="w-full justify-start text-base py-6 rounded-2xl"
+                    className={cn("w-full justify-start text-base py-6 rounded-2xl", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
@@ -113,7 +113,7 @@ export function DashboardSidebar() {
                       <Button
                         key={feature.title}
                         variant={getVariant(feature.href)}
-                        className={cn("w-full justify-start h-auto py-3 rounded-xl", getVariant(feature.href) === 'ghost' && 'sidebar-feature-button')}
+                        className={cn("w-full justify-start h-auto py-3 rounded-xl", getVariant(feature.href) === 'outline' ? 'btn-gradient-outline' : 'sidebar-feature-button')}
                         asChild
                       >
                         <Link href={feature.href} className="flex items-center text-sm">
@@ -135,7 +135,7 @@ export function DashboardSidebar() {
                  <Button
                     key={item.name}
                     variant={getVariant(item.href)}
-                    className="w-full justify-start text-base py-6 rounded-2xl"
+                    className={cn("w-full justify-start text-base py-6 rounded-2xl", getVariant(item.href) === 'outline' && 'btn-gradient-outline')}
                     asChild
                 >
                     <Link href={item.href}>
