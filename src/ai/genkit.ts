@@ -1,4 +1,4 @@
-import {genkit, defineSecret} from 'genkit';
+import {genkit, defineSecret, getSecret} from 'genkit';
 import {googleAI} from '@genkit-ai/google-genai';
 
 // Define the secrets your application needs. This allows you to manage them
@@ -10,7 +10,7 @@ export const ai = genkit({
   plugins: [
     googleAI({
       // Use the defined secret for the API key.
-      apiKey: process.env.GEMINI_API_KEY,
+      apiKey: getSecret('GEMINI_API_KEY'),
     }),
   ],
   model: 'googleai/gemini-pro',
