@@ -64,7 +64,7 @@ export function Hero() {
                   Enhance Your First Photo <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="secondary" size="lg" className={cn("rounded-2xl py-6 px-8 font-bold")}>
+              <Button asChild variant="secondary" size="lg" className={cn("rounded-2xl py-6 px-8 font-bold text-gradient btn-gradient-border")}>
                 <Link href="#features">Explore Features</Link>
               </Button>
             </div>
