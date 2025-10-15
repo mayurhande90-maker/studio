@@ -96,8 +96,8 @@ export function DashboardSidebar() {
             {featureCategories.map((category) => (
               <AccordionItem value={category.category} key={category.category} className="border-b-0">
                 <AccordionTrigger
-                  className={cn('text-sm font-bold hover:no-underline rounded-2xl px-4 py-2 hover:bg-secondary',
-                    category.category === 'premium' && 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent'
+                  className={cn('text-sm font-bold hover:no-underline rounded-2xl px-4 py-2 hover:bg-premium-gradient hover:text-primary-foreground',
+                    category.category === 'premium' && 'text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent hover:bg-clip-padding'
                   )}
                 >
                   <div className="flex items-center">
