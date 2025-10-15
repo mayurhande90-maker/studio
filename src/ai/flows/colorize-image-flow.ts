@@ -92,44 +92,25 @@ const colorizeImageFlow = ai.defineFlow(
     // 1. Analyze the image first
     const analysis = await analyzeImageFlow(input);
 
-    const apiUrl = process.env.IMAGE_PROCESSING_API_URL;
-    const apiKey = process.env.IMAGE_PROCESSING_API_KEY;
+    // 2. Generate the colorized image
+    const { media } = await ai.generate({
+      model: 'googleai/gemini-2.5-flash-image-preview',
+      prompt: [
+        {
+          text: `You are an expert in photo restoration and colorization. Colorize the following black-and-white or vintage image.
 
-    if (!apiUrl || !apiKey) {
-        throw new Error("Image processing API URL or key is not configured.");
-    }
-    
-    // 2. Call the external Image Processing API
-    const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
+**CRITICAL RULE:** The final image should be hyper-realistic and look like a real color photograph. Avoid any AI-generated or cartoonish look. The colors should be natural and historically plausible for the era if it's a vintage photo. The image is a: ${analysis.imageType}`
         },
-        body: JSON.stringify({
-          image: input.photoDataUri,
-          task: 'colorize' 
-        })
-      });
-    
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Image Processing API call failed: ${errorText}`);
-    }
-
-    const result = await response.json();
-    
-    // Assuming the API returns a JSON with a 'dataUri' field for the colorized image.
-    // You may need to adjust this based on your API's actual response structure.
-    const colorizedUri = result.dataUri;
-
-    if (!colorizedUri) {
-        throw new Error("Invalid response from Image Processing API.");
-    }
+        { media: { url: input.photoDataUri, contentType: input.mimeType } }
+      ],
+      config: {
+        responseModalities: ['TEXT', 'IMAGE'],
+      },
+    });
 
     return {
       analysis: analysis,
-      colorizedPhotoDataUri: colorizedUri,
+      colorizedPhotoDataUri: media.url!,
     };
   }
 );
