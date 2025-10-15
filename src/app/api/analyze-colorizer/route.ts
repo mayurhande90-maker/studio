@@ -1,5 +1,5 @@
 
-import { analyzeVintageImage, ColorizeImageInput } from '@/ai/flows/colorize-image-flow';
+import { analyzeVintageImage, ColorizeImageInput } from '@/ai/flows/analyze-vintage-image-flow';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const maxDuration = 60; // Set timeout to 60 seconds
