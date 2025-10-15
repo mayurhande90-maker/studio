@@ -33,14 +33,13 @@ const nextConfig: NextConfig = {
   },
   webpack: (config, { isServer, webpack }) => {
     // Fixes npm packages that depend on node modules
-    if (isServer) {
-        config.externals = [...config.externals, '@grpc/grpc-js', 'firebase'];
-    }
-    config.resolve.fallback = {
-        fs: false,
-        tls: false,
-        net: false,
-        child_process: false,
+    if (!isServer) {
+        config.resolve.fallback = {
+            fs: false,
+            tls: false,
+            net: false,
+            child_process: false,
+        }
     }
 
     return config

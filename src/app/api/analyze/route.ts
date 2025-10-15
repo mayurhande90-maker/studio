@@ -3,6 +3,7 @@ import { analyzeImage, EnhanceUploadedImageInput } from '@/ai/flows/analyze-imag
 import { NextRequest, NextResponse } from 'next/server';
 
 export const maxDuration = 60; // Set timeout to 60 seconds
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
