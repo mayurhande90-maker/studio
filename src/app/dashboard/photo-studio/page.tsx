@@ -327,7 +327,7 @@ export default function AIPhotoStudioPage() {
                                     onClick: (event) => event.stopPropagation(),
                                     className: cn(
                                         'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
-                                        isDragActive ? 'bg-primary/10 border-primary' : 'border-transparent',
+                                        isDragActive ? 'bg-primary/10 border-primary' : 'border-border',
                                         'border-2 border-dashed hover:bg-secondary/50'
                                     )
                                 })}
@@ -450,5 +450,6 @@ export default function AIPhotoStudioPage() {
     
 
     
+
 
 
