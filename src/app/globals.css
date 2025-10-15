@@ -150,4 +150,23 @@
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
   }
+  .hover-gradient-border {
+    @apply relative;
+  }
+  .hover-gradient-border:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit; 
+    border: 2px solid transparent;
+    background: linear-gradient(to right, hsl(var(--gradient-purple)), hsl(var(--gradient-blue))) border-box;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
 }
