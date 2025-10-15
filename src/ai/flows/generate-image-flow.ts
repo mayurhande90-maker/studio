@@ -41,9 +41,7 @@ const generateImageFlow = ai.defineFlow(
   },
   async (input) => {
     // 1. Call Google Gemini API
-    const geminiModel = googleAI.model('gemini-pro');
     const geminiResponse = await ai.generate({
-        model: geminiModel,
         prompt: input.prompt,
     });
     const geminiData = geminiResponse.output;
