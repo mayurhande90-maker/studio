@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -29,6 +30,14 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    // This is to fix the "Module not found: Can't resolve 'stream'" error
+    // which is caused by the @grpc/grpc-js dependency of firebase.
+    if (isServer) {
+      config.externals.push('@grpc/grpc-js', 'firebase');
+    }
+    return config;
   },
 };
 
