@@ -328,7 +328,7 @@ export default function AIPhotoStudioPage() {
                                     className: cn(
                                         'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full',
                                         isDragActive ? 'bg-primary/10 border-primary' : 'border-border',
-                                        'border-2 border-dashed hover:bg-secondary/50'
+                                        'border-2 border-dashed hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1'
                                     )
                                 })}
                                 onClick={open}
@@ -450,6 +450,7 @@ export default function AIPhotoStudioPage() {
     
 
     
+
 
 
 
