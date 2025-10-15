@@ -12,7 +12,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import { analyzeVintageImage } from './analyze-vintage-image-flow';
-import { ColorizeImageInput, ColorizeImageInputSchema, ImageAnalysis } from './schemas/vintage-image-schemas';
+import { ColorizeImageInput, ColorizeImageInputSchema, ImageAnalysisSchema, ImageAnalysis } from './schemas/vintage-image-schemas';
 
 
 export const ColorizeImageOutputSchema = z.object({
