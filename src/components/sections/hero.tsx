@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useCredits } from '@/hooks/use-credits';
 import { Skeleton } from '../ui/skeleton';
 import { useUser } from '@/firebase';
+import { cn } from '@/lib/utils';
 
 export function Hero() {
     const { user, isUserLoading } = useUser();
@@ -63,7 +64,7 @@ export function Hero() {
                   Enhance Your First Photo <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-2xl py-6 px-8">
+              <Button asChild variant="outline" size="lg" className={cn("rounded-2xl py-6 px-8 font-bold text-gradient btn-gradient-border")}>
                 <Link href="#features">Explore Features</Link>
               </Button>
             </div>
