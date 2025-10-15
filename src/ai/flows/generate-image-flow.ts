@@ -12,7 +12,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
-import { getSecret } from 'genkit/secrets';
+import { getSecret } from 'genkit';
 
 // Define input schema
 const GenerateImageInputSchema = z.object({
