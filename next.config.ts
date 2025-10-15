@@ -32,12 +32,14 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (config, { isServer }) => {
-    // This is to fix the "Module not found: Can't resolve 'stream'" error
-    // which is caused by the @grpc/grpc-js dependency of firebase.
-    if (isServer) {
-      config.externals.push('@grpc/grpc-js', 'firebase');
+    // Fixes npm packages that depend on `fs` module
+    if (!isServer) {
+        config.resolve.fallback = {
+            fs: false
+        }
     }
-    return config;
+
+    return config
   },
 };
 
