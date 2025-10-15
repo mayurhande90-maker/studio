@@ -101,7 +101,7 @@
   }
   
   .sidebar-feature-button:hover {
-    background-color: hsl(217 91% 60%);
+    background-color: hsl(var(--secondary));
     color: hsl(var(--primary-foreground));
   }
 
