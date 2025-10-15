@@ -73,12 +73,15 @@ export default function SignupPage() {
 
       if (user && firestore) {
         const userDocRef = doc(firestore, 'users', user.uid);
+        
+        const isTestAccount = values.email === 'test@magicpixa.com';
+
         const userData = {
           name: values.name,
           email: user.email,
           profilePhoto: user.photoURL || `https://avatar.vercel.sh/${user.email}.png`,
-          subscriptionPlan: 'free',
-          credits: 10,
+          subscriptionPlan: isTestAccount ? 'vip_tester' : 'free',
+          credits: isTestAccount ? 999999 : 10,
           creationHistory: [],
         };
         
