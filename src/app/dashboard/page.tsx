@@ -73,7 +73,7 @@ export default function DashboardPage() {
                     <div className="space-y-4">
                         {activityItems.map(item => (
                             <div key={item.id} className="flex items-center">
-                                <div className="p-2 bg-secondary rounded-full mr-4">
+                                <div className="p-2 bg-primary/10 rounded-full mr-4">
                                    <Activity className="h-5 w-5 text-primary" />
                                 </div>
                                 <div className="flex-1">
