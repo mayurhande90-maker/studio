@@ -321,7 +321,7 @@ export default function VintageColorizerPage() {
                                 {...getRootProps({
                                     onClick: (event) => event.stopPropagation(),
                                     className: cn(
-                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full hover-gradient-border hover:-translate-y-1',
+                                        'flex flex-col items-center justify-center text-center p-12 rounded-3xl cursor-pointer transition-all duration-300 w-full h-full hover-gradient-border',
                                         isDragActive ? 'bg-primary/10' : 'border-border',
                                         'border-2 border-dashed'
                                     )
@@ -423,3 +423,5 @@ export default function VintageColorizerPage() {
         </div>
     );
 }
+
+    
