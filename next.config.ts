@@ -32,10 +32,13 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (config, { isServer }) => {
-    // Fixes npm packages that depend on `fs` module
+    // Fixes npm packages that depend on node modules
     if (!isServer) {
         config.resolve.fallback = {
-            fs: false
+            fs: false,
+            tls: false,
+            net: false,
+            child_process: false,
         }
     }
 
