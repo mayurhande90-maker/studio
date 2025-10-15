@@ -12,6 +12,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
+import { getSecret } from 'genkit/secrets';
 
 // Define input schema
 const GenerateImageInputSchema = z.object({
@@ -48,11 +49,12 @@ const generateImageFlow = ai.defineFlow(
 
     // 2. Call Perplexity API
     // Note: Genkit does not have a native Perplexity plugin. We use fetch directly.
+    const perplexityApiKey = getSecret('PERPLEXITY_API_KEY');
     const perplexityResponse = await fetch("https://api.perplexity.ai/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.PERPLEXITY_API_KEY}`
+          "Authorization": `Bearer ${perplexityApiKey}`
         },
         body: JSON.stringify({
           model: "llama-3.1-sonar-large-128k-online",
