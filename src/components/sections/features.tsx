@@ -71,6 +71,13 @@ export const featureCategories: FeatureCategory[] = [
         href: '/dashboard/photo-studio',
         comingSoon: false,
       },
+      {
+        icon: Paintbrush,
+        title: 'Vintage Colorizer',
+        description: 'Colorize B&W photos with natural colors',
+        href: '/dashboard/colorizer',
+        comingSoon: false,
+      },
     ],
   },
   {
