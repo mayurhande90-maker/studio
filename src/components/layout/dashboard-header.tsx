@@ -4,7 +4,7 @@
 import React from 'react';
 import { Coins } from 'lucide-react';
 import { ThemeToggle } from '../theme-toggle';
-import { useUser } from '@/firebase';
+import app from "@/lib/firebase";
 import { UserDropdown } from '../auth/user-dropdown';
 import { Skeleton } from '../ui/skeleton';
 import { useCredits } from '@/hooks/use-credits';
