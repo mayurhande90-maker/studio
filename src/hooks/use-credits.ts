@@ -1,40 +1,38 @@
+"use client";
 import { useState, useEffect } from "react";
-import { getFirestore } from "firebase/firestore";
-import { initializeApp, getApps, getApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-};
-
-// Initialize Firebase safely
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
-
-const ANONYMOUS_CREDITS_KEY = "magicpixa_anonymous_credits";
+import { firestore } from "@/firebase/config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useAuth } from "@/hooks/use-auth";
 
 export function useCredits() {
-  const user = null;
-  const isUserLoading = false;
-
+  const { user, loading: userLoading } = useAuth();
   const [credits, setCredits] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // For now, simulate loading credits
   useEffect(() => {
-    setCredits(0);
-    setIsLoading(false);
-  }, []);
+    if (userLoading || !user) return;
 
-  return {
-    credits,
-    isLoading,
-    deductCredits: () => {
-      console.log("Credits deducted (mock)");
-    },
+    const fetchCredits = async () => {
+      const ref = doc(firestore, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        setCredits(snap.data().credits || 0);
+      } else {
+        setCredits(0);
+      }
+      setIsLoading(false);
+    };
+
+    fetchCredits();
+  }, [user, userLoading]);
+
+  const deductCredits = async (amount: number) => {
+    if (!user) return;
+    const ref = doc(firestore, "users", user.uid);
+    const newBalance = (credits ?? 0) - amount;
+    await updateDoc(ref, { credits: newBalance });
+    setCredits(newBalance);
   };
+
+  return { credits, isLoading, deductCredits };
 }
