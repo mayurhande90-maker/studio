@@ -10,7 +10,8 @@ import app from "@/lib/firebase";
 import { cn } from '@/lib/utils';
 
 export function Hero() {
-    const { user, isUserLoading } = useUser();
+    const user = null;
+const isUserLoading = false;
     const { credits, isLoading } = useCredits();
 
   const CreditsDisplay = () => {
