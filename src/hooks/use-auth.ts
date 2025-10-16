@@ -1,6 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+} from "firebase/auth";
 import { auth } from "@/firebase/config";
 
 export function useAuth() {
@@ -8,10 +13,13 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // prevent running during build
+
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser || null);
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
