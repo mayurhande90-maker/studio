@@ -14,7 +14,7 @@ import { Menu } from 'lucide-react';
 import { DashboardSidebar } from './dashboard-sidebar';
 
 export function DashboardHeader() {
-  const { isUserLoading } = useUser();
+  const isUserLoading = false;
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
   const CreditsDisplay = () => {
