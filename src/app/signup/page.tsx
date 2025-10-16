@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useAuth, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
+import app from "@/lib/firebase";
 import { useToast } from '@/hooks/use-toast';
 import { FirebaseError } from 'firebase/app';
 import { AuthErrorCodes, createUserWithEmailAndPassword } from 'firebase/auth';
