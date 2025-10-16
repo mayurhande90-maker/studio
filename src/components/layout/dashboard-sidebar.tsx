@@ -42,7 +42,8 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const defaultOpenCategories = featureCategories.map(c => c.category);
   const [isMounted, setIsMounted] = useState(false);
-  const { user, isUserLoading } = useUser();
+  const user = null;
+const isUserLoading = false;
 
   useEffect(() => {
     setIsMounted(true);
