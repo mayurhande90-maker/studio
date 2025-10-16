@@ -11,21 +11,20 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID,
 };
 
+// Initialize Firebase safely
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-
 
 const ANONYMOUS_CREDITS_KEY = "magicpixa_anonymous_credits";
 
 export function useCredits() {
   const user = null;
   const isUserLoading = false;
-  const firestore = useFirestore();
 
   const [credits, setCredits] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Temporary logic (since user is null)
+  // For now, simulate loading credits
   useEffect(() => {
     setCredits(0);
     setIsLoading(false);
@@ -34,6 +33,8 @@ export function useCredits() {
   return {
     credits,
     isLoading,
-    deductCredits: () => {},
+    deductCredits: () => {
+      console.log("Credits deducted (mock)");
+    },
   };
 }
