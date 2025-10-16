@@ -18,7 +18,8 @@ const activityItems = [
 ];
 
 export default function DashboardPage() {
-  const { user, isUserLoading } = useUser();
+  const user = null;
+const isUserLoading = false;
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
   const getDisplayName = () => {
