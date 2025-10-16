@@ -4,7 +4,6 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import app from "@/lib/firebase";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -12,6 +11,7 @@ import { useCredits } from '@/hooks/use-credits';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Coins, BookImage, Settings, CreditCard, Activity, ArrowRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUser } from '@/firebase/use-user';
 
 const activityItems = [
     { id: 1, action: 'Generated an image with', feature: 'AI Photo Studio', time: '2 hours ago' },
@@ -21,8 +21,7 @@ const activityItems = [
 ];
 
 export default function DashboardPage() {
-  const user = null;
-const isUserLoading = false;
+  const { user, loading: isUserLoading } = useUser();
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
   const getDisplayName = () => {

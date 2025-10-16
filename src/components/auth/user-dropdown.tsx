@@ -11,18 +11,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import app from "@/lib/firebase";
+import { useUser } from '@/firebase/use-user';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export function UserDropdown() {
-  const user = null; // temporary placeholder
-  const auth = useAuth();
+  const { user, auth } = useUser();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await auth.signOut();
-    router.push('/');
+    if (auth) {
+      await auth.signOut();
+      router.push('/');
+    }
   };
 
   const getInitials = () => {

@@ -18,7 +18,7 @@ import { enhanceUploadedImage } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import app from "@/lib/firebase";
+import { useUser } from '@/firebase/use-user';
 
 
 const generationMessages = [
@@ -48,7 +48,7 @@ export default function AIPhotoStudioPage() {
 
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
-    const user = null;
+    const { user } = useUser();
     
     const handleReset = useCallback(() => {
         setFile(null);
@@ -420,26 +420,3 @@ export default function AIPhotoStudioPage() {
         </div>
     );
 }
-    
-
-    
-
-    
-
-
-
-    
-
-    
-
-    
-
-
-
-
-
-
-
-    
-
-    

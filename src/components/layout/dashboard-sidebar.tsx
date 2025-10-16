@@ -23,8 +23,8 @@ import { usePathname } from 'next/navigation';
 import { featureCategories } from '../sections/features';
 import { Logo } from '../logo';
 import { useEffect, useState } from 'react';
-import app from "@/lib/firebase";
 import { Skeleton } from '../ui/skeleton';
+import { useUser } from '@/firebase/use-user';
 
 const mainNav = [
     { name: 'Dashboard', icon: LayoutGrid, href: '/dashboard' },
@@ -42,8 +42,7 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const defaultOpenCategories = featureCategories.map(c => c.category);
   const [isMounted, setIsMounted] = useState(false);
-  const user = null;
-const isUserLoading = false;
+  const { user, loading: isUserLoading } = useUser();
 
   useEffect(() => {
     setIsMounted(true);

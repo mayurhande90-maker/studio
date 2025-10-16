@@ -6,13 +6,12 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCredits } from '@/hooks/use-credits';
 import { Skeleton } from '../ui/skeleton';
-import app from "@/lib/firebase";
+import { useUser } from '@/firebase/use-user';
 import { cn } from '@/lib/utils';
 
 export function Hero() {
-    const user = null;
-const isUserLoading = false;
-    const { credits, isLoading } = useCredits();
+  const { user, loading: isUserLoading } = useUser();
+  const { credits, isLoading } = useCredits();
 
   const CreditsDisplay = () => {
     if (isLoading || isUserLoading) {

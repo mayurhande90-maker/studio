@@ -2,12 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import { useUser } from '@/firebase/use-user';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 export default function SignupPage() {
-  const { user, login, logout, loading } = useAuth();
+  const { user, signInWithProvider, loading, auth } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -15,6 +16,18 @@ export default function SignupPage() {
       router.push('/dashboard');
     }
   }, [user, loading, router]);
+
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithProvider(provider);
+  };
+
+  const handleLogout = async () => {
+    if (auth) {
+      await auth.signOut();
+      router.push('/');
+    }
+  };
 
   if (loading) {
     return (
@@ -33,7 +46,7 @@ export default function SignupPage() {
             <CardDescription>You’re already signed up and logged in.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={logout} className="mt-4 w-full">
+            <Button onClick={handleLogout} className="mt-4 w-full">
               Logout
             </Button>
           </CardContent>
@@ -50,7 +63,7 @@ export default function SignupPage() {
           <CardDescription>Sign up using your Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={login} className="w-full">
+          <Button onClick={handleLogin} className="w-full">
             Continue with Google
           </Button>
         </CardContent>

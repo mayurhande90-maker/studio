@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '../theme-toggle';
-import app from "@/lib/firebase";
 import { UserDropdown } from '../auth/user-dropdown';
 import { Skeleton } from '../ui/skeleton';
 import { useCredits } from '@/hooks/use-credits';
+import { useUser } from '@/firebase/use-user';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -30,8 +30,7 @@ const authNavItems = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const user = null;
-const isUserLoading = false;
+  const { user, loading: isUserLoading } = useUser();
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
 

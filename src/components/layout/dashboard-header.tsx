@@ -4,7 +4,6 @@
 import React from 'react';
 import { Coins } from 'lucide-react';
 import { ThemeToggle } from '../theme-toggle';
-import app from "@/lib/firebase";
 import { UserDropdown } from '../auth/user-dropdown';
 import { Skeleton } from '../ui/skeleton';
 import { useCredits } from '@/hooks/use-credits';
@@ -12,9 +11,10 @@ import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 import { Button } from '../ui/button';
 import { Menu } from 'lucide-react';
 import { DashboardSidebar } from './dashboard-sidebar';
+import { useUser } from '@/firebase/use-user';
 
 export function DashboardHeader() {
-  const isUserLoading = false;
+  const { user, loading: isUserLoading } = useUser();
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
   const CreditsDisplay = () => {

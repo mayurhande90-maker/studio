@@ -5,11 +5,11 @@ export const revalidate = 0; // ensures it's only rendered client-side
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/use-auth';
+import { useUser } from '@/firebase/use-user';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default function DashboardCreations() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useUser();
   const router = useRouter();
 
   useEffect(() => {
