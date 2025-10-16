@@ -3,9 +3,9 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-export default function CreationsPage() {
+export default function DashboardCreations() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -32,7 +32,7 @@ export default function CreationsPage() {
           <CardTitle>Your Creations</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Display user-specific creations here.</p>
+          <p>This is your creations dashboard. Display user data here.</p>
         </CardContent>
       </Card>
     </div>
