@@ -45,7 +45,7 @@ export default function AIPhotoStudioPage() {
 
     const { toast } = useToast();
     const { credits, deductCredits } = useCredits();
-    const { user } = useUser();
+    const user = null;
     
     const handleReset = useCallback(() => {
         setFile(null);
