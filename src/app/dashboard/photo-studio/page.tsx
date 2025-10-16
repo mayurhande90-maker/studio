@@ -15,7 +15,7 @@ import { enhanceUploadedImage } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { useUser } from '@/firebase';
+import app from "@/lib/firebase";
 
 
 const generationMessages = [
