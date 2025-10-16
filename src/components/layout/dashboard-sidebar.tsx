@@ -23,7 +23,7 @@ import { usePathname } from 'next/navigation';
 import { featureCategories } from '../sections/features';
 import { Logo } from '../logo';
 import { useEffect, useState } from 'react';
-import { useUser } from '@/firebase';
+import app from "@/lib/firebase";
 import { Skeleton } from '../ui/skeleton';
 
 const mainNav = [
