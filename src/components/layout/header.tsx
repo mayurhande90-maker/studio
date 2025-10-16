@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Logo } from '@/components/logo';
 import { ThemeToggle } from '../theme-toggle';
-import { useUser } from '@/firebase';
+import app from "@/lib/firebase";
 import { UserDropdown } from '../auth/user-dropdown';
 import { Skeleton } from '../ui/skeleton';
 import { useCredits } from '@/hooks/use-credits';
