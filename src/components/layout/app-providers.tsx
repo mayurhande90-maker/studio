@@ -11,7 +11,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange={false}
     >
-      <FirebaseClientProvider>{children}</FirebaseClientProvider>
+      {children}
     </ThemeProvider>
   );
 }
