@@ -30,7 +30,8 @@ const authNavItems = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, isUserLoading } = useUser();
+  const user = null;
+const isUserLoading = false;
   const { credits, isLoading: isCreditsLoading } = useCredits();
 
 
