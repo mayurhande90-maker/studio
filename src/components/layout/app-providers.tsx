@@ -1,7 +1,7 @@
 'use client';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { FirebaseClientProvider } from '@/firebase';
+import app from "@/lib/firebase";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
