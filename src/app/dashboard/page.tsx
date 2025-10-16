@@ -1,8 +1,6 @@
-
 'use client';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
