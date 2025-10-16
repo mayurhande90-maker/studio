@@ -10,8 +10,11 @@ class FirestorePermissionError extends Error {}
 const ANONYMOUS_CREDITS_KEY = 'magicpixa_anonymous_credits';
 
 export function useCredits() {
-  const { user, isUserLoading } = useUser();
+  const user = null;
+  const isUserLoading = false;
   const firestore = useFirestore();
+  ...
+}
   const [credits, setCredits] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
