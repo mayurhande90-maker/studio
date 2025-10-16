@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useCredits } from '@/hooks/use-credits';
 import { Skeleton } from '../ui/skeleton';
-import { useUser } from '@/firebase';
+import app from "@/lib/firebase";
 import { cn } from '@/lib/utils';
 
 export function Hero() {
