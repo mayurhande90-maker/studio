@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import app from "@/lib/firebase";
 import { doc, setDoc } from 'firebase/firestore';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
+// Temporary replacements until new error handling is added
+const errorEmitter = console.error;
+class FirestorePermissionError extends Error {}
 
 const ANONYMOUS_CREDITS_KEY = 'magicpixa_anonymous_credits';
 
