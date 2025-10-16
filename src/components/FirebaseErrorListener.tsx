@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// Replaced old Firebase imports
-const errorEmitter = console.error;
-class FirestorePermissionError extends Error {}
+import { errorEmitter, FirestorePermissionError } from '@/lib/error-emitter';
 
 /**
  * An invisible component that listens for globally emitted 'permission-error' events.

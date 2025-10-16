@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useUser } from "@/firebase/use-user";
 import { firestore } from "@/firebase/client-config";
+import { errorEmitter, FirestorePermissionError } from "@/lib/error-emitter";
 
 export function useCredits() {
   const { user, loading: userLoading } = useUser();
@@ -27,12 +28,40 @@ export function useCredits() {
         setCredits(snap.data().credits ?? 0);
       } else {
         // If the user document doesn't exist, create it with initial credits.
-        await setDoc(ref, { credits: 10, email: user.email, displayName: user.displayName });
-        setCredits(10);
+        const newUserDoc = { credits: 10, email: user.email, displayName: user.displayName };
+        try {
+          await setDoc(ref, newUserDoc);
+          setCredits(10);
+        } catch (e: any) {
+           if (e.code === 'permission-denied') {
+            errorEmitter.emit(
+              'permission-error',
+              new FirestorePermissionError(
+                e.message,
+                'add',
+                ref,
+                newUserDoc
+              )
+            );
+          } else {
+            console.error("Error creating user document:", e);
+          }
+        }
       }
       setIsLoading(false);
     }, (error) => {
-        console.error("Error fetching credits:", error);
+        if (error.code === 'permission-denied') {
+          errorEmitter.emit(
+            'permission-error',
+            new FirestorePermissionError(
+              error.message,
+              'get',
+              ref
+            )
+          );
+        } else {
+          console.error("Error fetching credits:", error);
+        }
         setIsLoading(false);
     });
 
@@ -43,9 +72,27 @@ export function useCredits() {
     if (!user) return;
     const ref = doc(firestore, "users", user.uid);
     const newBalance = (credits ?? 0) - amount;
+
     if (newBalance >= 0) {
-      await updateDoc(ref, { credits: newBalance });
-      setCredits(newBalance);
+      const updatedData = { credits: newBalance };
+      try {
+        await updateDoc(ref, updatedData);
+        setCredits(newBalance);
+      } catch (e: any) {
+        if (e.code === 'permission-denied') {
+          errorEmitter.emit(
+            'permission-error',
+            new FirestorePermissionError(
+              e.message,
+              'update',
+              ref,
+              updatedData
+            )
+          );
+        } else {
+          console.error("Error deducting credits:", e);
+        }
+      }
     } else {
       console.error("Cannot deduct credits, insufficient balance.");
     }

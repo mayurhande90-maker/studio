@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { FirebaseErrorListener } from '../FirebaseErrorListener';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange={false}
       >
+        <FirebaseErrorListener />
         {children}
       </ThemeProvider>
     </FirebaseClientProvider>
