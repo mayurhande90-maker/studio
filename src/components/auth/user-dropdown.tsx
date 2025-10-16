@@ -15,7 +15,7 @@ import { LogOut, User as UserIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export function UserDropdown() {
-  const { user } = useUser();
+  const user = null; // temporary placeholder
   const auth = useAuth();
   const router = useRouter();
 
