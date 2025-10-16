@@ -1,6 +1,9 @@
 
 'use client';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import app from "@/lib/firebase";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
