@@ -1,27 +1,16 @@
 /**
- * @fileoverview Firestore Security Rules for MagicPixa application.
- *
- * Core Philosophy:
- * This ruleset enforces a strict user-ownership model for user profiles,
- * allows public access to image generation jobs (for processing by a backend function),
- * and restricts access to logs to authenticated users only, but this should be an admin role.
+ * @file Firestore Security Rules
+ * @description This ruleset enforces a strict user-ownership model for user profiles and restricts access to image generation logs.
  *
  * Data Structure:
- * - /users/{userId}: Stores individual user profiles. Access is restricted to the user themselves.
- * - /jobs/{jobId}: Stores image generation jobs. Accessible to all for function processing.
- * - /logs/aiGeneration/{logId}: Stores logs. Access is restricted to admins.
+ * - /users/{userId}: Stores user profile data, accessible only to the user.
+ * - /jobs/{jobId}: Stores image processing jobs, accessible to anyone for now.
+ * - /logs/aiGeneration/{logId}: Stores image generation logs, not directly accessible via client.
  *
  * Key Security Decisions:
- * - User listing is disallowed for privacy.
- * - The rules do NOT validate the data schema beyond authorization needs.
- *
- * Denormalization for Authorization:
- *  N/A - The current ruleset relies primarily on path-based authorization and does not require data denormalization.
- *  If more complex role-based access is required in the future (e.g., for shared projects or admin roles),
- *  consider denormalizing roles directly into the relevant documents to avoid costly `get()` calls in the rules.
- *
- * Structural Segregation:
- *  N/A - Drafts vs. published content use-cases are not present in the current data model.
+ * - User profiles are private and accessible only to the authenticated user with a matching user ID.
+ * - Image generation logs are not meant to be directly accessed by clients.
+ * - In this initial prototyping phase, writes to the jobs collection are open to facilitate processing by backend functions.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -30,80 +19,51 @@ service cloud.firestore {
     /**
      * @description Enforces user-ownership for user profiles.
      * @path /users/{userId}
-     * @allow (create) User with UID 'user123' can create their profile.
-     * @allow (get) User with UID 'user123' can read their profile.
-     * @allow (update) User with UID 'user123' can update their profile.
-     * @allow (delete) User with UID 'user123' can delete their profile.
-     * @deny (create) User with UID 'user456' cannot create a profile for 'user123'.
-     * @deny (get) User with UID 'user456' cannot read the profile of 'user123'.
-     * @principle Enforces document ownership for all operations.
+     * @allow (get, create, update, delete, list) if the request is made by the user with matching ID.
+     * @deny (get, create, update, delete, list) if the request is made by a different user or an unauthenticated user.
+     * @principle Enforces document ownership for all operations on user profiles.
      */
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow list: if false; // Listing users is not permitted.
-      allow create: if isOwner(userId);
-      allow update: if isExistingOwner(userId);
-      allow delete: if isExistingOwner(userId);
+      function isSignedIn() {
+        return request.auth != null;
+      }
+
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if false;
+
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && isExistingOwner(userId);
+      allow delete: if isSignedIn() && isExistingOwner(userId);
     }
 
     /**
-     * @description Allows public access to image generation jobs for processing.
+     * @description Allows anyone to read and write to the jobs collection. This is temporary for prototyping, and WILL require a revisit.
      * @path /jobs/{jobId}
-     * @allow (get) Anyone can read a job.
-     * @allow (list) Anyone can list jobs.
-     * @allow (create) Anyone can create a job.
-     * @allow (update) Anyone can update a job.
-     * @allow (delete) Anyone can delete a job.
-     * @principle Allows anyone to create, read, update, delete documents in the job collection for function processing.
+     * @allow (get, list) if true.
+     * @allow (create, update, delete) if true.
+     * @principle Allows for image processing jobs to be created by anyone.  This is temporary and MUST be secured later.
      */
     match /jobs/{jobId} {
       allow get, list: if true;
-      allow create: if true;
-      allow update: if true;
-      allow delete: if true;
+      allow create, update, delete: if true; // TODO: Securing this is the next step to avoid abuse.
     }
 
-    /**
-     * @description Restricts access to logs to authenticated admins.
-     * @path /logs/aiGeneration/{logId}
-     * @allow (get) Authenticated users can read logs if they are admins.
-     * @deny (get) Non-authenticated users cannot read logs.
-     * @deny (create) Non-authenticated users cannot create logs.
-     * @deny (update) Non-authenticated users cannot update logs.
-     * @deny (delete) Non-authenticated users cannot delete logs.
-     * @principle Restricts access to admins only.
-     */
-    match /logs/aiGeneration/{logId} {
-      allow get, list: if isSignedIn(); // TODO: Add admin role check here.
-      allow create, update, delete: if false; // TODO: Add admin role check here.
-    }
-
-    // --- Helper Functions ---
-
-    /**
-     * @description Checks if the current user is signed in.
-     * @return {bool} True if the user is signed in, false otherwise.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * @description Checks if the current user is the owner of the resource.
-     * @param {string} userId The user ID to compare against the request's auth UID.
-     * @return {bool} True if the user is the owner, false otherwise.
-     */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /**
-     * @description Checks if the current user is the owner of the existing resource.
-     * @param {string} userId The user ID to compare against the resource's data.
-     * @return {bool} True if the user is the owner and the resource exists, false otherwise.
-     */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
+      /**
+       * @description Restricts access to the aiGeneration logs collection.
+       * @path /logs/aiGeneration/{logId}
+       * @allow No client access is allowed.
+       * @principle Prevents unauthorized access to sensitive logging information.
+       */
+      match /logs/aiGeneration/{logId} {
+        allow get, list, create, update, delete: if false;
+      }
   }
 }
