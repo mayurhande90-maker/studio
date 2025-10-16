@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'; // prevents Next.js from pre-rendering
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/firebase';
+import { useUser } from '@/firebase/use-user';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default function DashboardCreations() {
