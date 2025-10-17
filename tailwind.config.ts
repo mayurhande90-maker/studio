@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        body: ['Manrope', 'sans-serif'],
+        body: ['Poppins', 'sans-serif'],
         headline: ['Poppins', 'sans-serif'],
       },
       colors: {
