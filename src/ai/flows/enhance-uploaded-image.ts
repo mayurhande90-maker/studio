@@ -62,6 +62,9 @@ const enhanceUploadedImageFlow = ai.defineFlow(
   async (input) => {
     // 1. Analyze the image first
     const analysis: ProductImageAnalysis = await analyzeImageFlow(input);
+    if (!analysis) {
+        throw new Error("Initial image analysis failed. Please try a different image.");
+    }
 
     // 2. Generate the enhanced image
     const { media } = await ai.generate({
@@ -77,19 +80,26 @@ The product is a: ${analysis.productType}`
         { media: { url: input.photoDataUri, contentType: input.mimeType } }
       ],
       config: {
-        // Specify JPG output if the model supports it, otherwise, it will be PNG by default.
-        // For Gemini, it's typically PNG, which can be converted on the client.
         responseModalities: ['TEXT', 'IMAGE'],
       },
     });
 
+    if (!media || !media.url) {
+        throw new Error(
+            'The AI model failed to generate an image. This may be due to a content policy violation or a temporary issue. Please try again with a different image.'
+        );
+    }
+
     // 3. Generate post-generation analysis and marketing tips
     const { output: postGenAnalysis } = await postGenerationPrompt({ productType: analysis.productType });
+    if (!postGenAnalysis) {
+        throw new Error("Failed to generate post-generation marketing analysis.");
+    }
 
     return {
       analysis: analysis,
-      enhancedPhotoDataUri: media.url!,
-      postGenerationAnalysis: postGenAnalysis!,
+      enhancedPhotoDataUri: media.url,
+      postGenerationAnalysis: postGenAnalysis,
     };
   }
 );
