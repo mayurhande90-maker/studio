@@ -1,7 +1,15 @@
 # Settings to manage and configure a Firebase App Hosting backend.
 # https://firebase.google.com/docs/app-hosting/configure
-
 runConfig:
-  # Increase this value if you'd like to automatically spin up
-  # more instances in response to increased traffic.
-  maxInstances: 1
+  # Increase this value to automatically spin up more instances in response
+  # to increased traffic. AI workloads can be demanding, so more instances
+  # may be needed for a production application.
+  maxInstances: 2
+  # Allocate more CPU to handle AI-intensive tasks from Genkit.
+  cpu: 1
+# Pass the GEMINI_API_KEY secret from Google Secret Manager to the app
+# as an environment variable. Firebase App Hosting handles this automatically.
+# Make sure you have stored your key in Secret Manager with this name.
+env:
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
