@@ -6,7 +6,7 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import { auth } from "@/firebase/config";
+import { auth } from "@/firebase/client-config";
 
 export function useAuth() {
   const [user, setUser] = useState<any>(null);
