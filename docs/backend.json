@@ -228,37 +228,23 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/users/{userId}",
-        "definition": {
-          "entityName": "User",
-          "schema": {
-            "$ref": "#/entities/User"
-          },
-          "description": "Stores user profile information. User data is private and accessible only to the user with matching userId. Includes standard profile information (name, email, profilePhoto, subscriptionPlan, credits)."
-        }
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
       },
-      {
-        "path": "/jobs/{jobId}",
-        "definition": {
-          "entityName": "Job",
-          "schema": {
-            "$ref": "#/entities/Job"
-          },
-          "description": "Stores image processing jobs. The Firebase Function `processImageJob` processes the documents in this collection. The userId field allows for tracing the job back to the user who requested it."
-        }
+      "description": "Stores user profile information. User data is private and accessible only to the user with matching userId. Includes standard profile information (name, email, profilePhoto, subscriptionPlan, credits)."
+    },
+    "/jobs/{jobId}": {
+      "schema": {
+        "$ref": "#/entities/Job"
       },
-      {
-        "path": "/logs/aiGeneration/{logId}",
-        "definition": {
-          "entityName": "Log",
-          "schema": {
-            "$ref": "#/entities/Log"
-          },
-          "description": "Stores logs for each image generation attempt. Contains information about the API provider used, success/failure status, and generation duration. Accessible to admins only."
-        }
-      }
-    ]
+      "description": "Stores image processing jobs. The Firebase Function `processImageJob` processes the documents in this collection. The userId field allows for tracing the job back to the user who requested it."
+    },
+    "/logs/aiGeneration/{logId}": {
+      "schema": {
+        "$ref": "#/entities/Log"
+      },
+      "description": "Stores logs for each image generation attempt. Contains information about the API provider used, success/failure status, and generation duration. Accessible to admins only."
+    }
   }
 }
