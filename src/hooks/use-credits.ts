@@ -19,7 +19,7 @@ export function useCredits() {
     }
     if (!user) {
       setIsLoading(false);
-      setCredits(0);
+      setCredits(10); // Give 10 free credits for guests
       return;
     }
 
@@ -35,7 +35,7 @@ export function useCredits() {
         setCredits(snap.data().credits ?? 0);
       } else {
         // If the user document doesn't exist, create it with initial credits.
-        const newUserDoc = { credits: 10, email: user.email, displayName: user.displayName };
+        const newUserDoc = { credits: 10, email: user.email, displayName: user.displayName, photoURL: user.photoURL };
         setDoc(ref, newUserDoc).catch((e: any) => {
            if (e.code === 'permission-denied') {
             const permissionError = new FirestorePermissionError({
