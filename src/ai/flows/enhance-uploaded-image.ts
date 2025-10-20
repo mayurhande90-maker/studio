@@ -77,7 +77,7 @@ const enhanceUploadedImageFlow = ai.defineFlow(
 
 The product is a: ${analysis.productType}`
         },
-        { media: { url: input.photoDataUri, contentType: input.mimeType } }
+        { media: { url: input.photoDataUri } }
       ],
       config: {
         responseModalities: ['TEXT', 'IMAGE'],

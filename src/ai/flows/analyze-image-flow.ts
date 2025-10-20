@@ -47,7 +47,7 @@ const analysisPrompt = ai.definePrompt({
     - If it's blurry: "A bit out of focus — our AI will fix that in seconds."
     - If you are not sure: "Perfect upload! Let's see what Magicpixa can do."
 
-    Photo: {{media url=photoDataUri contentType=mimeType}}`
+    Photo: {{media url=photoDataUri}}`
 });
 
 export const analyzeImageFlow = ai.defineFlow(
