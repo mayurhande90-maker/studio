@@ -1,10 +1,10 @@
 
 "use client";
 import { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useUser } from "@/firebase/use-user";
 import { useFirestore } from "@/firebase";
-import { errorEmitter, FirestorePermissionError } from "@/lib/error-emitter";
+import { errorEmitter, FirestorePermissionError } from "@/firebase/error-emitter";
 
 export function useCredits() {
   const { user, loading: userLoading } = useUser();
@@ -36,31 +36,26 @@ export function useCredits() {
       } else {
         // If the user document doesn't exist, create it with initial credits.
         const newUserDoc = { credits: 10, email: user.email, displayName: user.displayName };
-        try {
-          await setDoc(ref, newUserDoc);
-          setCredits(10);
-        } catch (e: any) {
+        setDoc(ref, newUserDoc).catch((e: any) => {
            if (e.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError(
-                e.message,
-                'add',
-                ref,
-                newUserDoc
-              );
+            const permissionError = new FirestorePermissionError({
+                path: ref.path,
+                operation: 'create',
+                requestResourceData: newUserDoc
+            });
             errorEmitter.emit('permission-error', permissionError);
           } else {
             console.error("Error creating user document:", e);
           }
-        }
+        });
       }
       setIsLoading(false);
     }, (error) => {
         if (error.code === 'permission-denied') {
-          const permissionError = new FirestorePermissionError(
-              error.message,
-              'get',
-              ref
-            );
+          const permissionError = new FirestorePermissionError({
+              path: ref.path,
+              operation: 'get'
+          });
           errorEmitter.emit('permission-error', permissionError);
         } else {
           console.error("Error fetching credits:", error);
@@ -78,22 +73,18 @@ export function useCredits() {
 
     if (newBalance >= 0) {
       const updatedData = { credits: newBalance };
-      try {
-        await updateDoc(ref, updatedData);
-        setCredits(newBalance);
-      } catch (e: any) {
+      updateDoc(ref, updatedData).catch((e: any) => {
         if (e.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError(
-                e.message,
-                'update',
-                ref,
-                updatedData
-            );
+            const permissionError = new FirestorePermissionError({
+                path: ref.path,
+                operation: 'update',
+                requestResourceData: updatedData
+            });
           errorEmitter.emit('permission-error', permissionError);
         } else {
           console.error("Error deducting credits:", e);
         }
-      }
+      });
     } else {
       console.error("Cannot deduct credits, insufficient balance.");
     }
