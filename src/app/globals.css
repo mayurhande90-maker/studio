@@ -9,6 +9,8 @@
     --foreground: 240 5.9% 10%;
     --card: 0 0% 100%;
     --card-foreground: 240 5.9% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 5.9% 10%;
     --primary: 251 91% 60%; /* #5A31F4 */
     --primary-foreground: 0 0% 100%;
     --secondary: 260 83% 53%;
@@ -72,7 +74,10 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--gradient-purple))] to-[hsl(var(--gradient-blue))];
+    background-image: linear-gradient(to right, hsl(var(--gradient-purple)), hsl(var(--gradient-blue)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .animated-gradient {
     background-size: 200%;
@@ -107,11 +112,12 @@
   }
 
   .btn-gradient-outline {
-    @apply relative bg-transparent;
+    position: relative;
+    background-color: transparent;
   }
 
   .btn-gradient-outline:hover {
-    @apply bg-transparent;
+    background-color: transparent;
   }
   
   .btn-gradient-outline:hover::before {
@@ -132,7 +138,9 @@
   }
 
   .btn-gradient-border {
-    @apply relative bg-transparent border-none;
+    position: relative;
+    background-color: transparent;
+    border: none;
   }
 
   .btn-gradient-border::before {
@@ -153,7 +161,8 @@
   }
 
   .btn-solid-gradient:hover {
-     @apply bg-transparent text-primary-foreground;
+     background-color: transparent;
+     color: hsl(var(--primary-foreground));
   }
   .hover-gradient-border {
     @apply relative;
