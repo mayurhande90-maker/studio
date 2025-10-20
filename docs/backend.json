@@ -240,7 +240,7 @@
       },
       "description": "Stores image processing jobs. The Firebase Function `processImageJob` processes the documents in this collection. The userId field allows for tracing the job back to the user who requested it."
     },
-    "/logs/aiGeneration/{logId}": {
+    "/aiGenerationLogs/{logId}": {
       "schema": {
         "$ref": "#/entities/Log"
       },
