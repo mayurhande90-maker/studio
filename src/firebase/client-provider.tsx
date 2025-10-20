@@ -1,24 +1,15 @@
+
 'use client';
-import { createContext } from 'react';
-
-import { app, auth, firestore } from './client-config';
-
-export const FirebaseContext = createContext({
-  app,
-  auth,
-  firestore,
-});
+import { useMemo } from 'react';
+import { FirebaseProvider } from './provider';
+import { initializeFirebase } from './index';
 
 export const FirebaseClientProvider = (props: { children: React.ReactNode }) => {
+  const value = useMemo(() => initializeFirebase(), []);
+
   return (
-    <FirebaseContext.Provider
-      value={{
-        app,
-        auth,
-        firestore,
-      }}
-    >
+    <FirebaseProvider value={value}>
       {props.children}
-    </FirebaseContext.Provider>
+    </FirebaseProvider>
   );
 };

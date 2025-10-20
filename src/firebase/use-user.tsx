@@ -1,3 +1,4 @@
+
 'use client';
 import {
   User,
@@ -6,12 +7,11 @@ import {
   onAuthStateChanged,
   AuthProvider,
 } from 'firebase/auth';
-import { useContext, useEffect, useState } from 'react';
-
-import { FirebaseContext } from './client-provider';
+import { useEffect, useState } from 'react';
+import { useAuth } from './provider';
 
 export const useUser = () => {
-  const { auth } = useContext(FirebaseContext);
+  const auth = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,3 +33,4 @@ export const useUser = () => {
     signOut: () => signOut(auth),
   };
 };
+

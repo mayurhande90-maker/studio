@@ -1,12 +1,14 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useUser } from "@/firebase/use-user";
-import { firestore } from "@/firebase/client-config";
+import { useFirestore } from "@/firebase";
 import { errorEmitter, FirestorePermissionError } from "@/lib/error-emitter";
 
 export function useCredits() {
   const { user, loading: userLoading } = useUser();
+  const firestore = useFirestore();
   const [credits, setCredits] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,6 +21,11 @@ export function useCredits() {
       setIsLoading(false);
       setCredits(0);
       return;
+    }
+
+    if (!firestore) {
+        setIsLoading(false);
+        return;
     }
 
     const ref = doc(firestore, "users", user.uid);
@@ -34,15 +41,13 @@ export function useCredits() {
           setCredits(10);
         } catch (e: any) {
            if (e.code === 'permission-denied') {
-            errorEmitter.emit(
-              'permission-error',
-              new FirestorePermissionError(
+            const permissionError = new FirestorePermissionError(
                 e.message,
                 'add',
                 ref,
                 newUserDoc
-              )
-            );
+              );
+            errorEmitter.emit('permission-error', permissionError);
           } else {
             console.error("Error creating user document:", e);
           }
@@ -51,14 +56,12 @@ export function useCredits() {
       setIsLoading(false);
     }, (error) => {
         if (error.code === 'permission-denied') {
-          errorEmitter.emit(
-            'permission-error',
-            new FirestorePermissionError(
+          const permissionError = new FirestorePermissionError(
               error.message,
               'get',
               ref
-            )
-          );
+            );
+          errorEmitter.emit('permission-error', permissionError);
         } else {
           console.error("Error fetching credits:", error);
         }
@@ -66,10 +69,10 @@ export function useCredits() {
     });
 
     return () => unsubscribe();
-  }, [user, userLoading]);
+  }, [user, userLoading, firestore]);
 
   const deductCredits = async (amount: number) => {
-    if (!user) return;
+    if (!user || !firestore) return;
     const ref = doc(firestore, "users", user.uid);
     const newBalance = (credits ?? 0) - amount;
 
@@ -80,15 +83,13 @@ export function useCredits() {
         setCredits(newBalance);
       } catch (e: any) {
         if (e.code === 'permission-denied') {
-          errorEmitter.emit(
-            'permission-error',
-            new FirestorePermissionError(
-              e.message,
-              'update',
-              ref,
-              updatedData
-            )
-          );
+            const permissionError = new FirestorePermissionError(
+                e.message,
+                'update',
+                ref,
+                updatedData
+            );
+          errorEmitter.emit('permission-error', permissionError);
         } else {
           console.error("Error deducting credits:", e);
         }
