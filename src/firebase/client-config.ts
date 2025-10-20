@@ -1,4 +1,3 @@
-
 // This file is for client-side Firebase initialization.
 // It's safe to expose this configuration to the browser.
 export const firebaseConfig = {
