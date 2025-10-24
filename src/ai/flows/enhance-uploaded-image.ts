@@ -16,7 +16,7 @@ export type { EnhanceUploadedImageInput } from './analyze-image-flow';
 
 
 const PostGenerationAnalysisSchema = z.object({
-    description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We\'ve placed your product in a professional studio setting with cinematic lighting.'"),
+    description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We've placed your product in a professional studio setting with cinematic lighting.'"),
     marketingTip: z.string().describe("A short, actionable marketing tip for the user. Example: 'Use this on your product listings or social media to boost engagement!'")
 });
 export type PostGenerationAnalysis = z.infer<typeof PostGenerationAnalysisSchema>;
@@ -92,7 +92,7 @@ The product is a: ${analysis.productType}`
     }
 
     // 3. Generate post-generation analysis and marketing tips
-    const { output: postGenAnalysis } = await postGenerationPrompt.generate({ input: { productType: analysis.productType }});
+    const { output: postGenAnalysis } = await postGenerationPrompt({ productType: analysis.productType });
     if (!postGenAnalysis) {
         throw new Error("Failed to generate post-generation marketing analysis.");
     }
