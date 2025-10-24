@@ -57,7 +57,7 @@ export const analyzeImageFlow = ai.defineFlow(
     outputSchema: ProductImageAnalysisSchema,
   },
   async (input) => {
-    const { output } = await analysisPrompt.generate({input});
+    const { output } = await analysisPrompt(input);
     return output!;
   }
 );
