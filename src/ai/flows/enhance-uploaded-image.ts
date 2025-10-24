@@ -37,7 +37,7 @@ const PostGenerationAnalysisSchema = z.object({
 export type PostGenerationAnalysis = z.infer<typeof PostGenerationAnalysisSchema>;
 
 
-const EnhanceUploadedImageOutputSchema = z.object({
+export const EnhanceUploadedImageOutputSchema = z.object({
   analysis: ProductImageAnalysisSchema,
   enhancedPhotoDataUri: z
     .string()
