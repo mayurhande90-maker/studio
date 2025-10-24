@@ -24,7 +24,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      {!isAuthPage && <Header />}
       <div className={cn("relative flex min-h-dvh flex-col", !isAuthPage && "pt-20")}>
         <main className="flex-1">{children}</main>
       </div>

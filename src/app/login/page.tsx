@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import Link from 'next/link';
+import { Logo } from '@/components/logo';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -63,7 +65,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-background">
+    <div className="flex flex-col justify-center items-center h-screen bg-background">
+      <div className="absolute top-0 left-0 p-6">
+        <Logo />
+      </div>
       <Card className="p-8 w-full max-w-md">
         <CardHeader>
           <CardTitle>Login to MagicPixa</CardTitle>

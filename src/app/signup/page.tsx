@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -12,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import Link from 'next/link';
+import { Logo } from '@/components/logo';
 
 const formSchema = z.object({
   displayName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -65,7 +67,10 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-background">
+    <div className="flex flex-col justify-center items-center h-screen bg-background">
+      <div className="absolute top-0 left-0 p-6">
+        <Logo />
+      </div>
       <Card className="p-8 w-full max-w-md">
         <CardHeader>
           <CardTitle>Create your MagicPixa account</CardTitle>
