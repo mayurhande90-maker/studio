@@ -55,7 +55,9 @@ export async function enhanceUploadedImage(
 
 const analysisPrompt = ai.definePrompt({
     name: 'productImageAnalysisPrompt',
-    inputSchema: EnhanceUploadedImageInputSchema,
+    inputSchema: z.object({
+        photoDataUri: z.string(),
+    }),
     outputSchema: ProductImageAnalysisSchema,
     prompt: `You are an expert image analyst. Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
 
@@ -96,7 +98,7 @@ const enhanceUploadedImageFlow = ai.defineFlow(
   },
   async (input) => {
     // 1. Analyze the image first
-    const { output: analysis } = await analysisPrompt(input);
+    const { output: analysis } = await analysisPrompt({ photoDataUri: input.photoDataUri });
     if (!analysis) {
         throw new Error("Initial image analysis failed. Please try a different image.");
     }
