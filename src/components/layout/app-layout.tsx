@@ -9,19 +9,9 @@ import { Toaster } from '../ui/toaster';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
+  const isDashboard = pathname.startsWith('/dashboard');
   const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/signup');
 
-  if (isAuthPage) {
-    return (
-      <div className="relative flex min-h-dvh flex-col">
-        <main className="flex-1">{children}</main>
-        <Toaster />
-      </div>
-    );
-  }
-
-  const isDashboard = pathname.startsWith('/dashboard');
 
   if (isDashboard) {
     return (
@@ -35,10 +25,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <div className={cn("relative flex min-h-dvh flex-col", "pt-20")}>
+      <div className={cn("relative flex min-h-dvh flex-col", !isAuthPage && "pt-20")}>
         <main className="flex-1">{children}</main>
       </div>
-      <Footer />
+      {!isAuthPage && <Footer />}
       <Toaster />
     </>
   );
