@@ -1,16 +1,18 @@
 'use server';
 
-// import {genkit, defineSecret} from 'genkit';
-// import {googleAI} from '@genkit-ai/google-genai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// defineSecret('GEMINI_API_KEY', 'Your Google AI API Key');
+// Initialize Gemini with your API key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
-export const ai = {
-  // The genkit plugin has been temporarily disabled because
-  // the package @genkit-ai/google-genai is not available during build.
-  // Re-enable this by restoring the imports above once you have
-  // a valid package/version or switch to a supported SDK.
-  plugins: [],
-  logLevel: 'debug',
-  enableTracingAndMetrics: true,
-};
+export async function generateImage(prompt: string) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (error) {
+    console.error("Error generating image:", error);
+    throw new Error("Image generation failed. Check your Gemini API key or prompt.");
+  }
+}
