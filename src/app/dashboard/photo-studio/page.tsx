@@ -12,7 +12,6 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { useCredits } from '@/hooks/use-credits';
 import { EnhanceUploadedImageOutput, EnhanceUploadedImageInput, ProductImageAnalysis } from '@/ai/flows/enhance-uploaded-image';
-import { analyzeImage } from '@/ai/flows/analyze-image-flow';
 import { enhanceUploadedImage } from '@/ai/flows/enhance-uploaded-image';
 import Image from 'next/image';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
@@ -35,7 +34,7 @@ export default function AIPhotoStudioPage() {
     const [file, setFile] = useState<{blob: Blob, dataUri: string} | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false); // This state will now represent the whole generation process start
     const [generationStep, setGenerationStep] = useState(0);
     const [generationProgress, setGenerationProgress] = useState(0);
     const [analysisResult, setAnalysisResult] = useState<EnhanceUploadedImageOutput['analysis'] | null>(null);
@@ -56,41 +55,10 @@ export default function AIPhotoStudioPage() {
         setAnalysisResult(null);
         setPostGenerationAnalysis(null);
         setIsGenerating(false);
+        setIsAnalyzing(false);
         setGenerationProgress(0);
     }, []);
-
-    const handleAnalysis = useCallback(async () => {
-        if (!file) return;
-        setIsAnalyzing(true);
-        try {
-            const input = { photoDataUri: file.dataUri, mimeType: 'image/jpeg' };
-            const result: ProductImageAnalysis = await analyzeImage(input);
-            setAnalysisResult(result);
-        } catch (error: any) {
-            console.error('Analysis Error:', error);
-            toast({
-                variant: 'destructive',
-                title: 'Analysis Failed',
-                description: error.message || 'Could not analyze the image. Please try another one.',
-            });
-            setAnalysisResult({
-                productType: 'Unknown',
-                imageQuality: 'Analysis failed',
-                friendlyCaption: 'There was an issue analyzing this image. You can still try to generate.'
-            });
-        } finally {
-            setIsAnalyzing(false);
-        }
-    }, [file, toast]);
-
-    useEffect(() => {
-        // When a new file is uploaded, trigger analysis
-        if (file && !analysisResult && !isAnalyzing) {
-            handleAnalysis();
-        }
-    }, [file, analysisResult, isAnalyzing, handleAnalysis]);
-
-
+    
     const compressImage = (file: File): Promise<{blob: Blob, dataUri: string}> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -159,6 +127,8 @@ export default function AIPhotoStudioPage() {
         const selectedFile = acceptedFiles[0];
         if (selectedFile) {
             handleReset();
+            setIsAnalyzing(true); // Indicate processing starts now
+            setAnalysisResult(null); // Reset previous analysis
 
             try {
                  const compressedFile = await compressImage(selectedFile);
@@ -172,8 +142,8 @@ export default function AIPhotoStudioPage() {
                     title: 'Upload Failed',
                     description: 'Could not process the image. Please try another one.',
                 });
+                 setIsAnalyzing(false);
             }
-
         }
     }, [toast, handleReset]);
 
@@ -187,13 +157,14 @@ export default function AIPhotoStudioPage() {
     
     
     const handleGenerate = async () => {
-        if (!file || !analysisResult) return;
+        if (!file) return;
         if (credits === null || credits < GENERATION_COST) {
             setShowInsufficientCredits(true);
             return;
         }
 
         setIsGenerating(true);
+        setIsAnalyzing(false); // Analysis is part of generation now
         setGeneratedImage(null);
         setPostGenerationAnalysis(null);
         setGenerationStep(0);
@@ -213,6 +184,7 @@ export default function AIPhotoStudioPage() {
             const input: EnhanceUploadedImageInput = { photoDataUri: file.dataUri, mimeType: 'image/jpeg' };
             const result: EnhanceUploadedImageOutput = await enhanceUploadedImage(input);
 
+            setAnalysisResult(result.analysis);
             setGeneratedImage(result.enhancedPhotoDataUri);
             setPostGenerationAnalysis(result.postGenerationAnalysis);
             deductCredits(GENERATION_COST);
@@ -250,6 +222,14 @@ export default function AIPhotoStudioPage() {
         document.body.removeChild(link);
     };
 
+    // Use effect to automatically trigger generation after file is processed
+    useEffect(() => {
+        if (file && preview && !isGenerating) {
+            handleGenerate();
+        }
+    }, [file, preview]);
+
+
     return (
         <div className="w-full space-y-8">
             <div className="text-center">
@@ -275,17 +255,17 @@ export default function AIPhotoStudioPage() {
                             />
                         )}
                         
-                        {isGenerating && (
+                        {(isGenerating || isAnalyzing) && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 p-8 text-center">
                                 <ImageIcon className="w-16 h-16 text-primary animate-pulse" />
-                                <p className="font-bold text-2xl text-primary-foreground mt-4">{generationMessages[generationStep].text}</p>
-                                <p className="text-muted-foreground mt-2">Our AI is creating magic. Please wait a moment.</p>
-                                <Progress value={generationProgress} className="w-3/4 mt-6 h-3" />
-                                <p className="text-primary-foreground font-mono text-sm mt-2">{generationProgress}%</p>
+                                <p className="font-bold text-2xl text-primary-foreground mt-4">{isAnalyzing ? "Processing upload..." : generationMessages[generationStep].text}</p>
+                                <p className="text-muted-foreground mt-2">{isAnalyzing ? "Getting your image ready." : "Our AI is creating magic. Please wait a moment."}</p>
+                                {isGenerating && <Progress value={generationProgress} className="w-3/4 mt-6 h-3" />}
+                                {isGenerating && <p className="text-primary-foreground font-mono text-sm mt-2">{generationProgress}%</p>}
                             </div>
                         )}
 
-                        {preview && !generatedImage && !isGenerating && (
+                        {preview && !generatedImage && !isGenerating && !isAnalyzing && (
                             <div className="absolute top-4 right-4 z-10">
                                 <Button onClick={open} variant="outline" size="icon" className="rounded-full h-10 w-10 bg-black/50 hover:bg-black/70 text-white">
                                     <Upload className="h-5 w-5" />
@@ -330,11 +310,11 @@ export default function AIPhotoStudioPage() {
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="flex items-start gap-4 rounded-2xl min-h-[90px]">
-                                <Sparkles className={cn("w-6 h-6 text-yellow-500 flex-shrink-0 mt-1", { 'animate-pulse': isAnalyzing })} />
+                                <Sparkles className={cn("w-6 h-6 text-yellow-500 flex-shrink-0 mt-1", { 'animate-pulse': isGenerating || isAnalyzing })} />
                                 <div className="space-y-1 w-full">
-                                    {isAnalyzing ? (
+                                    {(isGenerating || isAnalyzing) ? (
                                         <p className="font-semibold text-foreground animate-pulse">
-                                            Analysing the Photo...
+                                            {isAnalyzing ? "Analyzing your photo..." : "Generating your masterpiece..."}
                                         </p>
                                     ) : postGenerationAnalysis ? (
                                         <>
@@ -381,8 +361,8 @@ export default function AIPhotoStudioPage() {
                                 </div>
                             ) : (
                             <>
-                                <Button onClick={handleGenerate} variant="gradient" size="lg" className="w-full font-bold text-lg py-7 rounded-2xl hover:shadow-lg hover:shadow-primary/40" disabled={isGenerating || isAnalyzing || !analysisResult}>
-                                    {isGenerating ? (
+                                <Button onClick={handleGenerate} variant="gradient" size="lg" className="w-full font-bold text-lg py-7 rounded-2xl hover:shadow-lg hover:shadow-primary/40" disabled={!file || isGenerating || isAnalyzing}>
+                                    {(isGenerating || isAnalyzing) ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                             Creating Magic...
