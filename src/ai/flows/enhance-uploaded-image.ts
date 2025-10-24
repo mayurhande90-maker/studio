@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { analyzeImageFlow, ProductImageAnalysisSchema, ProductImageAnalysis, EnhanceUploadedImageInputSchema } from './analyze-image-flow';
+import { analyzeImageFlow, ProductImageAnalysisSchema, type ProductImageAnalysis, EnhanceUploadedImageInputSchema } from './analyze-image-flow';
 export type { EnhanceUploadedImageInput } from './analyze-image-flow';
 
 
@@ -19,6 +19,7 @@ const PostGenerationAnalysisSchema = z.object({
     description: z.string().describe("A one-sentence description of the generated image, explaining what was done. Example: 'We\'ve placed your product in a professional studio setting with cinematic lighting.'"),
     marketingTip: z.string().describe("A short, actionable marketing tip for the user. Example: 'Use this on your product listings or social media to boost engagement!'")
 });
+export type PostGenerationAnalysis = z.infer<typeof PostGenerationAnalysisSchema>;
 
 
 const EnhanceUploadedImageOutputSchema = z.object({
@@ -39,8 +40,8 @@ export async function enhanceUploadedImage(
 
 const postGenerationPrompt = ai.definePrompt({
     name: 'postGenerationAnalysisPrompt',
-    input: { schema: z.object({ productType: z.string() }) },
-    output: { schema: PostGenerationAnalysisSchema },
+    inputSchema: z.object({ productType: z.string() }),
+    outputSchema: PostGenerationAnalysisSchema,
     prompt: `You are a marketing expert. An AI has just generated a professional image of a user's product, which is a "{{productType}}". 
     
     Generate a one-sentence description of the new image and a short, actionable marketing tip.
@@ -91,7 +92,7 @@ The product is a: ${analysis.productType}`
     }
 
     // 3. Generate post-generation analysis and marketing tips
-    const { output: postGenAnalysis } = await postGenerationPrompt({ productType: analysis.productType });
+    const { output: postGenAnalysis } = await postGenerationPrompt.generate({ input: { productType: analysis.productType }});
     if (!postGenAnalysis) {
         throw new Error("Failed to generate post-generation marketing analysis.");
     }

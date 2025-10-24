@@ -33,8 +33,8 @@ export type ProductImageAnalysis = z.infer<typeof ProductImageAnalysisSchema>;
 
 const analysisPrompt = ai.definePrompt({
     name: 'productImageAnalysisPrompt',
-    input: { schema: EnhanceUploadedImageInputSchema },
-    output: { schema: ProductImageAnalysisSchema},
+    inputSchema: EnhanceUploadedImageInputSchema,
+    outputSchema: ProductImageAnalysisSchema,
     prompt: `You are an expert image analyst. Analyze the following product image. Identify the product type, assess the image quality, and generate a friendly, encouraging one-line caption for the user.
 
     Here are some examples for the friendly caption based on image type:
@@ -57,7 +57,7 @@ export const analyzeImageFlow = ai.defineFlow(
     outputSchema: ProductImageAnalysisSchema,
   },
   async (input) => {
-    const { output } = await analysisPrompt(input);
+    const { output } = await analysisPrompt.generate({input});
     return output!;
   }
 );
