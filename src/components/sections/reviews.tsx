@@ -96,7 +96,7 @@ export function Reviews() {
                               key={i}
                               className={`w-5 h-5 ${
                                   i < review.rating
-                                  ? 'text-yellow-400 fill-yellow-400'
+                                  ? 'text-yellow-500 fill-yellow-500'
                                   : 'text-muted-foreground/50'
                               }`}
                               />
