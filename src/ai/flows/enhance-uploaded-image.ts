@@ -9,7 +9,15 @@
  * - EnhanceUploadedImageOutput - The return type for the enhanceUploadedImage function.
  */
 
-import {ai} from '@/ai/genkit';
+// safe import that works with whatever genkit exports
+import * as genkit from '@/ai/genkit'
+
+// later, wherever you used `ai.something(...)`
+// replace with `genkit.ai?.something(...)` or `genkit.default?.ai?.something(...)`
+// but if you only use `ai(...)` in a couple spots, change those to:
+const ai = genkit.ai ?? genkit.default?.ai ?? genkit
+// and then continue using `ai(...)` as before
+
 import {z} from 'genkit';
 
 export const EnhanceUploadedImageInputSchema = z.object({

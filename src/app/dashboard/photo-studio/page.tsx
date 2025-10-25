@@ -1,7 +1,10 @@
-
 'use client';
 
 export const dynamic = 'force-dynamic';
+// Remove or DO NOT export `revalidate` as an object here.
+// If you need revalidation put a number OR `false`. For now remove it entirely
+// or set it to a single numeric value (example: 0 or 60).
+// export const revalidate = 0;
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';

@@ -1,17 +1,28 @@
 'use server';
 
-import {genkit, defineSecret} from 'genkit';
+import {genkit, type Plugin} from 'genkit';
 import {googleAI} from '@genkit-ai/google-genai';
+import {next} from '@genkit-ai/next';
+import {firebase} from '@genkit-ai/firebase';
+import {devLogger, prodLogger} from 'genkit/logging';
 
-// Define the secret for clarity, but rely on process.env for the actual value.
-defineSecret('GEMINI_API_KEY', 'Your Google AI API Key');
+const plugins: Plugin<any>[] = [
+  next(),
+  googleAI({
+    apiVersion: 'v1beta',
+  }),
+  firebase(),
+];
+
+if (process.env.NODE_ENV === 'development') {
+  plugins.push(devLogger());
+} else {
+  plugins.push(prodLogger());
+}
 
 export const ai = genkit({
-  plugins: [
-    googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    }),
-  ],
-  logLevel: 'debug',
-  enableTracingAndMetrics: true,
+  plugins,
+  flowStateStore: 'firebase',
+  traceStore: 'firebase',
+  enableTracing: true,
 });
