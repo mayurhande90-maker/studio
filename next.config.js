@@ -44,6 +44,10 @@ const nextConfig = {
 
     return config
   },
+  // This allows cross-origin requests in development, which is necessary for the Firebase Studio environment.
+  allowedDevOrigins: [
+      'https://*.cloudworkstations.dev',
+  ],
 };
 
 module.exports = nextConfig;
