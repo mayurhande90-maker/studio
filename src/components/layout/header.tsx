@@ -23,8 +23,8 @@ const navItems = [
 ];
 
 const authNavItems = [
-  { name: 'Login', href: '/login', variant: 'ghost' as const },
-  { name: 'Sign Up', href: '/signup', variant: 'gradient' as const },
+  { name: 'Login', href: '/login', variant: 'outline' as const, className: "btn-gradient-outline" },
+  { name: 'Sign Up', href: '/signup', variant: 'gradient' as const, className: "" },
 ];
 
 export function Header() {
@@ -76,7 +76,7 @@ export function Header() {
             asChild
             variant={item.variant}
             size="sm"
-            className="font-bold"
+            className={cn("font-bold", item.className)}
           >
             <Link href={item.href}>{item.name}</Link>
           </Button>
