@@ -1,9 +1,8 @@
 'use server';
 
 import {genkit, type Plugin} from 'genkit';
-import {googleAI} from '@genkit-ai/google-genai';
+import {googleAI} from '@genkit-ai/googleai';
 import {next} from '@genkit-ai/next';
-import {firebase} from '@genkit-ai/firebase';
 import {devLogger, prodLogger} from 'genkit/logging';
 
 const plugins: Plugin<any>[] = [
@@ -11,7 +10,6 @@ const plugins: Plugin<any>[] = [
   googleAI({
     apiVersion: 'v1beta',
   }),
-  firebase(),
 ];
 
 if (process.env.NODE_ENV === 'development') {
@@ -22,7 +20,5 @@ if (process.env.NODE_ENV === 'development') {
 
 export const ai = genkit({
   plugins,
-  flowStateStore: 'firebase',
-  traceStore: 'firebase',
   enableTracing: true,
 });

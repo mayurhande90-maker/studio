@@ -60,7 +60,7 @@ export function Hero() {
                 variant="gradient"
                 className="text-primary-foreground transition-transform hover:scale-105 rounded-2xl shadow-lg text-base py-6 px-8 font-semibold"
               >
-                <Link href="/enhance">
+                <Link href="/dashboard">
                   Enhance Your First Photo <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
